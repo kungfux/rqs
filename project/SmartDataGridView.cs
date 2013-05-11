@@ -1,15 +1,28 @@
 ﻿/*   
- ****************************************************************
- * This document contains unpublished, confidential and
- * proprietary information of IT WORKS Team. No disclosure or use
- * of any portion of the contents of these materials may be made
- * without the express written consent of IT WORKS Team's leader.
- ****************************************************************
- */
-
-/*
- * This file is a part of "Bestfish .NET" project
- * Copyright (C) 2012-2013 IT WORKS Team
+ *  RQS
+ *  Requirement Searching Utility
+ *  Copyright (C) Fuks Alexander 2013
+ *  
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *  
+ *  Fuks Alexander, hereby disclaims all copyright
+ *  interest in the program "RQS"
+ *  (which makes passes at compilers)
+ *  written by Alexander Fuks.
+ * 
+ *  Alexander Fuks, 10 May 2013.
  */
 
 using System;
@@ -39,6 +52,7 @@ namespace RQS
         private bool[] ColumnsVisibility = null;
         private int[] ColumnsOrder = null;
         private int[] ColumnsWidth = null;
+        private int RowsHeight = 22;
         private bool ColumnsVisibilityWasLoaded = false;
 
         private SmartDataGridViewSetupColumns setup;
@@ -52,7 +66,7 @@ namespace RQS
             this.AllowUserToDeleteRows = false;
             this.AllowUserToOrderColumns = true;
             this.AllowUserToResizeColumns = true;
-            this.AllowUserToResizeRows = false;
+            this.AllowUserToResizeRows = true;
             this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.ReadOnly = true;
             this.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -67,13 +81,25 @@ namespace RQS
             ReadColumnsVisibility();
             ReadColumnsWidth();
             ReadColumnsOrder();
+            ReadRowsHeight();
 
             // Add events
             this.ColumnAdded += new DataGridViewColumnEventHandler(SmartDataGridView_ColumnAdded);
+            this.RowsAdded += new DataGridViewRowsAddedEventHandler(SmartDataGridView_RowsAdded);
             this.ColumnWidthChanged += new DataGridViewColumnEventHandler(SmartDataGridView_ColumnWidthChanged);
             this.ColumnDisplayIndexChanged += new DataGridViewColumnEventHandler(SmartDataGridView_ColumnDisplayIndexChanged);
             this.CellFormatting += new DataGridViewCellFormattingEventHandler(SmartDataGridView_CellFormatting);
+            this.RowHeightChanged += new DataGridViewRowEventHandler(SmartDataGridView_RowHeightChanged);
             this.HandleDestroyed += new EventHandler(SmartDataGridView_HandleDestroyed);
+        }
+
+        void SmartDataGridView_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
+        {
+            RowsHeight = e.Row.Height;
+            foreach (DataGridViewRow row in this.Rows)
+            {
+                row.Height = e.Row.Height;
+            }
         }
 
         void SmartDataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -209,6 +235,14 @@ namespace RQS
             }
         }
 
+        // Read rows height
+        private void ReadRowsHeight()
+        {
+            RowsHeight =
+                Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegistryPath, string.Concat(SmartDataGridViewUniqueName, "RowsHeight"), 22);
+        }
+
         // Save columns width
         private void SaveColumnsVisibility()
         {
@@ -250,6 +284,17 @@ namespace RQS
             }
             Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
                 RegistryPath, string.Concat(SmartDataGridViewUniqueName, "Order"), KeyValue);
+        }
+
+        // Save rows height
+        private void SaveRowsHeight()
+        {
+            if (this.Rows.Count > 0 &&
+                this.Rows[0].Height > 0)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegistryPath, string.Concat(SmartDataGridViewUniqueName, "RowsHeight"), this.Rows[0].Height);
+            }
         }
         #endregion
 
@@ -308,6 +353,8 @@ namespace RQS
                 SetColumnsOrder();
                 SetColumnsVisibility();
             }
+            // set word wrap
+            e.Column.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
         // remember new width of column when user change it
@@ -337,11 +384,21 @@ namespace RQS
             SaveColumnsWidth();
             SaveColumnsOrder();
             SaveColumnsVisibility();
+            SaveRowsHeight();
+        }
+
+        // when new row is added
+        void SmartDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            for (int a = 0; a < e.RowCount; a++)
+            {
+                this.Rows[a + e.RowIndex].Height = RowsHeight;
+            }
         }
         #endregion
 
         #region Menu
-         // user wants to see setup
+        // user wants to see setup
         public void ShowSetup()
         {
             ShowSetup((Form)this.Parent);

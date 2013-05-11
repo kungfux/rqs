@@ -40,6 +40,7 @@ namespace RQS.GUI
 
         private FRSearch FRSearch = new FRSearch();
         private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 6);
+        private int[] LastMouseDownLocation = new int[] { 0, 0 };
 
         private void Search_Load(object sender, System.EventArgs e)
         {
@@ -55,11 +56,27 @@ namespace RQS.GUI
             DataGridView.Columns.Add("", "CCP");
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
+            DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
 
             DataGridView.MultiSelect = true;
             DataGridView.ContextMenuStrip = contextMenuStrip1;
 
             tableLayoutPanel1.Controls.Add(DataGridView, 0, 1);
+        }
+
+        void DataGridView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                LastMouseDownLocation[0] = DataGridView.HitTest(e.X, e.Y).RowIndex;
+                LastMouseDownLocation[1] = DataGridView.HitTest(e.X, e.Y).ColumnIndex;
+
+                if (LastMouseDownLocation[0] >= 0)
+                {
+                    DataGridView.ClearSelection();
+                    DataGridView.Rows[LastMouseDownLocation[0]].Selected = true;
+                }
+            }
         }
 
         private void bSearch_Click(object sender, System.EventArgs e)
@@ -82,21 +99,44 @@ namespace RQS.GUI
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            switch (e.KeyCode)
             {
-                bSearch_Click(this, null);
+                case Keys.Enter:
+                    bSearch_Click(this, null);
+                    break;
+                case Keys.Up:
+                    if (comboBox1.SelectedIndex > 0)
+                    {
+                        comboBox1.SelectedIndex--;
+                    }
+                    break;
+                case Keys.Down:
+                    if (comboBox1.SelectedIndex < comboBox1.Items.Count - 1)
+                    {
+                        comboBox1.SelectedIndex++;
+                    }
+                    break;
             }
         }
 
         private void contextCopyCell_Click(object sender, System.EventArgs e)
         {
-            //TODO
-            // Add DataGridView_CellDoubleClick call properly
+            if (LastMouseDownLocation[0] >= 0 &&
+                LastMouseDownLocation[1] >= 0 &&
+                DataGridView.Rows.Count >= LastMouseDownLocation[0] &&
+                DataGridView.Columns.Count >= LastMouseDownLocation[1])
+            {
+                Clipboard.SetText(DataGridView.Rows[LastMouseDownLocation[0]].
+                    Cells[LastMouseDownLocation[1]].Value.ToString());
+            }
         }
 
         void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            Clipboard.SetText(DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                Clipboard.SetText(DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+            }
         }
 
         private void contextCopyRows_Click(object sender, System.EventArgs e)
@@ -104,9 +144,19 @@ namespace RQS.GUI
             string text = "";
             foreach (DataGridViewRow row in DataGridView.SelectedRows)
             {
-                foreach (DataGridViewCell cell in row.Cells)
+                for (int a = 0; a < DataGridView.Columns.Count; a++)
                 {
-                    text += cell.Value.ToString() + ";";
+                    if (!DataGridView.Columns[a].Visible)
+                    {
+                        continue;
+                    }
+                    for (int b = 0; b < DataGridView.Columns.Count; b++)
+                    {
+                        if (DataGridView.Columns[b].DisplayIndex == a)
+                        {
+                            text += row.Cells[b].Value.ToString() + ";";
+                        }
+                    }
                 }
                 text += Environment.NewLine;
             }
@@ -120,11 +170,8 @@ namespace RQS.GUI
 
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (DataGridView.SelectedRows.Count <= 0)
-            {
-                contextCopyCell.Enabled = false;
-                contextCopyRows.Enabled = false;
-            }
+            contextCopyCell.Enabled = DataGridView.SelectedRows.Count > 0;
+            contextCopyRows.Enabled = DataGridView.SelectedRows.Count > 0;
         }
     }
 }

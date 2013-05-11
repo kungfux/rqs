@@ -28,6 +28,7 @@
 using System.IO;
 using System.Collections.Generic;
 using ExcelLibrary.SpreadSheet;
+using System.Windows.Forms;
 
 namespace RQS
 {
@@ -68,9 +69,22 @@ namespace RQS
             Row row;
             FR FR;
 
+            // change tolower to get more results
+            value = value.ToLower();
+
             foreach (string XLSFile in XLSFiles)
             {
-                book = Workbook.Load(ClientParams.Parameters.XLSLocation + "\\" + XLSFile);
+                try
+                {
+                    book = Workbook.Load(ClientParams.Parameters.XLSLocation + "\\" + XLSFile);
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show(XLSFile + " is locked by another process and will be skipped from search results!",
+                        "RQS", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    continue;
+                }
+
                 sheet = book.Worksheets[0];
 
                 for (int a = sheet.Cells.FirstRowIndex; a <= sheet.Cells.LastRowIndex; a++)
@@ -82,14 +96,14 @@ namespace RQS
                     {
                         case SearchBy.FR_ID: // If search criteria NOT equals to cell value
                             if (row.GetCell(0).IsEmpty ||
-                                !row.GetCell(0).Value.ToString().Equals(value))
+                                !row.GetCell(0).Value.ToString().ToLower().Equals(value))
                             {
                                 continue;
                             }
                             break;
                         case SearchBy.FR_TMS_Task: // If search criteria is NOT present in cell value
                             if (row.GetCell(1).IsEmpty ||
-                                !row.GetCell(1).Value.ToString().Contains(value))
+                                !row.GetCell(1).Value.ToString().ToLower().Contains(value))
                             {
                                 continue;
                             }
