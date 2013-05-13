@@ -135,33 +135,33 @@
             this.toolStripSeparator1,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(140, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 76);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
             // 
             this.contextCopyCell.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextCopyCell.Name = "contextCopyCell";
-            this.contextCopyCell.Size = new System.Drawing.Size(139, 22);
+            this.contextCopyCell.Size = new System.Drawing.Size(146, 22);
             this.contextCopyCell.Text = "Copy cell";
             this.contextCopyCell.Click += new System.EventHandler(this.contextCopyCell_Click);
             // 
             // contextCopyRows
             // 
             this.contextCopyRows.Name = "contextCopyRows";
-            this.contextCopyRows.Size = new System.Drawing.Size(139, 22);
+            this.contextCopyRows.Size = new System.Drawing.Size(146, 22);
             this.contextCopyRows.Text = "Copy row(s)";
             this.contextCopyRows.Click += new System.EventHandler(this.contextCopyRows_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(136, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // contextCustomize
             // 
             this.contextCustomize.Name = "contextCustomize";
-            this.contextCustomize.Size = new System.Drawing.Size(139, 22);
+            this.contextCustomize.Size = new System.Drawing.Size(146, 22);
             this.contextCustomize.Text = "Customize...";
             this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
             // 
@@ -173,6 +173,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "Search";
             this.Size = new System.Drawing.Size(803, 414);
+            this.Tag = " Search ";
             this.Load += new System.EventHandler(this.Search_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);

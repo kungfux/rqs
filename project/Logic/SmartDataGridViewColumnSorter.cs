@@ -25,21 +25,44 @@
  *  Alexander Fuks, 10 May 2013.
  */
 
+using System.Collections;
 using System.Windows.Forms;
-using System.Reflection;
+using System;
 
-namespace RQS.GUI
+namespace RQS.Logic
 {
-    public partial class About : UserControl
+    internal class SmartDataGridViewColumnSorter
     {
-        public About()
+        public SmartDataGridViewColumnSorter(DataGridView DataGridView)
         {
-            InitializeComponent();
+            DataGridView.SortCompare += new DataGridViewSortCompareEventHandler(DataGridView_SortCompare);
+        }
 
-            label1.Text = string.Format(label1.Text,
-                Assembly.GetExecutingAssembly().GetName().Version.Major,
-                Assembly.GetExecutingAssembly().GetName().Version.Minor,
-                Assembly.GetExecutingAssembly().GetName().Version.Build);
+        void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            switch (e.Column.Index)
+            {
+                case 0:
+                    e.SortResult = CompareInt32(e.CellValue1, e.CellValue2);
+                    e.Handled = true;
+                    break;
+            }
+        }
+
+        private int CompareInt32(object value1, object value2)
+        {
+            int a;
+            int b;
+
+            if (Int32.TryParse(value1.ToString(), out a) && 
+                Int32.TryParse(value2.ToString(), out b))
+            {
+                return a.CompareTo(b);
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }

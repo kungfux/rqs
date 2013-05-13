@@ -166,7 +166,7 @@ namespace RQS
         {
             for (int a = 0; a < values.Length; a++)
             {
-                if (text.Contains(values[a]))
+                if (text.Equals(values[a]))
                 {
                     return true;
                 }

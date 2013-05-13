@@ -64,6 +64,7 @@
             this.Controls.Add(this.label1);
             this.Name = "About";
             this.Size = new System.Drawing.Size(644, 387);
+            this.Tag = " About ";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 

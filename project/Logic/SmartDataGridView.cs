@@ -30,7 +30,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using ItWorksTeam.IO;
 
-namespace RQS
+namespace RQS.Logic
 {
     // SmartDataGridView class implement SmartDataGridView control default settings set, saving/restoring
     // columns width from box.

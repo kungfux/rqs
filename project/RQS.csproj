@@ -63,6 +63,13 @@
     <Compile Include="GUI\Search.Designer.cs">
       <DependentUpon>Search.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Setup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI\Setup.Designer.cs">
+      <DependentUpon>Setup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logic\SmartDataGridViewColumnSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -71,10 +78,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Registry.cs" />
-    <Compile Include="SmartDataGridView.cs">
+    <Compile Include="Logic\SmartDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SmartDataGridViewSetupColumns.cs">
+    <Compile Include="Logic\SmartDataGridViewSetupColumns.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -100,6 +107,9 @@
     <EmbeddedResource Include="GUI\Search.resx">
       <DependentUpon>Search.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\Setup.resx">
+      <DependentUpon>Setup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -28,6 +28,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System;
+using RQS.Logic;
 
 namespace RQS.GUI
 {
@@ -41,6 +42,7 @@ namespace RQS.GUI
         private FRSearch FRSearch = new FRSearch();
         private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 6);
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
+        private SmartDataGridViewColumnSorter ColumnSorter;
 
         private void Search_Load(object sender, System.EventArgs e)
         {
@@ -57,6 +59,8 @@ namespace RQS.GUI
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
             DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
+
+            ColumnSorter = new SmartDataGridViewColumnSorter(DataGridView);
 
             DataGridView.MultiSelect = true;
             DataGridView.ContextMenuStrip = contextMenuStrip1;

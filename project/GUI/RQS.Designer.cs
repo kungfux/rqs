@@ -57,7 +57,7 @@
             this.tsSearch.Image = ((System.Drawing.Image)(resources.GetObject("tsSearch.Image")));
             this.tsSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsSearch.Name = "tsSearch";
-            this.tsSearch.Size = new System.Drawing.Size(62, 22);
+            this.tsSearch.Size = new System.Drawing.Size(60, 22);
             this.tsSearch.Text = "Search";
             this.tsSearch.Click += new System.EventHandler(this.tsSearch_Click);
             // 
@@ -67,15 +67,16 @@
             this.tsSetup.Image = ((System.Drawing.Image)(resources.GetObject("tsSetup.Image")));
             this.tsSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsSetup.Name = "tsSetup";
-            this.tsSetup.Size = new System.Drawing.Size(57, 22);
+            this.tsSetup.Size = new System.Drawing.Size(55, 22);
             this.tsSetup.Text = "Setup";
+            this.tsSetup.Click += new System.EventHandler(this.tsSetup_Click);
             // 
             // tsAbout
             // 
             this.tsAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsAbout.Image")));
             this.tsAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsAbout.Name = "tsAbout";
-            this.tsAbout.Size = new System.Drawing.Size(60, 22);
+            this.tsAbout.Size = new System.Drawing.Size(56, 22);
             this.tsAbout.Text = "About";
             this.tsAbout.Click += new System.EventHandler(this.tsAbout_Click);
             // 
@@ -116,6 +117,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "RQS";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RQS :: Search Requirements";

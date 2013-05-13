@@ -36,12 +36,17 @@ namespace RQS.GUI
             InitializeComponent();
         }
 
-        private Search cSearch = new Search();
-        private About cAbout = new About();
+        private Search cSearch;
+        private About cAbout;
+        private Setup cSetup;
 
         private void DisplayControl(Control UserControl)
         {
             gRQS.Controls.Clear();
+            if (UserControl.Tag != null)
+            {
+                gRQS.Text = UserControl.Tag.ToString();
+            }
             gRQS.Controls.Add(UserControl);
             UserControl.Dock = DockStyle.Fill;
         }
@@ -53,12 +58,29 @@ namespace RQS.GUI
 
         private void tsSearch_Click(object sender, System.EventArgs e)
         {
+            if (cSearch == null)
+            {
+                cSearch = new Search();
+            }
             DisplayControl(cSearch);
         }
 
         private void tsAbout_Click(object sender, System.EventArgs e)
         {
+            if (cAbout == null)
+            {
+                cAbout = new About();
+            }
             DisplayControl(cAbout);
+        }
+
+        private void tsSetup_Click(object sender, System.EventArgs e)
+        {
+            if (cSetup == null)
+            {
+                cSetup = new Setup();
+            }
+            DisplayControl(cSetup);
         }
 
         private void RQS_KeyDown(object sender, KeyEventArgs e)

@@ -26,20 +26,14 @@
  */
 
 using System.Windows.Forms;
-using System.Reflection;
 
 namespace RQS.GUI
 {
-    public partial class About : UserControl
+    public partial class Setup : UserControl
     {
-        public About()
+        public Setup()
         {
             InitializeComponent();
-
-            label1.Text = string.Format(label1.Text,
-                Assembly.GetExecutingAssembly().GetName().Version.Major,
-                Assembly.GetExecutingAssembly().GetName().Version.Minor,
-                Assembly.GetExecutingAssembly().GetName().Version.Build);
         }
     }
 }
