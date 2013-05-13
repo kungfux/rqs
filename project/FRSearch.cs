@@ -110,7 +110,7 @@ namespace RQS
                             break;
                         case SearchBy.FR_TEXT: // If search criteria is NOT present in cell value
                             if (row.GetCell(3).IsEmpty ||
-                                !row.GetCell(3).Value.ToString().Contains(value))
+                                !row.GetCell(3).Value.ToString().ToLower().Contains(value))
                             {
                                 continue;
                             }
@@ -122,7 +122,7 @@ namespace RQS
                     FR.FRID = !row.GetCell(0).IsEmpty ? row.GetCell(0).Value.ToString() : "";
                     FR.FRTMSTask = !row.GetCell(1).IsEmpty ? row.GetCell(1).Value.ToString() : "";
                     FR.FRText = !row.GetCell(3).IsEmpty ? row.GetCell(3).Value.ToString() : "";
-                    FR.CCP = !row.GetCell(6).IsEmpty ? row.GetCell(6).Value.ToString() : "";
+                    FR.CCP = !row.GetCell(7).IsEmpty ? row.GetCell(7).Value.ToString() : "";
                     Result.Add(FR);
                     // Break if many results
                     if (limitResults && Result.Count >= ClientParams.Parameters.ResultsLimit)
