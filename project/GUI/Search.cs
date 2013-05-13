@@ -81,20 +81,45 @@ namespace RQS.GUI
 
         private void bSearch_Click(object sender, System.EventArgs e)
         {
+            // Check is .xls files are loaded
+            if (FRSearch.XLSFilesCount <= 0)
+            {
+                MessageBox.Show("No .xls files found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            // perform searching
+            bSearch.Enabled = false;
+            bSearch.Text = "Searching...";
+            Application.DoEvents();
+            // Clear previous results
             DataGridView.Rows.Clear();
-
+            // Search
             List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboBox1.SelectedIndex, 
                 textBox1.Text, checkBox1.Checked);
-            for (int a=0; a < FRs.Count; a++)
+            // If nothing is found
+            if (FRs.Count <= 0)
             {
-                DataGridView.Rows.Add(
-                    (a + 1).ToString(),
-                    FRs[a].FoundInFile,
-                    FRs[a].FRID,
-                    FRs[a].FRTMSTask,
-                    FRs[a].FRText,
-                    FRs[a].CCP);
+                MessageBox.Show("Nothing is found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            else
+            {
+                // Display results
+                for (int a = 0; a < FRs.Count; a++)
+                {
+                    DataGridView.Rows.Add(
+                        (a + 1).ToString(),
+                        FRs[a].FoundInFile,
+                        FRs[a].FRID,
+                        FRs[a].FRTMSTask,
+                        FRs[a].FRText,
+                        FRs[a].CCP);
+                }
+            }
+
+            bSearch.Text = "Search";
+            bSearch.Enabled = true;
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)

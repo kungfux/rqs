@@ -34,6 +34,11 @@ namespace RQS
 {
     internal class FRSearch
     {
+        public int XLSFilesCount
+        {
+            get { return XLSFiles.Length; }
+        }
+
         private string[] XLSFiles = new string[0];
 
         public FRSearch()

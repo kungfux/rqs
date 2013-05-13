@@ -80,7 +80,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(513, 26);
+            this.checkBox1.Location = new System.Drawing.Point(530, 26);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(117, 17);
             this.checkBox1.TabIndex = 3;
@@ -91,7 +91,7 @@
             // 
             this.bSearch.Location = new System.Drawing.Point(432, 22);
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(75, 23);
+            this.bSearch.Size = new System.Drawing.Size(92, 23);
             this.bSearch.TabIndex = 2;
             this.bSearch.Text = "Search";
             this.bSearch.UseVisualStyleBackColor = true;
@@ -135,33 +135,33 @@
             this.toolStripSeparator1,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(140, 76);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
             // 
             this.contextCopyCell.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextCopyCell.Name = "contextCopyCell";
-            this.contextCopyCell.Size = new System.Drawing.Size(146, 22);
+            this.contextCopyCell.Size = new System.Drawing.Size(139, 22);
             this.contextCopyCell.Text = "Copy cell";
             this.contextCopyCell.Click += new System.EventHandler(this.contextCopyCell_Click);
             // 
             // contextCopyRows
             // 
             this.contextCopyRows.Name = "contextCopyRows";
-            this.contextCopyRows.Size = new System.Drawing.Size(146, 22);
+            this.contextCopyRows.Size = new System.Drawing.Size(139, 22);
             this.contextCopyRows.Text = "Copy row(s)";
             this.contextCopyRows.Click += new System.EventHandler(this.contextCopyRows_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(136, 6);
             // 
             // contextCustomize
             // 
             this.contextCustomize.Name = "contextCustomize";
-            this.contextCustomize.Size = new System.Drawing.Size(146, 22);
+            this.contextCustomize.Size = new System.Drawing.Size(139, 22);
             this.contextCustomize.Text = "Customize...";
             this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
             // 
