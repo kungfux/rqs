@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RQS));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.tsAbout = new System.Windows.Forms.ToolStripButton();
-            this.tsSetup = new System.Windows.Forms.ToolStripButton();
             this.tsSearch = new System.Windows.Forms.ToolStripButton();
-            this.gRQS = new System.Windows.Forms.GroupBox();
+            this.tsSetup = new System.Windows.Forms.ToolStripButton();
+            this.tsAbout = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.gRQS = new System.Windows.Forms.GroupBox();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +52,33 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tsSearch
+            // 
+            this.tsSearch.Image = ((System.Drawing.Image)(resources.GetObject("tsSearch.Image")));
+            this.tsSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsSearch.Name = "tsSearch";
+            this.tsSearch.Size = new System.Drawing.Size(62, 22);
+            this.tsSearch.Text = "Search";
+            this.tsSearch.Click += new System.EventHandler(this.tsSearch_Click);
+            // 
+            // tsSetup
+            // 
+            this.tsSetup.Enabled = false;
+            this.tsSetup.Image = ((System.Drawing.Image)(resources.GetObject("tsSetup.Image")));
+            this.tsSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsSetup.Name = "tsSetup";
+            this.tsSetup.Size = new System.Drawing.Size(57, 22);
+            this.tsSetup.Text = "Setup";
+            // 
+            // tsAbout
+            // 
+            this.tsAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsAbout.Image")));
+            this.tsAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsAbout.Name = "tsAbout";
+            this.tsAbout.Size = new System.Drawing.Size(60, 22);
+            this.tsAbout.Text = "About";
+            this.tsAbout.Click += new System.EventHandler(this.tsAbout_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -62,32 +89,11 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // tsAbout
+            // toolStripStatusLabel1
             // 
-            this.tsAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsAbout.Image")));
-            this.tsAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsAbout.Name = "tsAbout";
-            this.tsAbout.Size = new System.Drawing.Size(56, 22);
-            this.tsAbout.Text = "About";
-            this.tsAbout.Click += new System.EventHandler(this.tsAbout_Click);
-            // 
-            // tsSetup
-            // 
-            this.tsSetup.Enabled = false;
-            this.tsSetup.Image = ((System.Drawing.Image)(resources.GetObject("tsSetup.Image")));
-            this.tsSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsSetup.Name = "tsSetup";
-            this.tsSetup.Size = new System.Drawing.Size(55, 22);
-            this.tsSetup.Text = "Setup";
-            // 
-            // tsSearch
-            // 
-            this.tsSearch.Image = ((System.Drawing.Image)(resources.GetObject("tsSearch.Image")));
-            this.tsSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsSearch.Name = "tsSearch";
-            this.tsSearch.Size = new System.Drawing.Size(60, 22);
-            this.tsSearch.Text = "Search";
-            this.tsSearch.Click += new System.EventHandler(this.tsSearch_Click);
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 17);
+            this.toolStripStatusLabel1.Text = "Ready.";
             // 
             // gRQS
             // 
@@ -99,12 +105,6 @@
             this.gRQS.TabStop = false;
             this.gRQS.Text = " Search ";
             // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 17);
-            this.toolStripStatusLabel1.Text = "Ready.";
-            // 
             // RQS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -115,10 +115,12 @@
             this.Controls.Add(this.toolStrip1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "RQS";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RQS :: Search Requirements";
             this.Load += new System.EventHandler(this.RQS_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RQS_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

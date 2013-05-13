@@ -65,7 +65,7 @@ namespace RQS
             }
         }
 
-        public List<FR> Search(SearchBy searchBy, string value, bool limitResults)
+        public List<FR> Search(SearchBy searchBy, string[] values, bool limitResults)
         {
             List<FR> Result = new List<FR>();
 
@@ -74,8 +74,11 @@ namespace RQS
             Row row;
             FR FR;
 
-            // change tolower to get more results
-            value = value.ToLower();
+            // change to lower to get more results
+            for (int a = 0; a < values.Length; a++)
+            {
+                values[a] = values[a].ToLower();
+            }
 
             foreach (string XLSFile in XLSFiles)
             {
@@ -101,21 +104,24 @@ namespace RQS
                     {
                         case SearchBy.FR_ID: // If search criteria NOT equals to cell value
                             if (row.GetCell(0).IsEmpty ||
-                                !row.GetCell(0).Value.ToString().ToLower().Equals(value))
+                                (values.Length == 1 && !row.GetCell(0).Value.ToString().ToLower().Equals(values)) ||
+                                (values.Length > 1 && !MultiSearchORlogic(row.GetCell(0).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
                             break;
                         case SearchBy.FR_TMS_Task: // If search criteria is NOT present in cell value
                             if (row.GetCell(1).IsEmpty ||
-                                !row.GetCell(1).Value.ToString().ToLower().Contains(value))
+                                (values.Length == 1 && !row.GetCell(1).Value.ToString().ToLower().Contains(values[0])) ||
+                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(1).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
                             break;
                         case SearchBy.FR_TEXT: // If search criteria is NOT present in cell value
                             if (row.GetCell(3).IsEmpty ||
-                                !row.GetCell(3).Value.ToString().ToLower().Contains(value))
+                                (values.Length == 1 && !row.GetCell(3).Value.ToString().ToLower().Contains(values[0])) ||
+                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(3).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
@@ -142,6 +148,30 @@ namespace RQS
                 }
             }
             return Result;
+        }
+
+        // Return true in case all values present in text
+        public bool MultiSearchANDlogic(string text, string[] values)
+        {
+            bool result = true;
+            for (int a = 0; a < values.Length; a++)
+            {
+                result = result & text.Contains(values[a]);
+            }
+            return result;
+        }
+
+        // Return true in case at leats one value present in text
+        public bool MultiSearchORlogic(string text, string[] values)
+        {
+            for (int a = 0; a < values.Length; a++)
+            {
+                if (text.Contains(values[a]))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

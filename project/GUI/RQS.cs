@@ -60,5 +60,13 @@ namespace RQS.GUI
         {
             DisplayControl(cAbout);
         }
+
+        private void RQS_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.WindowState = FormWindowState.Minimized;
+            }
+        }
     }
 }

@@ -70,12 +70,6 @@ namespace RQS.GUI
             {
                 LastMouseDownLocation[0] = DataGridView.HitTest(e.X, e.Y).RowIndex;
                 LastMouseDownLocation[1] = DataGridView.HitTest(e.X, e.Y).ColumnIndex;
-
-                if (LastMouseDownLocation[0] >= 0)
-                {
-                    DataGridView.ClearSelection();
-                    DataGridView.Rows[LastMouseDownLocation[0]].Selected = true;
-                }
             }
         }
 
@@ -95,8 +89,17 @@ namespace RQS.GUI
             // Clear previous results
             DataGridView.Rows.Clear();
             // Search
+            string[] criteria;
+            if (textBox1.Text.Contains(";"))
+            {
+                 criteria = textBox1.Text.Split(';');
+            }
+            else
+            {
+                criteria = new string[] { textBox1.Text };
+            }
             List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboBox1.SelectedIndex, 
-                textBox1.Text, checkBox1.Checked);
+                criteria, checkBox1.Checked);
             // If nothing is found
             if (FRs.Count <= 0)
             {
