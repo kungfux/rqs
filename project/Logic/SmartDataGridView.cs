@@ -335,6 +335,7 @@ namespace RQS.Logic
             if (!ColumnsVisibilityWasLoaded && this.Columns.Count > ColumnIndex)
             {
                 ColumnsVisibility[ColumnIndex] = false;
+                this.Columns[ColumnIndex].Visible = false;
             }
         }
         #endregion
