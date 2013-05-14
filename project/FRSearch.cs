@@ -177,8 +177,8 @@ namespace RQS
                     FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
                     FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
                     FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
-                    FR.Created = !row.GetCell(cCreated).IsEmpty ? new DateTime(1899, 12, 30).AddDays(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
-                    FR.Modified = !row.GetCell(cModified).IsEmpty ? new DateTime(1899, 12, 30).AddDays(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
+                    FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
+                    FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
                     Result.Add(FR);
                     // Break if many results
                     if (limitResults && Result.Count >= ClientParams.Parameters.ResultsLimit)

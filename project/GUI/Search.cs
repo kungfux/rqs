@@ -66,6 +66,7 @@ namespace RQS.GUI
             checkboxCell.Value = false;
             DataGridViewColumn IsChangedColumn = new DataGridViewColumn(checkboxCell);
             IsChangedColumn.HeaderText = "Is changed?";
+            IsChangedColumn.SortMode = DataGridViewColumnSortMode.Automatic;
             DataGridView.Columns.Add(IsChangedColumn);
             DataGridView.HideColumnByDefault(8);
 
