@@ -41,7 +41,7 @@ namespace RQS.GUI
         }
 
         private FRSearch FRSearch = new FRSearch();
-        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 6);
+        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 9);
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
         private SmartDataGridViewColumnSorter ColumnSorter;
 
@@ -57,6 +57,17 @@ namespace RQS.GUI
             DataGridView.Columns.Add("", "FR TMS Task");
             DataGridView.Columns.Add("", "FR Text");
             DataGridView.Columns.Add("", "CCP");
+            DataGridView.Columns.Add("", "Date created");
+            DataGridView.HideColumnByDefault(6);
+            DataGridView.Columns.Add("", "Date modified");
+            DataGridView.HideColumnByDefault(7);
+
+            DataGridViewCheckBoxCell checkboxCell = new DataGridViewCheckBoxCell();
+            checkboxCell.Value = false;
+            DataGridViewColumn IsChangedColumn = new DataGridViewColumn(checkboxCell);
+            IsChangedColumn.HeaderText = "Is changed?";
+            DataGridView.Columns.Add(IsChangedColumn);
+            DataGridView.HideColumnByDefault(8);
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
             DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
@@ -85,6 +96,15 @@ namespace RQS.GUI
             {
                 MessageBox.Show("No .xls files found!", "RQS",
                      MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bSearch.Enabled = false;
+                return;
+            }
+            // Check if user forgot specify keyword
+            if (textBox1.Text.Length <= 0)
+            {
+                MessageBox.Show("Specify search keyword(s) first!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                textBox1.Focus();
                 return;
             }
             // perform searching
@@ -118,11 +138,15 @@ namespace RQS.GUI
                 {
                     DataGridView.Rows.Add(
                         (a + 1).ToString(),
-                        FRs[a].FoundInFile,
+                        FRs[a].FRSource,
                         FRs[a].FRID,
                         FRs[a].FRTMSTask,
                         FRs[a].FRText,
-                        FRs[a].CCP);
+                        FRs[a].CCP,
+                        FRs[a].Created,
+                        FRs[a].Modified,
+                        FRs[a].Created.Length >0 && FRs[a].Modified.Length > 0
+                            ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
                 }
             }
 

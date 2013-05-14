@@ -31,11 +31,12 @@ namespace RQS
 {
     internal class FR
     {
-        public string FoundInFile;
-
+        public string FRSource;
         public string FRID;
         public string FRTMSTask;
         public string FRText;
         public string CCP;
+        public string Created;
+        public string Modified;
     }
 }

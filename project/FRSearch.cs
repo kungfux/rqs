@@ -29,6 +29,7 @@ using System.IO;
 using System.Collections.Generic;
 using ExcelLibrary.SpreadSheet;
 using System.Windows.Forms;
+using System;
 
 namespace RQS
 {
@@ -95,7 +96,49 @@ namespace RQS
 
                 sheet = book.Worksheets[0];
 
-                for (int a = sheet.Cells.FirstRowIndex; a <= sheet.Cells.LastRowIndex; a++)
+                // Determine columns
+                int cFRID = -1;
+                int cFRTMSTask = -1;
+                int cFRText = -1;
+                int cCCP = -1;
+                int cCreated = -1;
+                int cModified = -1;
+
+                if (sheet.Cells.FirstRowIndex >= 0)
+                {
+                    row = sheet.Cells.GetRow(0);
+
+                    for (int a = row.FirstColIndex; a <= row.LastColIndex; a++)
+                    {
+                        if (row.GetCell(a).IsEmpty)
+                        {
+                            continue;
+                        }
+                        switch (row.GetCell(a).Value.ToString().ToLower())
+                        {
+                            case "fr id":
+                                cFRID = a;
+                                break;
+                            case "fr tms task":
+                                cFRTMSTask = a;
+                                break;
+                            case "functional requirements":
+                                cFRText = a;
+                                break;
+                            case "ccp":
+                                cCCP = a;
+                                break;
+                            case "fr date":
+                                cCreated = a;
+                                break;
+                            case "last modified on":
+                                cModified = a;
+                                break;
+                        }
+                    }
+                }
+
+                for (int a = sheet.Cells.FirstRowIndex + 1; a <= sheet.Cells.LastRowIndex; a++)
                 {
                     row = sheet.Cells.GetRow(a);
 
@@ -103,25 +146,25 @@ namespace RQS
                     switch (searchBy)
                     {
                         case SearchBy.FR_ID: // If search criteria NOT equals to cell value
-                            if (row.GetCell(0).IsEmpty ||
-                                (values.Length == 1 && !row.GetCell(0).Value.ToString().ToLower().Equals(values)) ||
-                                (values.Length > 1 && !MultiSearchORlogic(row.GetCell(0).Value.ToString().ToLower(), values)))
+                            if (row.GetCell(cFRID).IsEmpty ||
+                                (values.Length == 1 && !row.GetCell(cFRID).Value.ToString().ToLower().Equals(values[0])) ||
+                                (values.Length > 1 && !MultiSearchORlogic(row.GetCell(cFRID).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
                             break;
                         case SearchBy.FR_TMS_Task: // If search criteria is NOT present in cell value
-                            if (row.GetCell(1).IsEmpty ||
-                                (values.Length == 1 && !row.GetCell(1).Value.ToString().ToLower().Contains(values[0])) ||
-                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(1).Value.ToString().ToLower(), values)))
+                            if (row.GetCell(cFRTMSTask).IsEmpty ||
+                                (values.Length == 1 && !row.GetCell(cFRTMSTask).Value.ToString().ToLower().Contains(values[0])) ||
+                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(cFRTMSTask).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
                             break;
                         case SearchBy.FR_TEXT: // If search criteria is NOT present in cell value
-                            if (row.GetCell(3).IsEmpty ||
-                                (values.Length == 1 && !row.GetCell(3).Value.ToString().ToLower().Contains(values[0])) ||
-                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(3).Value.ToString().ToLower(), values)))
+                            if (row.GetCell(cFRText).IsEmpty ||
+                                (values.Length == 1 && !row.GetCell(cFRText).Value.ToString().ToLower().Contains(values[0])) ||
+                                (values.Length > 1 && !MultiSearchANDlogic(row.GetCell(cFRText).Value.ToString().ToLower(), values)))
                             {
                                 continue;
                             }
@@ -129,11 +172,13 @@ namespace RQS
                     }
 
                     FR = new FR();
-                    FR.FoundInFile = XLSFile;
-                    FR.FRID = !row.GetCell(0).IsEmpty ? row.GetCell(0).Value.ToString() : "";
-                    FR.FRTMSTask = !row.GetCell(1).IsEmpty ? row.GetCell(1).Value.ToString() : "";
-                    FR.FRText = !row.GetCell(3).IsEmpty ? row.GetCell(3).Value.ToString() : "";
-                    FR.CCP = !row.GetCell(7).IsEmpty ? row.GetCell(7).Value.ToString() : "";
+                    FR.FRSource = XLSFile;
+                    FR.FRID = !row.GetCell(cFRID).IsEmpty ? row.GetCell(cFRID).Value.ToString() : "";
+                    FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
+                    FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
+                    FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
+                    FR.Created = !row.GetCell(cCreated).IsEmpty ? new DateTime(1899, 12, 30).AddDays(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
+                    FR.Modified = !row.GetCell(cModified).IsEmpty ? new DateTime(1899, 12, 30).AddDays(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
                     Result.Add(FR);
                     // Break if many results
                     if (limitResults && Result.Count >= ClientParams.Parameters.ResultsLimit)
