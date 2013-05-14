@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System;
 using RQS.Logic;
+using System.Diagnostics;
 
 namespace RQS.GUI
 {
@@ -204,6 +205,20 @@ namespace RQS.GUI
         {
             contextCopyCell.Enabled = DataGridView.SelectedRows.Count > 0;
             contextCopyRows.Enabled = DataGridView.SelectedRows.Count > 0;
+            contextOpenSourceFile.Enabled = DataGridView.SelectedRows.Count > 0;
+        }
+
+        private void contextOpenSourceFile_Click(object sender, EventArgs e)
+        {
+            if (LastMouseDownLocation[0] >= 0 &&
+                LastMouseDownLocation[1] >= 0 &&
+                DataGridView.Rows.Count >= LastMouseDownLocation[0] &&
+                DataGridView.Columns.Count >= LastMouseDownLocation[1] &&
+                DataGridView.Rows[LastMouseDownLocation[0]].Cells[1].Value != null)
+            {
+                Process.Start(ClientParams.Parameters.XLSLocation + "\\" +
+                    DataGridView.Rows[LastMouseDownLocation[0]].Cells[1].Value.ToString());
+            }
         }
     }
 }

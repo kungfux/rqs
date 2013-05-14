@@ -41,6 +41,8 @@
             this.contextCopyRows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextCustomize = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextOpenSourceFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -133,37 +135,51 @@
             this.contextCopyCell,
             this.contextCopyRows,
             this.toolStripSeparator1,
+            this.contextOpenSourceFile,
+            this.toolStripSeparator2,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 76);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 126);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
             // 
             this.contextCopyCell.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextCopyCell.Name = "contextCopyCell";
-            this.contextCopyCell.Size = new System.Drawing.Size(146, 22);
+            this.contextCopyCell.Size = new System.Drawing.Size(160, 22);
             this.contextCopyCell.Text = "Copy cell";
             this.contextCopyCell.Click += new System.EventHandler(this.contextCopyCell_Click);
             // 
             // contextCopyRows
             // 
             this.contextCopyRows.Name = "contextCopyRows";
-            this.contextCopyRows.Size = new System.Drawing.Size(146, 22);
+            this.contextCopyRows.Size = new System.Drawing.Size(160, 22);
             this.contextCopyRows.Text = "Copy row(s)";
             this.contextCopyRows.Click += new System.EventHandler(this.contextCopyRows_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // contextCustomize
             // 
             this.contextCustomize.Name = "contextCustomize";
-            this.contextCustomize.Size = new System.Drawing.Size(146, 22);
+            this.contextCustomize.Size = new System.Drawing.Size(160, 22);
             this.contextCustomize.Text = "Customize...";
             this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
+            // 
+            // contextOpenSourceFile
+            // 
+            this.contextOpenSourceFile.Name = "contextOpenSourceFile";
+            this.contextOpenSourceFile.Size = new System.Drawing.Size(160, 22);
+            this.contextOpenSourceFile.Text = "Open source file";
+            this.contextOpenSourceFile.Click += new System.EventHandler(this.contextOpenSourceFile_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
             // 
             // Search
             // 
@@ -197,5 +213,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextCopyRows;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem contextCustomize;
+        private System.Windows.Forms.ToolStripMenuItem contextOpenSourceFile;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
