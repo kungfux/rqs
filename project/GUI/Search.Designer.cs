@@ -40,12 +40,14 @@
             this.contextCopyCell = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCopyRows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.contextCustomize = new System.Windows.Forms.ToolStripMenuItem();
             this.contextOpenSourceFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextCustomize = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -64,11 +66,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkBox1);
-            this.groupBox1.Controls.Add(this.bSearch);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.comboBox1);
-            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.tableLayoutPanel2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
@@ -79,21 +77,22 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(530, 26);
+            this.checkBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBox1.Location = new System.Drawing.Point(644, 10);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(117, 17);
+            this.checkBox1.Size = new System.Drawing.Size(144, 23);
             this.checkBox1.TabIndex = 3;
             this.checkBox1.Text = "Limit search results";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // bSearch
             // 
-            this.bSearch.Location = new System.Drawing.Point(432, 22);
+            this.bSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSearch.Location = new System.Drawing.Point(543, 10);
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(92, 23);
+            this.bSearch.Size = new System.Drawing.Size(95, 23);
             this.bSearch.TabIndex = 2;
             this.bSearch.Text = "Search";
             this.bSearch.UseVisualStyleBackColor = true;
@@ -101,33 +100,37 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(262, 24);
+            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Location = new System.Drawing.Point(223, 10);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(164, 21);
+            this.textBox1.Size = new System.Drawing.Size(314, 21);
             this.textBox1.TabIndex = 1;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // comboBox1
             // 
+            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "FR ID",
             "FR TMS Task",
             "FR Text"});
-            this.comboBox1.Location = new System.Drawing.Point(90, 24);
+            this.comboBox1.Location = new System.Drawing.Point(73, 10);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(166, 21);
+            this.comboBox1.Size = new System.Drawing.Size(144, 21);
             this.comboBox1.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 27);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.Size = new System.Drawing.Size(64, 29);
             this.label1.TabIndex = 0;
             this.label1.Text = "Search by";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // contextMenuStrip1
             // 
@@ -139,47 +142,71 @@
             this.toolStripSeparator2,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 104);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
             // 
             this.contextCopyCell.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextCopyCell.Name = "contextCopyCell";
-            this.contextCopyCell.Size = new System.Drawing.Size(160, 22);
+            this.contextCopyCell.Size = new System.Drawing.Size(163, 22);
             this.contextCopyCell.Text = "Copy cell";
             this.contextCopyCell.Click += new System.EventHandler(this.contextCopyCell_Click);
             // 
             // contextCopyRows
             // 
             this.contextCopyRows.Name = "contextCopyRows";
-            this.contextCopyRows.Size = new System.Drawing.Size(160, 22);
+            this.contextCopyRows.Size = new System.Drawing.Size(163, 22);
             this.contextCopyRows.Text = "Copy row(s)";
             this.contextCopyRows.Click += new System.EventHandler(this.contextCopyRows_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
-            // 
-            // contextCustomize
-            // 
-            this.contextCustomize.Name = "contextCustomize";
-            this.contextCustomize.Size = new System.Drawing.Size(160, 22);
-            this.contextCustomize.Text = "Customize...";
-            this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
             // 
             // contextOpenSourceFile
             // 
             this.contextOpenSourceFile.Name = "contextOpenSourceFile";
-            this.contextOpenSourceFile.Size = new System.Drawing.Size(160, 22);
+            this.contextOpenSourceFile.Size = new System.Drawing.Size(163, 22);
             this.contextOpenSourceFile.Text = "Open source file";
             this.contextOpenSourceFile.Click += new System.EventHandler(this.contextOpenSourceFile_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(160, 6);
+            // 
+            // contextCustomize
+            // 
+            this.contextCustomize.Name = "contextCustomize";
+            this.contextCustomize.Size = new System.Drawing.Size(163, 22);
+            this.contextCustomize.Text = "Customize...";
+            this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.ColumnCount = 5;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 101F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox1, 4, 1);
+            this.tableLayoutPanel2.Controls.Add(this.comboBox1, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.bSearch, 3, 1);
+            this.tableLayoutPanel2.Controls.Add(this.textBox1, 2, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(791, 44);
+            this.tableLayoutPanel2.TabIndex = 5;
             // 
             // Search
             // 
@@ -195,6 +222,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -215,5 +244,6 @@
         private System.Windows.Forms.ToolStripMenuItem contextCustomize;
         private System.Windows.Forms.ToolStripMenuItem contextOpenSourceFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
     }
 }
