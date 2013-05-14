@@ -97,9 +97,13 @@ namespace RQS
                 sheet = book.Worksheets[0];
 
                 // Determine columns
-                int cFRID = -1;
-                int cFRTMSTask = -1;
-                int cFRText = -1;
+                // TODO:
+                // Some of columns have default value as temporary solution
+                //  to have more search results but probably it is needed to cover
+                //  more excel headers. Needs to investigate.
+                int cFRID = 0;
+                int cFRTMSTask = 1;
+                int cFRText = 3;
                 int cCCP = -1;
                 int cCreated = -1;
                 int cModified = -1;

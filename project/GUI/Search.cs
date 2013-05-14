@@ -109,8 +109,8 @@ namespace RQS.GUI
                 return;
             }
             // perform searching
-            bSearch.Enabled = false;
-            bSearch.Text = "Searching...";
+            SetEnabledToSearchControls(false);
+            this.Cursor = Cursors.WaitCursor;
             Application.DoEvents();
             // Clear previous results
             DataGridView.Rows.Clear();
@@ -151,8 +151,8 @@ namespace RQS.GUI
                 }
             }
 
-            bSearch.Text = "Search";
-            bSearch.Enabled = true;
+            this.Cursor = Cursors.Arrow;
+            SetEnabledToSearchControls(true);
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -244,6 +244,14 @@ namespace RQS.GUI
                 Process.Start(ClientParams.Parameters.XLSLocation + "\\" +
                     DataGridView.Rows[LastMouseDownLocation[0]].Cells[1].Value.ToString());
             }
+        }
+
+        private void SetEnabledToSearchControls(bool Enabled)
+        {
+            comboBox1.Enabled = Enabled;
+            textBox1.Enabled = Enabled;
+            bSearch.Enabled = Enabled;
+            checkBox1.Enabled = Enabled;
         }
     }
 }
