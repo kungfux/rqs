@@ -54,12 +54,12 @@ namespace RQS.GUI
             DataGridView.Columns.Add("", "#");
             DataGridView.Columns.Add("", "Source");
             DataGridView.Columns.Add("", "FR ID");
-            DataGridView.Columns.Add("", "FR TMS Task");
-            DataGridView.Columns.Add("", "FR Text");
+            DataGridView.Columns.Add("", "TMS task");
+            DataGridView.Columns.Add("", "FR text");
             DataGridView.Columns.Add("", "CCP");
-            DataGridView.Columns.Add("", "Date created");
+            DataGridView.Columns.Add("", "Created");
             DataGridView.HideColumnByDefault(6);
-            DataGridView.Columns.Add("", "Date modified");
+            DataGridView.Columns.Add("", "Last modified");
             DataGridView.HideColumnByDefault(7);
 
             DataGridViewCheckBoxCell checkboxCell = new DataGridViewCheckBoxCell();
