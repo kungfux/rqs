@@ -92,14 +92,6 @@ namespace RQS.GUI
 
         private void bSearch_Click(object sender, System.EventArgs e)
         {
-            // Check is .xls files are loaded
-            if (FRSearch.XLSFilesCount <= 0)
-            {
-                MessageBox.Show("No .xls files found!", "RQS",
-                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                bSearch.Enabled = false;
-                return;
-            }
             // Check if user forgot specify keyword
             if (textBox1.Text.Length <= 0)
             {
@@ -115,15 +107,24 @@ namespace RQS.GUI
             // Clear previous results
             DataGridView.Rows.Clear();
             // Search
-            string[] criteria;
+            string[] criteria = new string[] { textBox1.Text };;
             if (textBox1.Text.Contains(";"))
             {
-                 criteria = textBox1.Text.Split(';');
+                criteria = textBox1.Text.Split(';');
             }
             else
             {
-                criteria = new string[] { textBox1.Text };
+                if (textBox1.Text.Contains(","))
+                {
+                    criteria = textBox1.Text.Split(',');
+                }
             }
+            // Remove trailing white spaces
+            for (int a=0; a<criteria.Length;a++)
+            {
+                criteria[a] = criteria[a].Trim();
+            }
+
             List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboBox1.SelectedIndex, 
                 criteria, checkBox1.Checked);
             // If nothing is found

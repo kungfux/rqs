@@ -35,17 +35,7 @@ namespace RQS
 {
     internal class FRSearch
     {
-        public int XLSFilesCount
-        {
-            get { return XLSFiles.Length; }
-        }
-
         private string[] XLSFiles = new string[0];
-
-        public FRSearch()
-        {
-            LoadXLSFilesList();
-        }
 
         public enum SearchBy
         {
@@ -62,12 +52,26 @@ namespace RQS
             XLSFiles = new string[XLSFilesCount];
             for (int a = 0; a < XLSFilesCount; a++)
             {
+                if (XLSFilesInfo[a].Name.StartsWith(".~"))
+                {
+                    continue;
+                }
                 XLSFiles[a] = XLSFilesInfo[a].Name;
             }
         }
 
         public List<FR> Search(SearchBy searchBy, string[] values, bool limitResults)
         {
+            // Load files before each search to
+            // avoid message about locked files
+            LoadXLSFilesList();
+            if (XLSFiles.Length <= 0)
+            {
+                MessageBox.Show("No .xls files found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+
             List<FR> Result = new List<FR>();
 
             Workbook book;
@@ -83,6 +87,11 @@ namespace RQS
 
             foreach (string XLSFile in XLSFiles)
             {
+                if (XLSFile == null)
+                {
+                    continue;
+                }
+
                 try
                 {
                     book = Workbook.Load(ClientParams.Parameters.XLSLocation + "\\" + XLSFile);
