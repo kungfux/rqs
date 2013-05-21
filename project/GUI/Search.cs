@@ -127,28 +127,33 @@ namespace RQS.GUI
 
             List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboBox1.SelectedIndex, 
                 criteria, checkBox1.Checked);
-            // If nothing is found
-            if (FRs.Count <= 0)
+            // If FRs is null then no xls files are found
+            // and reported by search engine
+            if (FRs != null)
             {
-                MessageBox.Show("Nothing is found!", "RQS",
-                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                // Display results
-                for (int a = 0; a < FRs.Count; a++)
+                // If nothing is found
+                if (FRs.Count <= 0)
                 {
-                    DataGridView.Rows.Add(
-                        (a + 1).ToString(),
-                        FRs[a].FRSource,
-                        FRs[a].FRID,
-                        FRs[a].FRTMSTask,
-                        FRs[a].FRText,
-                        FRs[a].CCP,
-                        FRs[a].Created,
-                        FRs[a].Modified,
-                        FRs[a].Created.Length >0 && FRs[a].Modified.Length > 0
-                            ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
+                    MessageBox.Show("Nothing is found!", "RQS",
+                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // Display results
+                    for (int a = 0; a < FRs.Count; a++)
+                    {
+                        DataGridView.Rows.Add(
+                            (a + 1).ToString(),
+                            FRs[a].FRSource,
+                            FRs[a].FRID,
+                            FRs[a].FRTMSTask,
+                            FRs[a].FRText,
+                            FRs[a].CCP,
+                            FRs[a].Created,
+                            FRs[a].Modified,
+                            FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
+                                ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
+                    }
                 }
             }
 
