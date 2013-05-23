@@ -34,6 +34,16 @@ namespace RQS.GUI
         public RQS()
         {
             InitializeComponent();
+
+            // Apply custom window size
+            this.Width = ClientParams.Parameters.WindowSizeWidth;
+            this.Height = ClientParams.Parameters.WindowSizeHeight;
+
+            if ((FormWindowState)ClientParams.Parameters.WindowSizeState == FormWindowState.Normal ||
+                (FormWindowState)ClientParams.Parameters.WindowSizeState == FormWindowState.Maximized)
+            {
+                this.WindowState = (FormWindowState)ClientParams.Parameters.WindowSizeState;
+            }
         }
 
         private Search cSearch;
@@ -88,6 +98,23 @@ namespace RQS.GUI
             if (e.KeyCode == Keys.Escape)
             {
                 this.WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        private void RQS_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Save custom window size
+            if (this.WindowState != FormWindowState.Minimized)
+            {
+                ClientParams.Parameters.WindowSizeState = (int)this.WindowState;
+
+                if (this.WindowState != FormWindowState.Maximized)
+                {
+                    ClientParams.Parameters.WindowSizeWidth = this.Width;
+                    ClientParams.Parameters.WindowSizeHeight = this.Height;
+                }
+
+                new ClientParams().SaveParams();
             }
         }
     }

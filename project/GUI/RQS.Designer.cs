@@ -122,6 +122,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RQS :: Search Requirements";
             this.Load += new System.EventHandler(this.RQS_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RQS_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RQS_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

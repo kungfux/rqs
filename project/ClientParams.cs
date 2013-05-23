@@ -44,6 +44,9 @@ namespace RQS
         public Color ColoredLinesColor1 = Color.FromArgb(212, 208, 200);
         public Color ColoredLinesColor2 = Color.FromArgb(255, 255, 255);
         public int ResultsLimit = 100;
+        public int WindowSizeWidth = 783;
+        public int WindowSizeHeight = 527;
+        public int WindowSizeState = (int)FormWindowState.Normal;
         #endregion
 
         public static ClientParams Parameters
@@ -55,10 +58,60 @@ namespace RQS
                     lock (_lock)
                     {
                         _clientParams = new ClientParams();
+                        _clientParams.LoadParams();
                     }
                 }
                 return _clientParams;
             }
+        }
+
+        public void SaveParams()
+        {
+            if (WindowSizeState != ClientParams.Parameters.WindowSizeState)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeState", ClientParams.Parameters.WindowSizeState);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeState");
+            }
+
+            if (WindowSizeWidth != ClientParams.Parameters.WindowSizeWidth)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeWidth", ClientParams.Parameters.WindowSizeWidth);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeWidth");
+            }
+
+            if (WindowSizeHeight != ClientParams.Parameters.WindowSizeHeight)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeHeight", ClientParams.Parameters.WindowSizeHeight);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "WindowSizeHeight");
+            }
+        }
+
+        public void LoadParams()
+        {
+            WindowSizeState =
+                Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "WindowSizeState", WindowSizeState);
+            WindowSizeWidth =
+                Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "WindowSizeWidth", WindowSizeWidth);
+            WindowSizeHeight =
+                Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "WindowSizeHeight", WindowSizeHeight);
         }
     }
 }
