@@ -69,9 +69,11 @@
     <Compile Include="GUI\Setup.Designer.cs">
       <DependentUpon>Setup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\DataGridViewRichTextBoxCell.cs">
-    </Compile>
+    <Compile Include="Logic\DataGridViewRichTextBoxCell.cs" />
     <Compile Include="Logic\DataGridViewRichTextBoxColumn.cs" />
+    <Compile Include="Logic\DataGridViewRichTextBoxEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Logic\SmartDataGridViewColumnSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
