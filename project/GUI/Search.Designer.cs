@@ -34,14 +34,16 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboSearchBy = new System.Windows.Forms.ComboBox();
             this.bSearch = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboSearchText = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextCopyCell = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCopyRows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOpenSourceFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeDuplicatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.contextCustomize = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
@@ -86,9 +88,9 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.checkBox1, 4, 1);
-            this.tableLayoutPanel2.Controls.Add(this.comboBox1, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.comboSearchBy, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.bSearch, 3, 1);
-            this.tableLayoutPanel2.Controls.Add(this.textBox1, 2, 1);
+            this.tableLayoutPanel2.Controls.Add(this.comboSearchText, 2, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -122,19 +124,19 @@
             this.checkBox1.Text = "Limit search results";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // comboSearchBy
             // 
-            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboSearchBy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboSearchBy.FormattingEnabled = true;
+            this.comboSearchBy.Items.AddRange(new object[] {
             "FR ID",
             "FR TMS Task",
             "FR Text"});
-            this.comboBox1.Location = new System.Drawing.Point(73, 10);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(144, 21);
-            this.comboBox1.TabIndex = 4;
+            this.comboSearchBy.Location = new System.Drawing.Point(73, 10);
+            this.comboSearchBy.Name = "comboSearchBy";
+            this.comboSearchBy.Size = new System.Drawing.Size(144, 21);
+            this.comboSearchBy.TabIndex = 4;
             // 
             // bSearch
             // 
@@ -147,14 +149,16 @@
             this.bSearch.UseVisualStyleBackColor = true;
             this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
             // 
-            // textBox1
+            // comboSearchText
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(223, 10);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(314, 21);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.comboSearchText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboSearchText.FormattingEnabled = true;
+            this.comboSearchText.Location = new System.Drawing.Point(223, 10);
+            this.comboSearchText.Name = "comboSearchText";
+            this.comboSearchText.Size = new System.Drawing.Size(314, 21);
+            this.comboSearchText.TabIndex = 1;
+            this.comboSearchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboSearchBy_KeyDown);
+            this.comboSearchText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboSearchText_KeyPress);
             // 
             // contextMenuStrip1
             // 
@@ -163,48 +167,64 @@
             this.contextCopyRows,
             this.toolStripSeparator1,
             this.contextOpenSourceFile,
+            this.operationsToolStripMenuItem,
             this.toolStripSeparator2,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(164, 104);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 148);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
             // 
             this.contextCopyCell.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.contextCopyCell.Name = "contextCopyCell";
-            this.contextCopyCell.Size = new System.Drawing.Size(163, 22);
+            this.contextCopyCell.Size = new System.Drawing.Size(160, 22);
             this.contextCopyCell.Text = "Copy cell";
             this.contextCopyCell.Click += new System.EventHandler(this.contextCopyCell_Click);
             // 
             // contextCopyRows
             // 
             this.contextCopyRows.Name = "contextCopyRows";
-            this.contextCopyRows.Size = new System.Drawing.Size(163, 22);
+            this.contextCopyRows.Size = new System.Drawing.Size(160, 22);
             this.contextCopyRows.Text = "Copy row(s)";
             this.contextCopyRows.Click += new System.EventHandler(this.contextCopyRows_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // contextOpenSourceFile
             // 
             this.contextOpenSourceFile.Name = "contextOpenSourceFile";
-            this.contextOpenSourceFile.Size = new System.Drawing.Size(163, 22);
+            this.contextOpenSourceFile.Size = new System.Drawing.Size(160, 22);
             this.contextOpenSourceFile.Text = "Open source file";
             this.contextOpenSourceFile.Click += new System.EventHandler(this.contextOpenSourceFile_Click);
+            // 
+            // operationsToolStripMenuItem
+            // 
+            this.operationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeDuplicatesToolStripMenuItem});
+            this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
+            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.operationsToolStripMenuItem.Text = "Operations";
+            // 
+            // removeDuplicatesToolStripMenuItem
+            // 
+            this.removeDuplicatesToolStripMenuItem.Name = "removeDuplicatesToolStripMenuItem";
+            this.removeDuplicatesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeDuplicatesToolStripMenuItem.Text = "Remove duplication";
+            this.removeDuplicatesToolStripMenuItem.Click += new System.EventHandler(this.removeDuplicatesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
             // 
             // contextCustomize
             // 
             this.contextCustomize.Name = "contextCustomize";
-            this.contextCustomize.Size = new System.Drawing.Size(163, 22);
+            this.contextCustomize.Size = new System.Drawing.Size(160, 22);
             this.contextCustomize.Text = "Customize...";
             this.contextCustomize.Click += new System.EventHandler(this.contextCustomize_Click);
             // 
@@ -233,8 +253,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboSearchBy;
         private System.Windows.Forms.Button bSearch;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -245,5 +264,8 @@
         private System.Windows.Forms.ToolStripMenuItem contextOpenSourceFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.ComboBox comboSearchText;
+        private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeDuplicatesToolStripMenuItem;
     }
 }

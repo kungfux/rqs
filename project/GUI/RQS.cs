@@ -113,9 +113,10 @@ namespace RQS.GUI
                     ClientParams.Parameters.WindowSizeWidth = this.Width;
                     ClientParams.Parameters.WindowSizeHeight = this.Height;
                 }
-
-                new ClientParams().SaveParams();
             }
+            // Save search history
+            // No special steps are needed, just call SaveParams()
+            new ClientParams().SaveParams();
         }
     }
 }

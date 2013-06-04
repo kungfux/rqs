@@ -41,12 +41,16 @@ namespace RQS
 
         #region Default parameters
         public string XLSLocation = Application.StartupPath;
+
         public Color ColoredLinesColor1 = Color.FromArgb(212, 208, 200);
         public Color ColoredLinesColor2 = Color.FromArgb(255, 255, 255);
+
         public int ResultsLimit = 100;
         public int WindowSizeWidth = 783;
         public int WindowSizeHeight = 527;
         public int WindowSizeState = (int)FormWindowState.Normal;
+
+        public string[] SearchHistory;
         #endregion
 
         public static ClientParams Parameters
@@ -65,8 +69,11 @@ namespace RQS
             }
         }
 
+        // Save custom parameters
+        // or remove which are set by default
         public void SaveParams()
         {
+            // Window Size
             if (WindowSizeState != ClientParams.Parameters.WindowSizeState)
             {
                 Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
@@ -99,10 +106,52 @@ namespace RQS
                 Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
                     RegPath, "WindowSizeHeight");
             }
+            // end of Window Size
+
+            // Search History
+            if (ClientParams.Parameters.SearchHistory != null &&
+                ClientParams.Parameters.SearchHistory.Length > 0)
+            {
+                string History = "";
+                if (ClientParams.Parameters.SearchHistory.Length == 1)
+                {
+                    History = ClientParams.Parameters.SearchHistory[0];
+                }
+                else
+                {
+                    for (int a = 0; a < ClientParams.Parameters.SearchHistory.Length; a++)
+                    {
+                        if (ClientParams.Parameters.SearchHistory[a] != null &&
+                            !ClientParams.Parameters.SearchHistory[a].Equals(""))
+                        {
+                            History += ClientParams.Parameters.SearchHistory[a];
+                            // Limit saving to 30 records
+                            if (a >= 29)
+                            {
+                                break;
+                            }
+                            // Do not add '|' at the end
+                            if ((a + 1) == ClientParams.Parameters.SearchHistory.Length)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                History += "|";
+                            }
+                        }
+                    }
+                }
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                            RegPath, "History", History);
+            }
+            // end of Search History
         }
 
+        // Load custom parameters
         public void LoadParams()
         {
+            // Window Size
             WindowSizeState =
                 Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
                 RegPath, "WindowSizeState", WindowSizeState);
@@ -112,6 +161,25 @@ namespace RQS
             WindowSizeHeight =
                 Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
                 RegPath, "WindowSizeHeight", WindowSizeHeight);
+            // end of Window Size
+
+            // Search History
+            string History =
+                Registry.ReadKey<string>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "History", null);
+            if (History != null &&
+                !History.Equals(""))
+            {
+                if (History.Contains("|"))
+                {
+                    SearchHistory = History.Split('|');
+                }
+                else
+                {
+                    SearchHistory = new string[1] { History };
+                }
+            }
+            // end of Search History
         }
     }
 }
