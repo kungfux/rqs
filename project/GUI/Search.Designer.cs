@@ -171,7 +171,7 @@
             this.toolStripSeparator2,
             this.contextCustomize});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 148);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 126);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // contextCopyCell
