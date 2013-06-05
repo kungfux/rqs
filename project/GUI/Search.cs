@@ -117,25 +117,69 @@ namespace RQS.GUI
             DataGridView.Rows.Clear();
             // Save search criteria to history
             AddRecordToHistory();
-            // Search
-            string[] criteria = new string[] { comboSearchText.Text }; ;
+            // Prepare search keywords
+            string[] criteria = new string[] { comboSearchText.Text };
+            // Detect several keywords splitted by ';' or ',' or '-'
+            // Priorities for splitting will be the following: ',;-'
             if (comboSearchText.Text.Contains(";"))
             {
                 criteria = comboSearchText.Text.Split(';');
             }
-            else
+            if (comboSearchText.Text.Contains(","))
             {
-                if (comboSearchText.Text.Contains(","))
+                criteria = comboSearchText.Text.Split(',');
+            }
+            if ((FRSearch.SearchBy)comboSearchBy.SelectedIndex == FRSearch.SearchBy.FR_ID)
+            {
+                // Navigate over initial search array
+                for (int a = 0; a < criteria.Length; a++)
                 {
-                    criteria = comboSearchText.Text.Split(',');
+                    if (criteria[a].Contains("-"))
+                    {
+                        string[] criterias = ExplodeCriterias(criteria[a]);
+                        if (criterias != null)
+                        {
+                            string[] oldArray = criteria;
+                            // -1 because one element of the initial array should be
+                            // deleted and replaced by exploded array
+                            criteria = new string[criteria.Length + criterias.Length - 1];
+                            // Navigate over new search array
+                            for (int b = 0; b < criteria.Length; b++)
+                            {
+                                if (b < a)
+                                {
+                                    criteria[b] = oldArray[b];
+                                    continue;
+                                }
+                                if (b == a)
+                                {
+                                    // Navigate over exploded array
+                                    for (int c = 0; c < criterias.Length; c++)
+                                    {
+                                        criteria[b + c] = criterias[c];
+                                    }
+                                    // -1 because 'for' statement will do ++
+                                    b = b + criterias.Length - 1;
+                                    continue;
+                                }
+                                if (b > a)
+                                {
+                                    criteria[b] = oldArray[a + 1];
+                                    a++;
+                                    continue;
+                                }
+                            }
+                            a = 0;
+                        }
+                    }
                 }
             }
-            // Remove trailing white spaces
+            // Remove white spaces
             for (int a=0; a<criteria.Length;a++)
             {
                 criteria[a] = criteria[a].Trim();
             }
-
+            // Search
             List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboSearchBy.SelectedIndex, 
                 criteria, checkBox1.Checked);
             // If FRs is null then no xls files are found
@@ -170,6 +214,56 @@ namespace RQS.GUI
 
             this.Cursor = Cursors.Arrow;
             SetEnabledToSearchControls(true);
+        }
+
+        // Converts keywords like FR001-005
+        // to array with FR001, FR002, FR003, FR004, FR005
+        private string[] ExplodeCriterias(string str)
+        {
+            // Get 1st and 2nd numbers
+            string[] Input = str.Split('-');
+            if (str == null ||
+                Input.Length != 2)
+            {
+                return null;
+            }
+            // Leave only numbers in Input string
+            int _temp;
+            for (int a = 0; a < Input.Length; a++)
+            {
+                for (int b = 0; b < Input[a].Length; b++)
+                {
+                    if (Input[a].Length > b &&
+                        !int.TryParse(Input[a].Substring(b, 1), out _temp))
+                    {
+                        Input[a] = Input[a].Remove(b, 1);
+                        b--;
+                    }
+                }
+            }
+            // Get numbers
+            int NumberSize = Input[0].Length;
+            int Number1;
+            int Number2;
+            if (!int.TryParse(Input[0], out Number1) ||
+                !int.TryParse(Input[1], out Number2))
+            {
+                return null;
+            }
+            // Check numbers
+            if (Input[0].Length != Input[1].Length ||
+                Number1 > Number2)
+            {
+                return null;
+            }
+            // Generate diapason
+            string[] result = new string[Number2-Number1+1];
+            for (int a = 0; a <= Number2 - Number1; a++)
+            {
+                result[a] = (Number1 + a).ToString("D" + NumberSize.ToString());
+                result[a] = "fr" + result[a];
+            }
+            return result;
         }
 
         private void AddRecordToHistory()
