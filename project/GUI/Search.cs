@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System;
 using RQS.Logic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace RQS.GUI
 {
@@ -251,7 +252,7 @@ namespace RQS.GUI
                 return null;
             }
             // Check numbers
-            if (Input[0].Length != Input[1].Length ||
+            if (Input[0].Length > Input[1].Length ||
                 Number1 > Number2)
             {
                 return null;

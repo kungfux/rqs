@@ -39,7 +39,8 @@ namespace RQS.GUI
             label1.Text = string.Format(label1.Text,
                 Assembly.GetExecutingAssembly().GetName().Version.Major,
                 Assembly.GetExecutingAssembly().GetName().Version.Minor,
-                Assembly.GetExecutingAssembly().GetName().Version.Build);
+                Assembly.GetExecutingAssembly().GetName().Version.Build,
+                Assembly.GetExecutingAssembly().GetName().Version.Revision);
         }
     }
 }
