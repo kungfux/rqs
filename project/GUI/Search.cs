@@ -142,7 +142,7 @@ namespace RQS.GUI
                         {
                             string[] oldArray = criteria;
                             // -1 because one element of the initial array should be
-                            // deleted and replaced by exploded array
+                            //  deleted and replaced by exploded array
                             criteria = new string[criteria.Length + criterias.Length - 1];
                             // Navigate over new search array
                             for (int b = 0; b < criteria.Length; b++)
@@ -255,6 +255,14 @@ namespace RQS.GUI
             if (Input[0].Length > Input[1].Length ||
                 Number1 > Number2)
             {
+                return null;
+            }
+            // Prevent working with big diapason
+            int MaxDiapason = 5000;
+            if (Number2 - Number1 > MaxDiapason)
+            {
+                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be skipped at all!", MaxDiapason), 
+                    "RQS", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
             // Generate diapason
