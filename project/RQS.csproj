@@ -89,6 +89,7 @@
     <Compile Include="Logic\SmartDataGridViewSetupColumns.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SearchOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExcelLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

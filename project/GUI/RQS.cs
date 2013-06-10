@@ -72,6 +72,8 @@ namespace RQS.GUI
             if (cSearch == null)
             {
                 cSearch = new Search();
+                cSearch.backgroundWorkInProgress += new Search.SearchInProgress(cSearch_backgroundWorkInProgress);
+                cSearch.backgroundWorkComplete += new Search.SearchComplete(cSearch_backgroundWorkComplete);
             }
             DisplayControl(cSearch);
         }
@@ -118,6 +120,18 @@ namespace RQS.GUI
             // Save search history
             // No special steps are needed, just call SaveParams()
             new ClientParams().SaveParams();
+        }
+
+        void cSearch_backgroundWorkComplete()
+        {
+            toolStripProgressBar1.Visible = false;
+            toolStripStatusLabel1.Text = "Ready.";
+        }
+
+        void cSearch_backgroundWorkInProgress()
+        {
+            toolStripStatusLabel1.Text = "Searching...";
+            toolStripProgressBar1.Visible = true;
         }
     }
 }

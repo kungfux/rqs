@@ -41,6 +41,11 @@ namespace RQS.GUI
             InitializeComponent();
         }
 
+        public event SearchInProgress backgroundWorkInProgress;
+        public delegate void SearchInProgress();
+        public event SearchComplete backgroundWorkComplete;
+        public delegate void SearchComplete();
+
         private FRSearch FRSearch = new FRSearch();
         private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 9);
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
@@ -110,10 +115,9 @@ namespace RQS.GUI
                 comboSearchText.Focus();
                 return;
             }
-            // perform searching
+            // Preparing
             SetEnabledToSearchControls(false);
             this.Cursor = Cursors.WaitCursor;
-            Application.DoEvents();
             // Clear previous results
             DataGridView.Rows.Clear();
             // Save search criteria to history
@@ -181,40 +185,77 @@ namespace RQS.GUI
                 criteria[a] = criteria[a].Trim();
             }
             // Search
-            List<FR> FRs = FRSearch.Search((FRSearch.SearchBy)comboSearchBy.SelectedIndex, 
-                criteria, checkBox1.Checked);
+            if (backgroundWorker1.IsBusy)
+            {
+                MessageBox.Show("Search is in progress right now! Please wait for results.", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                if (backgroundWorkInProgress != null)
+                {
+                    backgroundWorkInProgress();
+                }
+                SearchOptions options = new SearchOptions();
+                options.SearchCriteria = criteria;
+                options.SearchBy = (FRSearch.SearchBy)comboSearchBy.SelectedIndex;
+                options.LimitResults = checkBox1.Checked;
+                backgroundWorker1.RunWorkerAsync(options);
+            }
+        }
+
+        // Perform searching in the second thread
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            SearchOptions options = (SearchOptions)e.Argument;
+            // Search
+            List<FR> FRs = FRSearch.Search(options.SearchBy,
+                options.SearchCriteria, options.LimitResults);
             // If FRs is null then no xls files are found
             // and reported by search engine
             if (FRs != null)
             {
-                // If nothing is found
-                if (FRs.Count <= 0)
-                {
-                    MessageBox.Show("Nothing is found!", "RQS",
-                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    // Display results
-                    for (int a = 0; a < FRs.Count; a++)
-                    {
-                        DataGridView.Rows.Add(
-                            (a + 1).ToString(),
-                            FRs[a].FRSource,
-                            FRs[a].FRID,
-                            FRs[a].FRTMSTask,
-                            FRs[a].FRText,
-                            FRs[a].CCP,
-                            FRs[a].Created,
-                            FRs[a].Modified,
-                            FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
-                                ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
-                    }
-                }
+                e.Result = FRs;
+                return;
+            }
+            e.Result = null;
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if (backgroundWorkComplete != null)
+            {
+                backgroundWorkComplete();
             }
 
-            this.Cursor = Cursors.Arrow;
+            List<FR> FRs = (List<FR>)e.Result;
+            if (e.Result != null && FRs.Count > 0)
+            {
+                //Display results
+                for (int a = 0; a < FRs.Count; a++)
+                {
+                    DataGridView.Rows.Add(
+                        (a + 1).ToString(),
+                        FRs[a].FRSource,
+                        FRs[a].FRID,
+                        FRs[a].FRTMSTask,
+                        FRs[a].FRText,
+                        FRs[a].CCP,
+                        FRs[a].Created,
+                        FRs[a].Modified,
+                        FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
+                            ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
+                }
+            }
+            else
+            {
+                // If nothing is found
+                MessageBox.Show("Nothing is found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
             SetEnabledToSearchControls(true);
+            this.Cursor = Cursors.Arrow;
         }
 
         // Converts keywords like FR001-005
