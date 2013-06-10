@@ -42,10 +42,12 @@
             // 
             // toolStrip1
             // 
+            this.toolStrip1.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsSearch,
             this.tsSetup,
             this.tsAbout});
+            this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(767, 25);
@@ -57,17 +59,16 @@
             this.tsSearch.Image = ((System.Drawing.Image)(resources.GetObject("tsSearch.Image")));
             this.tsSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsSearch.Name = "tsSearch";
-            this.tsSearch.Size = new System.Drawing.Size(60, 22);
+            this.tsSearch.Size = new System.Drawing.Size(63, 22);
             this.tsSearch.Text = "Search";
             this.tsSearch.Click += new System.EventHandler(this.tsSearch_Click);
             // 
             // tsSetup
             // 
-            this.tsSetup.Enabled = false;
             this.tsSetup.Image = ((System.Drawing.Image)(resources.GetObject("tsSetup.Image")));
             this.tsSetup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsSetup.Name = "tsSetup";
-            this.tsSetup.Size = new System.Drawing.Size(55, 22);
+            this.tsSetup.Size = new System.Drawing.Size(58, 22);
             this.tsSetup.Text = "Setup";
             this.tsSetup.Click += new System.EventHandler(this.tsSetup_Click);
             // 
@@ -76,7 +77,7 @@
             this.tsAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsAbout.Image")));
             this.tsAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsAbout.Name = "tsAbout";
-            this.tsAbout.Size = new System.Drawing.Size(56, 22);
+            this.tsAbout.Size = new System.Drawing.Size(60, 22);
             this.tsAbout.Text = "About";
             this.tsAbout.Click += new System.EventHandler(this.tsAbout_Click);
             // 
@@ -121,8 +122,8 @@
             this.Name = "RQS";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RQS :: Search Requirements";
-            this.Load += new System.EventHandler(this.RQS_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RQS_FormClosing);
+            this.Load += new System.EventHandler(this.RQS_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RQS_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

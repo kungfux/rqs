@@ -106,13 +106,9 @@ namespace RQS
                 sheet = book.Worksheets[0];
 
                 // Determine columns
-                // TODO:
-                // Some of columns have default value as temporary solution
-                //  to have more search results but probably it is needed to cover
-                //  more excel headers. Needs to investigate.
-                int cFRID = 0;
-                int cFRTMSTask = 1;
-                int cFRText = 3;
+                int cFRID = 0;        // 1st column by default
+                int cFRTMSTask = 1;   // 2nd column by default
+                int cFRText = 3;      // 4rd column by default
                 int cCCP = -1;
                 int cCreated = -1;
                 int cModified = -1;
@@ -129,21 +125,42 @@ namespace RQS
                         }
                         switch (row.GetCell(a).Value.ToString().ToLower())
                         {
+                            // FR ID, NFR ID, ID
+                            case "id":
+                                cFRID = a;
+                                break;
                             case "fr id":
                                 cFRID = a;
                                 break;
+                            case "nfr id":
+                                cFRID = a;
+                                break;
+                            // FR TMS Task, NFR TMS Task
                             case "fr tms task":
                                 cFRTMSTask = a;
                                 break;
+                            case "nfr tms task":
+                                cFRTMSTask = a;
+                                break;
+                            // Functional Requirements, Non-Functional Requirements
                             case "functional requirements":
                                 cFRText = a;
                                 break;
+                            case "non-functional requirements":
+                                cFRText = a;
+                                break;
+                            // CCP
                             case "ccp":
                                 cCCP = a;
                                 break;
+                            // FR Date, NFR Date
                             case "fr date":
                                 cCreated = a;
                                 break;
+                            case "nfr date":
+                                cCreated = a;
+                                break;
+                            // Last Modified On
                             case "last modified on":
                                 cModified = a;
                                 break;

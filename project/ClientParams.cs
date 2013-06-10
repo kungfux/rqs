@@ -42,8 +42,8 @@ namespace RQS
         #region Default parameters
         public string XLSLocation = Application.StartupPath;
 
-        public Color ColoredLinesColor1 = Color.FromArgb(212, 208, 200);
-        public Color ColoredLinesColor2 = Color.FromArgb(255, 255, 255);
+        public Color ColoredLinesColor1 = Color.Gainsboro;
+        public Color ColoredLinesColor2 = Color.White;
 
         public int ResultsLimit = 100;
         public int WindowSizeWidth = 783;
@@ -108,6 +108,55 @@ namespace RQS
             }
             // end of Window Size
 
+            // Search directory
+            if (XLSLocation != ClientParams.Parameters.XLSLocation)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "XLSLocation", ClientParams.Parameters.XLSLocation);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "XLSLocation");
+            }
+            // end of Search directory
+
+            // Results limit
+            if (ResultsLimit != ClientParams.Parameters.ResultsLimit)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ResultsLimit", ClientParams.Parameters.ResultsLimit);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ResultsLimit");
+            }
+            // End of Results limit
+
+            // Grid colors
+            if (ColoredLinesColor1 != ClientParams.Parameters.ColoredLinesColor1)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ColoredLinesColor1", ClientParams.Parameters.ColoredLinesColor1.ToKnownColor().ToString());
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ColoredLinesColor1");
+            }
+            if (ColoredLinesColor2 != ClientParams.Parameters.ColoredLinesColor2)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ColoredLinesColor2", ClientParams.Parameters.ColoredLinesColor2.ToKnownColor().ToString());
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "ColoredLinesColor2");
+            }
+            // End of Grid colors
+
             // Search History
             if (ClientParams.Parameters.SearchHistory != null &&
                 ClientParams.Parameters.SearchHistory.Length > 0)
@@ -162,6 +211,29 @@ namespace RQS
                 Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
                 RegPath, "WindowSizeHeight", WindowSizeHeight);
             // end of Window Size
+
+            // Search directory
+            XLSLocation =
+                Registry.ReadKey<string>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "XLSLocation", XLSLocation);
+            // end of Search directory
+
+            // Results limit
+            ResultsLimit =
+                Registry.ReadKey<int>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "ResultsLimit", ResultsLimit);
+            // End of Results limit
+
+            // Grid colors
+            ColoredLinesColor1 =
+                Color.FromName(
+                Registry.ReadKey<string>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "ColoredLinesColor1", ColoredLinesColor1.ToKnownColor().ToString()));
+            ColoredLinesColor2 =
+                Color.FromName(
+                Registry.ReadKey<string>(Registry.BaseKeys.HKEY_CURRENT_USER,
+                RegPath, "ColoredLinesColor2", ColoredLinesColor2.ToKnownColor().ToString()));
+            // End of Grid colors
 
             // Search History
             string History =

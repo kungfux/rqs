@@ -59,6 +59,7 @@ namespace RQS.GUI
             }
             gRQS.Controls.Add(UserControl);
             UserControl.Dock = DockStyle.Fill;
+            UserControl.Focus();
         }
 
         private void RQS_Load(object sender, System.EventArgs e)
