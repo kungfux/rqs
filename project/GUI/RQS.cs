@@ -26,6 +26,7 @@
  */
 
 using System.Windows.Forms;
+using RQS.Logic;
 
 namespace RQS.GUI
 {

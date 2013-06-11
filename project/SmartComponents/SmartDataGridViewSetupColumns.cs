@@ -29,7 +29,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace RQS.Logic
+namespace RQS.SmartComponents
 {
     internal class SmartDataGridViewSetupColumns : Form
     {

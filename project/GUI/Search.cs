@@ -28,9 +28,10 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System;
-using RQS.Logic;
 using System.Diagnostics;
 using System.Drawing;
+using RQS.SmartComponents;
+using RQS.Logic;
 
 namespace RQS.GUI
 {
@@ -51,6 +52,7 @@ namespace RQS.GUI
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
         private SmartDataGridViewColumnSorter ColumnSorter;
         private bool HandledKeyDown = false;
+        private bool RequestCancel = false;
 
         private void Search_Load(object sender, System.EventArgs e)
         {
@@ -107,6 +109,16 @@ namespace RQS.GUI
 
         private void bSearch_Click(object sender, System.EventArgs e)
         {
+            // If cancel search is requested
+            if (RequestCancel)
+            {
+                FRSearch.RequestCancel = true;
+                backgroundWorker1.CancelAsync();
+                DisableInputControls(true);
+                this.Cursor = Cursors.Arrow;
+                return;
+            }
+            // If search is requested
             // Check if user forgot specify keyword
             if (comboSearchText.Text.Length <= 0)
             {
@@ -115,9 +127,6 @@ namespace RQS.GUI
                 comboSearchText.Focus();
                 return;
             }
-            // Preparing
-            SetEnabledToSearchControls(false);
-            this.Cursor = Cursors.WaitCursor;
             // Clear previous results
             DataGridView.Rows.Clear();
             // Save search criteria to history
@@ -141,6 +150,7 @@ namespace RQS.GUI
                 {
                     if (criteria[a].Contains("-"))
                     {
+                        // Explode the diapason
                         string[] criterias = ExplodeCriterias(criteria[a]);
                         if (criterias != null)
                         {
@@ -187,11 +197,15 @@ namespace RQS.GUI
             // Search
             if (backgroundWorker1.IsBusy)
             {
-                MessageBox.Show("Search is in progress right now! Please wait for results.", "RQS",
+                MessageBox.Show("Please wait until previous searching will be canceled.", "RQS",
                      MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
+                // All OK, disable contols and perform searching
+                DisableInputControls(false);
+                this.Cursor = Cursors.WaitCursor;
+
                 if (backgroundWorkInProgress != null)
                 {
                     backgroundWorkInProgress();
@@ -211,6 +225,11 @@ namespace RQS.GUI
             // Search
             List<FR> FRs = FRSearch.Search(options.SearchBy,
                 options.SearchCriteria, options.LimitResults);
+            // If user cancel operation
+            if (backgroundWorker1.CancellationPending)
+            {
+                e.Cancel = true;
+            }
             // If FRs is null then no xls files are found
             // and reported by search engine
             if (FRs != null)
@@ -221,40 +240,57 @@ namespace RQS.GUI
             e.Result = null;
         }
 
+        // Display search results
+        // after second thread is finished
         private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            // Report about operation is completed
             if (backgroundWorkComplete != null)
             {
                 backgroundWorkComplete();
             }
-
-            List<FR> FRs = (List<FR>)e.Result;
-            if (e.Result != null && FRs.Count > 0)
+            // Do not display results if operation is canceled
+            if (e.Cancelled)
             {
-                //Display results
-                for (int a = 0; a < FRs.Count; a++)
-                {
-                    DataGridView.Rows.Add(
-                        (a + 1).ToString(),
-                        FRs[a].FRSource,
-                        FRs[a].FRID,
-                        FRs[a].FRTMSTask,
-                        FRs[a].FRText,
-                        FRs[a].CCP,
-                        FRs[a].Created,
-                        FRs[a].Modified,
-                        FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
-                            ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
-                }
+                return;
+            }
+            if (e.Result == null)
+            {
+                // If no .xls files to search in
+                // null is reported by search engine
+                MessageBox.Show("No .xls files found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                // If nothing is found
-                MessageBox.Show("Nothing is found!", "RQS",
-                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                List<FR> FRs = (List<FR>)e.Result;
+                if (FRs.Count > 0)
+                {
+                    //Display results
+                    for (int a = 0; a < FRs.Count; a++)
+                    {
+                        DataGridView.Rows.Add(
+                            (a + 1).ToString(),
+                            FRs[a].FRSource,
+                            FRs[a].FRID,
+                            FRs[a].FRTMSTask,
+                            FRs[a].FRText,
+                            FRs[a].CCP,
+                            FRs[a].Created,
+                            FRs[a].Modified,
+                            FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
+                                ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
+                    }
+                }
+                else
+                {
+                    // If nothing is found
+                    MessageBox.Show("Nothing is found!", "RQS",
+                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
 
-            SetEnabledToSearchControls(true);
+            DisableInputControls(true);
             this.Cursor = Cursors.Arrow;
         }
 
@@ -262,15 +298,20 @@ namespace RQS.GUI
         // to array with FR001, FR002, FR003, FR004, FR005
         private string[] ExplodeCriterias(string str)
         {
+            // Check argument
+            if (str == null || !str.Contains("-"))
+            {
+                return null;
+            }
             // Get 1st and 2nd numbers
             string[] Input = str.Split('-');
-            if (str == null ||
-                Input.Length != 2)
+            if (Input.Length != 2)
             {
                 return null;
             }
             // Leave only numbers in Input string
             int _temp;
+            string prefix = ""; // will store FR or NFR
             for (int a = 0; a < Input.Length; a++)
             {
                 for (int b = 0; b < Input[a].Length; b++)
@@ -278,6 +319,11 @@ namespace RQS.GUI
                     if (Input[a].Length > b &&
                         !int.TryParse(Input[a].Substring(b, 1), out _temp))
                     {
+                        if (a == 0)
+                        {
+                            // Store prefix only from 1st word
+                            prefix += Input[a].Substring(b, 1);
+                        }
                         Input[a] = Input[a].Remove(b, 1);
                         b--;
                     }
@@ -302,16 +348,18 @@ namespace RQS.GUI
             int MaxDiapason = 5000;
             if (Number2 - Number1 > MaxDiapason)
             {
-                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be skipped at all!", MaxDiapason), 
+                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be threated as a word!", MaxDiapason), 
                     "RQS", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
+            // Prepare prefix
+            prefix = prefix.Trim().ToLower(); // will store 'fr' or 'nfr'
             // Generate diapason
             string[] result = new string[Number2-Number1+1];
             for (int a = 0; a <= Number2 - Number1; a++)
             {
                 result[a] = (Number1 + a).ToString("D" + NumberSize.ToString());
-                result[a] = "fr" + result[a];
+                result[a] = prefix + result[a];
             }
             return result;
         }
@@ -453,12 +501,23 @@ namespace RQS.GUI
             }
         }
 
-        private void SetEnabledToSearchControls(bool Enabled)
+        private void DisableInputControls(bool Enabled)
         {
+            // Enable/disable input controls
             comboSearchBy.Enabled = Enabled;
             comboSearchText.Enabled = Enabled;
-            bSearch.Enabled = Enabled;
             checkBox1.Enabled = Enabled;
+            // Rename search button
+            if (Enabled)
+            {
+                bSearch.Text = "Search";
+                RequestCancel = false;
+            }
+            else
+            {
+                bSearch.Text = "Cancel";
+                RequestCancel = true;
+            }
         }
 
         private void removeDuplicatesToolStripMenuItem_Click(object sender, EventArgs e)

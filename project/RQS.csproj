@@ -47,9 +47,9 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="ClientParams.cs" />
-    <Compile Include="FRSearch.cs" />
-    <Compile Include="FR.cs" />
+    <Compile Include="Logic\ClientParams.cs" />
+    <Compile Include="Logic\FRSearch.cs" />
+    <Compile Include="Logic\FR.cs" />
     <Compile Include="GUI\About.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -74,7 +74,7 @@
     <Compile Include="GUI\Setup.Designer.cs">
       <DependentUpon>Setup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\SmartDataGridViewColumnSorter.cs" />
+    <Compile Include="SmartComponents\SmartDataGridViewColumnSorter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -82,14 +82,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Registry.cs" />
-    <Compile Include="Logic\SmartDataGridView.cs">
+    <Compile Include="SmartComponents\Registry.cs" />
+    <Compile Include="SmartComponents\SmartDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Logic\SmartDataGridViewSetupColumns.cs">
+    <Compile Include="SmartComponents\SmartDataGridViewSetupColumns.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SearchOptions.cs" />
+    <Compile Include="Logic\SearchOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExcelLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">

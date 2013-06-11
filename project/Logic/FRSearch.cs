@@ -25,16 +25,18 @@
  *  Alexander Fuks, 10 May 2013.
  */
 
+using System;
 using System.IO;
 using System.Collections.Generic;
-using ExcelLibrary.SpreadSheet;
 using System.Windows.Forms;
-using System;
+using ExcelLibrary.SpreadSheet;
 
-namespace RQS
+namespace RQS.Logic
 {
     internal class FRSearch
     {
+        public bool RequestCancel = false;
+
         private string[] XLSFiles = new string[0];
 
         public enum SearchBy
@@ -67,8 +69,7 @@ namespace RQS
             LoadXLSFilesList();
             if (XLSFiles.Length <= 0)
             {
-                MessageBox.Show("No .xls files found!", "RQS",
-                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Return null only in case no .xls files
                 return null;
             }
 
@@ -87,6 +88,11 @@ namespace RQS
 
             foreach (string XLSFile in XLSFiles)
             {
+                // Stop working if cancel is requested
+                if (RequestCancel)
+                {
+                    break;
+                }
                 if (XLSFile == null)
                 {
                     continue;
@@ -170,6 +176,12 @@ namespace RQS
 
                 for (int a = sheet.Cells.FirstRowIndex + 1; a <= sheet.Cells.LastRowIndex; a++)
                 {
+                    // Stop working if cancel is requested
+                    if (RequestCancel)
+                    {
+                        break;
+                    }
+
                     row = sheet.Cells.GetRow(a);
 
                     // Qualification
@@ -222,6 +234,7 @@ namespace RQS
                     break;
                 }
             }
+            RequestCancel = false;
             return Result;
         }
 

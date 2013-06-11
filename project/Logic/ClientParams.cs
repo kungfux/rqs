@@ -30,7 +30,7 @@ using ItWorksTeam.IO;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace RQS
+namespace RQS.Logic
 {
     internal class ClientParams
     {

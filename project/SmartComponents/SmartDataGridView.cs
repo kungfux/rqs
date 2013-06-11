@@ -29,8 +29,9 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 using ItWorksTeam.IO;
+using RQS.Logic;
 
-namespace RQS.Logic
+namespace RQS.SmartComponents
 {
     // SmartDataGridView class implement SmartDataGridView control default settings set, saving/restoring
     // columns width from box.

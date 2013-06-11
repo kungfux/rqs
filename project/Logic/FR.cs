@@ -26,16 +26,17 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace RQS
+namespace RQS.Logic
 {
-    internal class SearchOptions
+    internal class FR
     {
-        public string[] SearchCriteria;
-        public FRSearch.SearchBy SearchBy;
-        public bool LimitResults;
+        public string FRSource;
+        public string FRID;
+        public string FRTMSTask;
+        public string FRText;
+        public string CCP;
+        public string Created;
+        public string Modified;
     }
 }

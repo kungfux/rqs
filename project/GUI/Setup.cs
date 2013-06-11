@@ -28,6 +28,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System;
+using RQS.Logic;
 
 namespace RQS.GUI
 {
