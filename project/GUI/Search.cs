@@ -292,6 +292,7 @@ namespace RQS.GUI
 
             DisableInputControls(true);
             this.Cursor = Cursors.Arrow;
+            comboSearchText.Focus();
         }
 
         // Converts keywords like FR001-005
