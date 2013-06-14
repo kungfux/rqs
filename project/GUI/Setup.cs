@@ -99,10 +99,6 @@ namespace RQS.GUI
 
         private void nLimit_ValueChanged(object sender, EventArgs e)
         {
-            if (!nLimit.Focused)
-            {
-                return;
-            }
             ClientParams.Parameters.ResultsLimit = (int)nLimit.Value;
         }
 

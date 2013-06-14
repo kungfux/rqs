@@ -397,7 +397,6 @@ namespace RQS.GUI
                         {
                             comboSearchBy.SelectedIndex--;
                         }
-                        HandledKeyDown = true;
                         e.Handled = true;
                     }
                     break;
@@ -409,7 +408,6 @@ namespace RQS.GUI
                         {
                             comboSearchBy.SelectedIndex++;
                         }
-                        HandledKeyDown = true;
                         e.Handled = true;
                     }
                     break;
@@ -426,10 +424,10 @@ namespace RQS.GUI
 
         private void comboSearchText_KeyPress(object sender, KeyPressEventArgs e)
         {
-            e.Handled = HandledKeyDown;
             if (HandledKeyDown)
             {
-                HandledKeyDown = !HandledKeyDown;
+                e.Handled = true;
+                HandledKeyDown = false;
             }
         }
 
