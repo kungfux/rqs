@@ -570,15 +570,15 @@ namespace RQS.GUI
                                 DeletedRowsCount++;
                             }
                         }
-                        MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
-                         MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("No search results to process!", "RQS",
-                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
+                MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
+                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No search results to process!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
