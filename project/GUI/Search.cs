@@ -197,7 +197,7 @@ namespace RQS.GUI
                 }
             }
             // Remove white spaces
-            for (int a=0; a<criteria.Length;a++)
+            for (int a = 0; a < criteria.Length; a++)
             {
                 criteria[a] = criteria[a].Trim();
             }
@@ -363,14 +363,14 @@ namespace RQS.GUI
             int MaxDiapason = 5000;
             if (Number2 - Number1 > MaxDiapason)
             {
-                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be threated as a word!", MaxDiapason), 
+                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be threated as a word!", MaxDiapason),
                     "RQS", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
             // Prepare prefix
             prefix = prefix.Trim().ToLower(); // will store 'fr' or 'nfr'
             // Generate diapason
-            string[] result = new string[Number2-Number1+1];
+            string[] result = new string[Number2 - Number1 + 1];
             for (int a = 0; a <= Number2 - Number1; a++)
             {
                 result[a] = (Number1 + a).ToString("D" + NumberSize.ToString());
@@ -569,37 +569,16 @@ namespace RQS.GUI
                                 DataGridView.Rows.RemoveAt(b);
                                 DeletedRowsCount++;
                             }
-            }
-        }
-
-        // Remove selected rows from DataGridView
-        private void OperationRemoveSelected()
-        {
-            for (int a = DataGridView.Rows.Count - 1; a >= 0; a--)
-            {
-                if (!DataGridView.Rows[a].Selected)
-                {
-                    continue;
+                        }
+                        MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
+                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No search results to process!", "RQS",
+                             MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
-                else
-                {
-                    DataGridView.Rows.RemoveAt(a);
-                }
-            }
-        }
-
-        private void removeSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OperationRemoveSelected();
-        }
-    }
-                MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
-                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("No search results to process!", "RQS",
-                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
