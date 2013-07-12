@@ -454,8 +454,12 @@ namespace RQS.GUI
         private void contextCopyRows_Click(object sender, System.EventArgs e)
         {
             string text = "";
-            foreach (DataGridViewRow row in DataGridView.SelectedRows)
+            foreach (DataGridViewRow row in DataGridView.Rows)
             {
+                if (!row.Selected)
+                {
+                    continue;
+                }
                 for (int a = 0; a < DataGridView.Columns.Count; a++)
                 {
                     if (!DataGridView.Columns[a].Visible)
@@ -466,7 +470,7 @@ namespace RQS.GUI
                     {
                         if (DataGridView.Columns[b].DisplayIndex == a)
                         {
-                            text += row.Cells[b].Value.ToString() + ";";
+                            text += row.Cells[b].Value.ToString() + "   ";
                         }
                     }
                 }
@@ -558,6 +562,27 @@ namespace RQS.GUI
                 MessageBox.Show("No search results to process!", "RQS",
                      MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        // Remove selected rows from DataGridView
+        private void OperationRemoveSelected()
+        {
+            for (int a = DataGridView.Rows.Count - 1; a >= 0; a--)
+            {
+                if (!DataGridView.Rows[a].Selected)
+                {
+                    continue;
+                }
+                else
+                {
+                    DataGridView.Rows.RemoveAt(a);
+                }
+            }
+        }
+
+        private void removeSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OperationRemoveSelected();
         }
     }
 }

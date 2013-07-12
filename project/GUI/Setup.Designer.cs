@@ -40,11 +40,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cmbColor1 = new System.Windows.Forms.ComboBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cSecondCopy = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nLimit)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // lLocation
@@ -71,6 +74,7 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBox1);
             this.flowLayoutPanel1.Controls.Add(this.groupBox2);
             this.flowLayoutPanel1.Controls.Add(this.groupBox3);
+            this.flowLayoutPanel1.Controls.Add(this.groupBox4);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -187,6 +191,28 @@
             this.cmbColor1.TabIndex = 6;
             this.cmbColor1.SelectedIndexChanged += new System.EventHandler(this.cmbColor1_SelectedIndexChanged);
             // 
+            // groupBox4
+            // 
+            this.groupBox4.BackColor = System.Drawing.Color.Khaki;
+            this.groupBox4.Controls.Add(this.cSecondCopy);
+            this.groupBox4.Location = new System.Drawing.Point(3, 86);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(200, 77);
+            this.groupBox4.TabIndex = 6;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = " Second copy of RQS ";
+            // 
+            // cSecondCopy
+            // 
+            this.cSecondCopy.BackColor = System.Drawing.Color.Transparent;
+            this.cSecondCopy.Location = new System.Drawing.Point(13, 20);
+            this.cSecondCopy.Name = "cSecondCopy";
+            this.cSecondCopy.Size = new System.Drawing.Size(181, 51);
+            this.cSecondCopy.TabIndex = 0;
+            this.cSecondCopy.Text = "Allow running several copies of RQS at the same time";
+            this.cSecondCopy.UseVisualStyleBackColor = false;
+            this.cSecondCopy.CheckedChanged += new System.EventHandler(this.cSecondCopy_CheckedChanged);
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -206,6 +232,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nLimit)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -224,6 +251,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbColor2;
         private System.Windows.Forms.ComboBox cmbColor1;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox cSecondCopy;
 
 
     }

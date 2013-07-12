@@ -51,6 +51,8 @@ namespace RQS.Logic
         public int WindowSizeState = (int)FormWindowState.Normal;
 
         public string[] SearchHistory;
+
+        public bool SecondCopyAllowed = false;
         #endregion
 
         public static ClientParams Parameters
@@ -195,6 +197,19 @@ namespace RQS.Logic
                             RegPath, "History", History);
             }
             // end of Search History
+
+            // Second copy of app
+            if (SecondCopyAllowed != ClientParams.Parameters.SecondCopyAllowed)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "SecondCopyAllowed", ClientParams.Parameters.SecondCopyAllowed);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "SecondCopyAllowed");
+            }
+            // End of second copy of app
         }
 
         // Load custom parameters
@@ -252,6 +267,12 @@ namespace RQS.Logic
                 }
             }
             // end of Search History
+
+            // Second copy of app
+            SecondCopyAllowed =
+                Registry.ReadKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "SecondCopyAllowed", SecondCopyAllowed);
+            // End of second copy of app
         }
     }
 }

@@ -28,6 +28,7 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using RQS.Logic;
 
 namespace RQS
 {
@@ -41,7 +42,7 @@ namespace RQS
             using (Mutex mutex = new Mutex(false, AppMutexName))
             {
                 bool Running = !mutex.WaitOne(0, false);
-                if (!Running)
+                if (!Running || ClientParams.Parameters.SecondCopyAllowed)
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
