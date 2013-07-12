@@ -31,12 +31,13 @@ namespace RQS.Logic
 {
     internal class FR
     {
-        public string FRSource;
-        public string FRID;
-        public string FRTMSTask;
-        public string FRText;
-        public string CCP;
-        public string Created;
-        public string Modified;
+        public string FRSource;   // File name which contain this FR
+        public string FRID;       // FR ID number (from file)
+        public string FRTMSTask;  // FR TMS task number (from file)
+        public string FRText;     // FR text (from file)
+        public string CCP;        // FR CCP (from file)
+        public string Created;    // FR created date (from file)
+        public string Modified;   // FR modified date (from file)
+        public string Status;     // FR status (from file)
     }
 }

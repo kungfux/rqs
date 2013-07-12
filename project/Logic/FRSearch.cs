@@ -118,6 +118,7 @@ namespace RQS.Logic
                 int cCCP = -1;
                 int cCreated = -1;
                 int cModified = -1;
+                int cStatus = -1;
 
                 if (sheet.Cells.FirstRowIndex >= 0)
                 {
@@ -170,6 +171,13 @@ namespace RQS.Logic
                             case "last modified on":
                                 cModified = a;
                                 break;
+                            // Status
+                            case "fr status":
+                                cStatus = a;
+                                break;
+                            case "nfr status":
+                                cStatus = a;
+                                break;
                         }
                     }
                 }
@@ -221,6 +229,7 @@ namespace RQS.Logic
                     FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
                     FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
                     FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
+                    FR.Status = !row.GetCell(cStatus).IsEmpty ? row.GetCell(cStatus).Value.ToString() : "";
                     Result.Add(FR);
                     // Break if many results
                     if (limitResults && Result.Count >= ClientParams.Parameters.ResultsLimit)

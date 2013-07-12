@@ -42,13 +42,17 @@ namespace RQS.GUI
             InitializeComponent();
         }
 
+        public int SearchResultsCount { get { return DataGridView.Rows.Count; } }
+
         public event SearchInProgress backgroundWorkInProgress;
         public delegate void SearchInProgress();
         public event SearchComplete backgroundWorkComplete;
         public delegate void SearchComplete();
+        public event SearchResultsAdded searchResultsAdded;
+        public delegate void SearchResultsAdded();
 
         private FRSearch FRSearch = new FRSearch();
-        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 9);
+        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 10);
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
         private SmartDataGridViewColumnSorter ColumnSorter;
         private bool HandledKeyDown = false;
@@ -78,6 +82,9 @@ namespace RQS.GUI
             IsChangedColumn.SortMode = DataGridViewColumnSortMode.Automatic;
             DataGridView.Columns.Add(IsChangedColumn);
             DataGridView.HideColumnByDefault(8);
+
+            DataGridView.Columns.Add("", "Status");
+            DataGridView.HideColumnByDefault(9);
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
             DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
@@ -279,7 +286,8 @@ namespace RQS.GUI
                             FRs[a].Created,
                             FRs[a].Modified,
                             FRs[a].Created.Length > 0 && FRs[a].Modified.Length > 0
-                                ? !FRs[a].Created.Equals(FRs[a].Modified) : false);
+                                ? !FRs[a].Created.Equals(FRs[a].Modified) : false,
+                            FRs[a].Status);
                     }
                 }
                 else
@@ -288,6 +296,12 @@ namespace RQS.GUI
                     MessageBox.Show("Nothing is found!", "RQS",
                          MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+
+            // Report about search results are displayed
+            if (searchResultsAdded != null)
+            {
+                searchResultsAdded();
             }
 
             DisableInputControls(true);
@@ -438,8 +452,12 @@ namespace RQS.GUI
                 DataGridView.Rows.Count >= LastMouseDownLocation[0] &&
                 DataGridView.Columns.Count >= LastMouseDownLocation[1])
             {
-                Clipboard.SetText(DataGridView.Rows[LastMouseDownLocation[0]].
-                    Cells[LastMouseDownLocation[1]].Value.ToString());
+                if (DataGridView.Rows[LastMouseDownLocation[0]].
+                    Cells[LastMouseDownLocation[1]].Value.ToString() != "")
+                {
+                    Clipboard.SetText(DataGridView.Rows[LastMouseDownLocation[0]].
+                        Cells[LastMouseDownLocation[1]].Value.ToString());
+                }
             }
         }
 
@@ -551,9 +569,30 @@ namespace RQS.GUI
                                 DataGridView.Rows.RemoveAt(b);
                                 DeletedRowsCount++;
                             }
-                        }
-                    }
+            }
+        }
+
+        // Remove selected rows from DataGridView
+        private void OperationRemoveSelected()
+        {
+            for (int a = DataGridView.Rows.Count - 1; a >= 0; a--)
+            {
+                if (!DataGridView.Rows[a].Selected)
+                {
+                    continue;
                 }
+                else
+                {
+                    DataGridView.Rows.RemoveAt(a);
+                }
+            }
+        }
+
+        private void removeSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OperationRemoveSelected();
+        }
+    }
                 MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
                  MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

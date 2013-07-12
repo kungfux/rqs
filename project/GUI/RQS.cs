@@ -75,6 +75,7 @@ namespace RQS.GUI
                 cSearch = new Search();
                 cSearch.backgroundWorkInProgress += new Search.SearchInProgress(cSearch_backgroundWorkInProgress);
                 cSearch.backgroundWorkComplete += new Search.SearchComplete(cSearch_backgroundWorkComplete);
+                cSearch.searchResultsAdded += new Search.SearchResultsAdded(cSearch_searchResultsAdded);
             }
             DisplayControl(cSearch);
         }
@@ -133,6 +134,14 @@ namespace RQS.GUI
         {
             toolStripStatusLabel1.Text = "Searching...";
             toolStripProgressBar1.Visible = true;
+        }
+
+        void cSearch_searchResultsAdded()
+        {
+            if (cSearch != null)
+            {
+                toolStripStatusLabel1.Text += string.Format(" {0} result(s) found.", cSearch.SearchResultsCount);
+            }
         }
     }
 }
