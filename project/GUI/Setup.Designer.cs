@@ -42,12 +42,15 @@
             this.cmbColor1 = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cSecondCopy = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cAutofilter = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nLimit)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // lLocation
@@ -75,6 +78,7 @@
             this.flowLayoutPanel1.Controls.Add(this.groupBox2);
             this.flowLayoutPanel1.Controls.Add(this.groupBox3);
             this.flowLayoutPanel1.Controls.Add(this.groupBox4);
+            this.flowLayoutPanel1.Controls.Add(this.groupBox5);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -213,6 +217,28 @@
             this.cSecondCopy.UseVisualStyleBackColor = false;
             this.cSecondCopy.CheckedChanged += new System.EventHandler(this.cSecondCopy_CheckedChanged);
             // 
+            // groupBox5
+            // 
+            this.groupBox5.BackColor = System.Drawing.Color.Plum;
+            this.groupBox5.Controls.Add(this.cAutofilter);
+            this.groupBox5.Location = new System.Drawing.Point(209, 86);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(200, 77);
+            this.groupBox5.TabIndex = 7;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = " Autofilter ";
+            // 
+            // cAutofilter
+            // 
+            this.cAutofilter.BackColor = System.Drawing.Color.Transparent;
+            this.cAutofilter.Location = new System.Drawing.Point(13, 20);
+            this.cAutofilter.Name = "cAutofilter";
+            this.cAutofilter.Size = new System.Drawing.Size(181, 51);
+            this.cAutofilter.TabIndex = 0;
+            this.cAutofilter.Text = "Enable autofilter in Search Results Grid";
+            this.cAutofilter.UseVisualStyleBackColor = false;
+            this.cAutofilter.CheckedChanged += new System.EventHandler(this.cAutofilter_CheckedChanged);
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,6 +259,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -253,6 +280,8 @@
         private System.Windows.Forms.ComboBox cmbColor1;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox cSecondCopy;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.CheckBox cAutofilter;
 
 
     }

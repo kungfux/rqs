@@ -62,6 +62,7 @@ namespace RQS.GUI
             cmbColor1.Text = ClientParams.Parameters.ColoredLinesColor1.ToKnownColor().ToString();
             cmbColor2.Text = ClientParams.Parameters.ColoredLinesColor2.ToKnownColor().ToString();
             cSecondCopy.Checked = ClientParams.Parameters.SecondCopyAllowed;
+            cAutofilter.Checked = ClientParams.Parameters.AutofilterEnabled;
         }
 
         void cmbColor_DrawItem(object sender, DrawItemEventArgs e)
@@ -124,6 +125,11 @@ namespace RQS.GUI
         private void cSecondCopy_CheckedChanged(object sender, EventArgs e)
         {
             ClientParams.Parameters.SecondCopyAllowed = cSecondCopy.Checked;
+        }
+
+        private void cAutofilter_CheckedChanged(object sender, EventArgs e)
+        {
+            ClientParams.Parameters.AutofilterEnabled = cAutofilter.Checked;
         }
     }
 }

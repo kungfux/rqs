@@ -69,7 +69,7 @@ namespace RQS.SmartComponents
             this.AllowUserToResizeColumns = true;
             this.AllowUserToResizeRows = true;
             this.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.ReadOnly = true;
+            this.ReadOnly = false;
             this.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.RowHeadersVisible = false;
             this.EditMode = DataGridViewEditMode.EditOnEnter;
@@ -392,6 +392,9 @@ namespace RQS.SmartComponents
         // when new row is added
         void SmartDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
+            // Set read only by default
+            this.Rows[e.RowIndex].ReadOnly = true;
+
             for (int a = 0; a < e.RowCount; a++)
             {
                 this.Rows[a + e.RowIndex].Height = RowsHeight;

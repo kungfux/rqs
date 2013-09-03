@@ -42,7 +42,15 @@ namespace RQS.GUI
             InitializeComponent();
         }
 
-        public int SearchResultsCount { get { return DataGridView.Rows.Count; } }
+        public int SearchResultsCount 
+        { 
+            get 
+            { 
+                return ClientParams.Parameters.AutofilterEnabled ? 
+                    DataGridView.Rows.Count -1 : 
+                    DataGridView.Rows.Count; 
+            } 
+        }
 
         public event SearchInProgress backgroundWorkInProgress;
         public delegate void SearchInProgress();
@@ -57,6 +65,7 @@ namespace RQS.GUI
         private SmartDataGridViewColumnSorter ColumnSorter;
         private bool HandledKeyDown = false;
         private bool RequestCancel = false;
+        private string AutofilterLastKey = null;
 
         private void Search_Load(object sender, System.EventArgs e)
         {
@@ -88,6 +97,8 @@ namespace RQS.GUI
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
             DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
+            DataGridView.EditingControlShowing += 
+                new DataGridViewEditingControlShowingEventHandler(DataGridView_EditingControlShowing);
 
             ColumnSorter = new SmartDataGridViewColumnSorter(DataGridView);
 
@@ -168,27 +179,27 @@ namespace RQS.GUI
                             // Navigate over new search array
                             for (int b = 0; b < criteria.Length; b++)
                             {
-                                if (b < a)
+                                switch (b.CompareTo(a))
                                 {
-                                    criteria[b] = oldArray[b];
-                                    continue;
-                                }
-                                if (b == a)
-                                {
-                                    // Navigate over exploded array
-                                    for (int c = 0; c < criterias.Length; c++)
-                                    {
-                                        criteria[b + c] = criterias[c];
-                                    }
-                                    // -1 because 'for' statement will do ++
-                                    b = b + criterias.Length - 1;
-                                    continue;
-                                }
-                                if (b > a)
-                                {
-                                    criteria[b] = oldArray[a + 1];
-                                    a++;
-                                    continue;
+                                    // if b < a
+                                    case -1:
+                                        criteria[b] = oldArray[b];
+                                        continue;
+                                    // if b == a
+                                    case 0:
+                                        // Navigate over exploded array
+                                        for (int c = 0; c < criterias.Length; c++)
+                                        {
+                                            criteria[b + c] = criterias[c];
+                                        }
+                                        // -1 because 'for' statement will do ++
+                                        b = b + criterias.Length - 1;
+                                        continue;
+                                    // if b > a
+                                    case 1:
+                                        criteria[b] = oldArray[a + 1];
+                                        a++;
+                                        continue;
                                 }
                             }
                             a = 0;
@@ -197,7 +208,7 @@ namespace RQS.GUI
                 }
             }
             // Remove white spaces
-            for (int a = 0; a < criteria.Length; a++)
+            for (int a=0; a<criteria.Length;a++)
             {
                 criteria[a] = criteria[a].Trim();
             }
@@ -289,6 +300,12 @@ namespace RQS.GUI
                                 ? !FRs[a].Created.Equals(FRs[a].Modified) : false,
                             FRs[a].Status);
                     }
+
+                    if (ClientParams.Parameters.AutofilterEnabled)
+                    {
+                        // Add autofilter
+                        AddAutoFilter();
+                    }
                 }
                 else
                 {
@@ -363,20 +380,131 @@ namespace RQS.GUI
             int MaxDiapason = 5000;
             if (Number2 - Number1 > MaxDiapason)
             {
-                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be threated as a word!", MaxDiapason),
+                MessageBox.Show(string.Format("Diapason over {0} is prohibited and will be threated as a word!", MaxDiapason), 
                     "RQS", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return null;
             }
             // Prepare prefix
             prefix = prefix.Trim().ToLower(); // will store 'fr' or 'nfr'
             // Generate diapason
-            string[] result = new string[Number2 - Number1 + 1];
+            string[] result = new string[Number2-Number1+1];
             for (int a = 0; a <= Number2 - Number1; a++)
             {
                 result[a] = (Number1 + a).ToString("D" + NumberSize.ToString());
                 result[a] = prefix + result[a];
             }
             return result;
+        }
+
+        private void AddAutoFilter()
+        {
+            DataGridViewRow filterRow = new DataGridViewRow();
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
+
+            filterRow.Frozen = true;
+
+            for (int column = 0; column < DataGridView.Columns.Count; column++)
+            {
+                DataGridViewComboBoxCell cell = (DataGridViewComboBoxCell)filterRow.Cells[column];
+                cell.Items.Add("");
+
+                for (int row = 0; row < DataGridView.Rows.Count; row++)
+                {
+                    if (cell.Items.IndexOf(DataGridView.Rows[row].Cells[column].Value.ToString()) < 0)
+                    {
+                        cell.Items.Add(DataGridView.Rows[row].Cells[column].Value.ToString());
+                    }
+                }
+            }
+
+            DataGridView.Rows.Insert(0, filterRow);
+            DataGridView.Rows[0].ReadOnly = false;
+        }
+
+        void DataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            ComboBox autofilter = e.Control as ComboBox;
+            if (autofilter != null)
+            {
+                autofilter.SelectedIndexChanged -= new EventHandler(autofilter_SelectedIndexChanged);
+                autofilter.SelectedIndexChanged += new EventHandler(autofilter_SelectedIndexChanged);
+            }
+        }
+
+        void autofilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cb = (ComboBox)sender;
+            string value = cb.Text;
+            if (value != null)
+            {
+                DoFilter(DataGridView.CurrentCell.ColumnIndex, value);
+            }
+        }
+
+        private void DoFilter(int columnIndex, string value)
+        {
+            // We have a problem here with grid refreshing, so there is a fix.
+            // This fix is peace of shit! It works for single column only. Probably,
+            //   some users will not find catch in it.
+            // TODO: Remove this shit!
+            if (value == AutofilterLastKey)
+            {
+                // Sometimes the best way do nothing! :)
+                return;
+            }
+            else
+            {
+                AutofilterLastKey = value;
+            }
+
+            // First of all display all rows
+            for (int row = 0; row < DataGridView.Rows.Count; row++)
+            {
+                DataGridView.Rows[row].Visible = true;
+            }
+
+            // Value that autofilter should left in grid
+            string valuetofilter = null;
+
+            for (int column = 0; column < DataGridView.Columns.Count; column++)
+            {
+                // Determine value selected in filter
+                // If value was just selected than take it from param
+                //   if not - take it from grid
+                if (column == columnIndex)
+                {
+                    valuetofilter = value;
+                }
+                else
+                {
+                    valuetofilter = DataGridView.Rows[0].Cells[column].Value != null ?
+                        DataGridView.Rows[0].Cells[column].Value.ToString() : null;
+                }
+
+                if (valuetofilter == null || valuetofilter.Equals(""))
+                {
+                    // Nothing to do so
+                    continue;
+                }
+
+                // Go over all rows in grid
+                for (int row = 1; row < DataGridView.Rows.Count; row++)
+                {
+                    if (!DataGridView.Rows[row].Cells[column].Value.ToString().Equals(valuetofilter))
+                    {
+                        DataGridView.Rows[row].Visible = false;
+                    }
+                }
+            }
         }
 
         private void AddRecordToHistory()
@@ -465,7 +593,11 @@ namespace RQS.GUI
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                Clipboard.SetText(DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                if (DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null &&
+                    DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString() != "")
+                {
+                    Clipboard.SetText(DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+                }
             }
         }
 
@@ -504,9 +636,9 @@ namespace RQS.GUI
 
         private void contextMenuStrip1_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            contextCopyCell.Enabled = DataGridView.SelectedRows.Count > 0;
-            contextCopyRows.Enabled = DataGridView.SelectedRows.Count > 0;
-            contextOpenSourceFile.Enabled = DataGridView.SelectedRows.Count > 0;
+            contextCopyCell.Enabled = DataGridView.SelectedRows.Count > 0 && !DataGridView.SelectedRows.Contains(DataGridView.Rows[0]);
+            contextCopyRows.Enabled = DataGridView.SelectedRows.Count > 0 && !DataGridView.SelectedRows.Contains(DataGridView.Rows[0]);
+            contextOpenSourceFile.Enabled = DataGridView.SelectedRows.Count > 0 && !DataGridView.SelectedRows.Contains(DataGridView.Rows[0]);
         }
 
         private void contextOpenSourceFile_Click(object sender, EventArgs e)
@@ -550,20 +682,21 @@ namespace RQS.GUI
         // Compare is performed by FR ID and FR TEXT
         private void OperationRemoveDuplication()
         {
+            int firstrow = ClientParams.Parameters.AutofilterEnabled ? 1 : 0;
             if (DataGridView.Rows.Count > 0)
             {
                 int DeletedRowsCount = 0;
-                for (int a = 0; a < DataGridView.Rows.Count; a++)
+                for (int a = firstrow; a < DataGridView.Rows.Count; a++)
                 {
                     if (DataGridView.Rows.Count >= a)
                     {
-                        for (int b = 0; b < DataGridView.Rows.Count; b++)
+                        for (int b = firstrow; b < DataGridView.Rows.Count; b++)
                         {
                             if (a == b)
                             {
                                 continue;
                             }
-                            if (DataGridView.Rows[a].Cells[2].Value.Equals(DataGridView.Rows[b].Cells[2].Value) ||
+                            if (DataGridView.Rows[a].Cells[2].Value.Equals(DataGridView.Rows[b].Cells[2].Value) &&
                                 DataGridView.Rows[a].Cells[4].Value.Equals(DataGridView.Rows[b].Cells[4].Value))
                             {
                                 DataGridView.Rows.RemoveAt(b);
@@ -572,8 +705,17 @@ namespace RQS.GUI
                         }
                     }
                 }
-                MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
-                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (DeletedRowsCount > 0)
+                {
+                    MessageBox.Show(string.Format("{0} rows were removed because of duplication.", DeletedRowsCount), "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No duplication found!", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else
             {
@@ -582,25 +724,25 @@ namespace RQS.GUI
             }
         }
 
-        // Remove selected rows from DataGridView
-        private void OperationRemoveSelected()
-        {
-            for (int a = DataGridView.Rows.Count - 1; a >= 0; a--)
-            {
-                if (!DataGridView.Rows[a].Selected)
-                {
-                    continue;
-                }
-                else
-                {
-                    DataGridView.Rows.RemoveAt(a);
-                }
-            }
-        }
-
         private void removeSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OperationRemoveSelected();
+        }
+
+        // Remove selected rows from DataGridView
+        private void OperationRemoveSelected()
+        {
+            for (int a = 1; a < DataGridView.Rows.Count; a++)
+            {
+                if (DataGridView.Rows[a].Selected)
+                {
+                    DataGridView.Rows.RemoveAt(a);
+                    if (a != DataGridView.Rows.Count - 1)
+                    {
+                        a--;
+                    }
+                }
+            }
         }
     }
 }

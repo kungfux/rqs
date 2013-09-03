@@ -42,12 +42,12 @@
             this.contextCopyRows = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextOpenSourceFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.removeDuplicatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.contextCustomize = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.removeSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -205,12 +205,24 @@
             this.contextOpenSourceFile.Text = "Open source file";
             this.contextOpenSourceFile.Click += new System.EventHandler(this.contextOpenSourceFile_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
+            // 
             // removeDuplicatesToolStripMenuItem
             // 
             this.removeDuplicatesToolStripMenuItem.Name = "removeDuplicatesToolStripMenuItem";
             this.removeDuplicatesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.removeDuplicatesToolStripMenuItem.Text = "Remove duplications";
             this.removeDuplicatesToolStripMenuItem.Click += new System.EventHandler(this.removeDuplicatesToolStripMenuItem_Click);
+            // 
+            // removeSelectedLinesToolStripMenuItem
+            // 
+            this.removeSelectedLinesToolStripMenuItem.Name = "removeSelectedLinesToolStripMenuItem";
+            this.removeSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.removeSelectedLinesToolStripMenuItem.Text = "Remove selected lines";
+            this.removeSelectedLinesToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedLinesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -229,18 +241,6 @@
             this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
-            // 
-            // removeSelectedLinesToolStripMenuItem
-            // 
-            this.removeSelectedLinesToolStripMenuItem.Name = "removeSelectedLinesToolStripMenuItem";
-            this.removeSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.removeSelectedLinesToolStripMenuItem.Text = "Remove selected lines";
-            this.removeSelectedLinesToolStripMenuItem.Click += new System.EventHandler(this.removeSelectedLinesToolStripMenuItem_Click);
             // 
             // Search
             // 

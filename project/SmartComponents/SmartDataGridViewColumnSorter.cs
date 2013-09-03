@@ -28,6 +28,7 @@
 using System.Collections;
 using System.Windows.Forms;
 using System;
+using RQS.Logic;
 
 namespace RQS.SmartComponents
 {
@@ -40,6 +41,13 @@ namespace RQS.SmartComponents
 
         void DataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
+            // We should not move autofilter from position 0!
+            if (ClientParams.Parameters.AutofilterEnabled && (e.RowIndex1 == 0 || e.RowIndex2 == 0))
+            {
+                e.Handled = true;
+                return;
+            }
+
             switch (e.Column.Index)
             {
                 case 0:

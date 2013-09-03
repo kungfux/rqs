@@ -53,6 +53,7 @@ namespace RQS.Logic
         public string[] SearchHistory;
 
         public bool SecondCopyAllowed = false;
+        public bool AutofilterEnabled = true;
         #endregion
 
         public static ClientParams Parameters
@@ -210,6 +211,19 @@ namespace RQS.Logic
                     RegPath, "SecondCopyAllowed");
             }
             // End of second copy of app
+
+            // Autofilter
+            if (SecondCopyAllowed != ClientParams.Parameters.SecondCopyAllowed)
+            {
+                Registry.SaveKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "AutofilterEnabled", ClientParams.Parameters.AutofilterEnabled);
+            }
+            else
+            {
+                Registry.DeleteKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "AutofilterEnabled");
+            }
+            // End of autofilter
         }
 
         // Load custom parameters
@@ -273,6 +287,12 @@ namespace RQS.Logic
                 Registry.ReadKey(Registry.BaseKeys.HKEY_CURRENT_USER,
                     RegPath, "SecondCopyAllowed", SecondCopyAllowed);
             // End of second copy of app
+
+            // Autofilter
+            AutofilterEnabled =
+                Registry.ReadKey(Registry.BaseKeys.HKEY_CURRENT_USER,
+                    RegPath, "AutofilterEnabled", AutofilterEnabled);
+            // End of autofilter
         }
     }
 }
