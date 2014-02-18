@@ -1,0 +1,168 @@
+﻿<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+		<title>WebRQS :: Online manual</title>
+		<style type="text/css">
+			body, p, table  { font: 14px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
+			h1  { font: bold 18px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
+			h2  { font: bold 16px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
+		</style>
+	</head>
+	<body>
+    <h1>WebRQS online manual</h1>
+    <br><br>
+    
+		<h1>Contents</h1>
+		<a href='#gi'>1. General information</a><br>
+		<a href='#in'>2. Introduction</a><br>
+		<a href='#sr'>3. Search requirements</a><br>
+		<a href='#ds'>4. Columns description</a><br>
+    <a href='#l'>5. Licence and disclaimer</a><br>
+		
+		<br><br><br>
+
+		<h2 id='gi'>General information</h2>
+		<p>This manual describes general information and internal logic of the program WebRQS.</p>
+		<i>This program is still being developed so some moments can be differ from described in this manual.</i>
+		<p><u>Note for draft edition:</u><br> The content of this draft manual are incomplete and are subject to change by the author. This manual should be used as an introductory resource to the features and functionality of WebRQS program.</p>
+		
+		<br><br><br>
+
+		<h2 id='in'>Introduction</h2>
+		<p>WebRQS is a web based program that allows to search the requirements converted from MS Excel (.xls) files which are created in special format.</p>
+		
+		<br><br><br>
+
+		<h2 id='f'>Features</h2>
+		<p>There are short list of features of the WebRQS:</p>
+		<ul>
+			<li>Search requirement(s) by FR ID, FR TMS Task or FR text;</li>
+      <li>Searching by FR ID diapason;</li>
+      <li>Multi-word, -id, -tms task searching;</li>
+			<li>Share search results with colleagues;</li>
+      <li>Filtering by FR source.</li>
+		</ul>
+		
+		<br><br><br>
+
+		<h2 id='sr'>Search requirements</h2>
+		<p>Search criteria section contain following options:</p>
+		<ul>
+			<li>"Search by" drop down list</li><br>
+			Select an option to specify what data will be used for qualifying requirements.
+			<li>"Value to search" field</li><br>
+			Define the search keyword or keywords into this field which will be used for requirements searching. This can be requirement number(s), tms task number(s) or some word(s).
+			<li>"Search" button</li><br>
+			Press "Search" button to perform searching.
+		</ul>
+		<p>WebRQS allows to search requirements by FR ID, FR TMS Task and FR text. You should specify search criteria by selecting appropriate option from the "Search by" list and then define search keyword(s). <u>All searching is case-insensitive.</u></p>
+		<p>Search keywords can be separated by comma or semicolon. In this case found requirements will contain all specified keywords (AND logic). There is one more option available and can be used for searching groups of requirements by FR ID only. For this purpose specify two numbers separated by dash. This lind of search is called as "FR ID diapason" and has limitation by 5000 numbers.</p>
+		<b>There are examples of search keywords:</b>
+		<table border=1 style=' text-align: left; '>
+			<tr>
+				<th>Search by</th>
+				<th>Value to search</th>
+				<th>Description</th>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>FR1</td>
+				<td>will search for requirement with number 'FR1'</td>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>FR1;fr3</td>
+				<td>will search requirements with numbers 'FR1' or 'FR3'</td>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>FR1,fr3</td>
+				<td>will search requirements with numbers 'FR1' or 'FR3'</td>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>FR1-FR3</td>
+				<td>will search requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>FR1-3</td>
+				<td>will search requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
+			</tr>
+			<tr>
+				<td>FR ID</td>
+				<td>NFR1-3</td>
+				<td>will search requirements with numbers 'NFR1' or 'NFR2' or 'NFR3'</td>
+			</tr>
+			<tr>
+				<td>FR TMS Task</td>
+				<td>PCC-43345</td>
+				<td>will search requirements which contain in FR TMS Task 'PCC-43345'</td>
+			</tr>
+			<tr>
+				<td>FR TMS Task</td>
+				<td>PCC;mar5</td>
+				<td>will search requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
+			</tr>
+			<tr>
+				<td>FR TMS Task</td>
+				<td>PCC,mar5</td>
+				<td>will search requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
+			</tr>
+			<tr>
+				<td>FR Text</td>
+				<td>OE_param_micro</td>
+				<td>will search requirements which contain in text specified keyword</td>
+			</tr>
+			<tr>
+				<td>FR Text</td>
+				<td>oe;specimen;collect;receive</td>
+				<td>will search requirements which contain in text all the keywords specified</td>
+			</tr>
+			<tr>
+				<td>FR Text</td>
+				<td>oe,specimen,collect,receive</td>
+				<td>will search requirements which contain in text all the keywords specified</td>
+			</tr>
+		</table>
+		
+		<p>When keyword is specified you need to press Enter or click "Search" to perform searching.</p>
+		<P><u>Note</u> that you can use up and down arrows on the keyboard to switch between "Search by" options when the focus is in "Value to search" field.</p>
+		<p>There is one more thing you should know. All searches are limited by search results by default. This means that WebRQS will break searching in case more than 100 requirements are found. If you see <font color='red'>Only first 100 results are displayed!</font> message then specify more clear search keywords and repeat searching.</p>
+
+		<br><br><br>
+
+		<h2 id='ds'>Columns description</h2>
+		<ul>
+			<li><b>FR ID</b> - requirement identifier;</li>
+			<li><b>TMS Task</b> - TMS task number associated with requirement;</li>
+			<li><b>Text</b> - Text of the requirement;</li>
+			<li><b>CCP</b> - Level of the failure:
+				<ul>
+					<li><b>5</b> - Critical, leading to serious permanent injury or death;</li>
+					<li><b>4</b> - Critical, could cause serious delay or misinformation;</li>
+					<li><b>3</b> - Failure that could cause to extended delay in patient care;</li>
+					<li><b>2</b> - Failure that could cause to delay in treatment of patient;</li>
+					<li><b>1</b> - Minor nuisance to users.</li>
+				</ul>
+			</li>
+			<li><b>Created / Modified</b> - Dates when requirement was created and last modified;</li>
+			<li><b>Is changed?</b> - Are created/modified dates are equals or not?</li>
+			<li><b>Status</b> - Status of the requirement</li>
+			<li><b>Found in file</b> - Source name where from requirement was imported to WebRQS system.</li>
+		</ul>
+
+
+    <br><br><br>
+
+    <h2 id='l'>Licence and disclaimer</h2>
+      <p>WebRQS is published under GNU GPL license. This means that WebRQS is free software; you can redistribute it and/or modify it 
+      under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, 
+      or (at your option) any later version.<br>WebRQS is designed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+      even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU General Public Licence</a> for more details.</p>
+      <p><b><u>Disclaimer:</b></u> Use WebRQS on your own risk; nobody respond in case search results are wrong.<br>Author, hereby disclaims all copyright interest in the program WebRQS (which makes passed at compilers).</p>
+
+      <p style='text-align: right;'>Written by <a href='mailto:ofuc@isd.dp.ua'>Fuks Alexander</a></p>
+	</body>
+</html>
