@@ -44,6 +44,41 @@ namespace RQS
                 bool Running = !mutex.WaitOne(0, false);
                 if (!Running || ClientParams.Parameters.SecondCopyAllowed)
                 {
+                    if (args != null &&
+                        args.Length > 0)
+                    {
+                        if (args.Length == 2)
+                        {
+                            switch (args[0])
+                            {
+                                case "-sFR":
+                                    ClientParams.Parameters.AutoSearchBy = FRSearch.SearchBy.FR_ID;
+                                    break;
+                                case "-sTMS":
+                                    ClientParams.Parameters.AutoSearchBy = FRSearch.SearchBy.FR_TMS_Task;
+                                    break;
+                                case "-sText":
+                                    ClientParams.Parameters.AutoSearchBy = FRSearch.SearchBy.FR_TEXT;
+                                    break;
+                            }
+                            ClientParams.Parameters.AutoSearchArgument = args[1];
+                            ClientParams.Parameters.AutoSearchAtStartUp = true;
+                        }
+                        else
+                        {
+                            string allArgs = "";
+                            foreach(string s in args)
+                            {
+                                allArgs += s;
+                            }
+                            MessageBox.Show(
+                                string.Format("Wrong arguments are passed to RQS: {1}{0}Expected arguments:{0}RQS.exe -[sFR|sTMS|sText] [criteria]",
+                                Environment.NewLine, allArgs), "RQS",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                    }
+
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new GUI.RQS());

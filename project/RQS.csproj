@@ -12,8 +12,7 @@
     <AssemblyName>RQS</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>RQS.Program</StartupObject>
     <ApplicationIcon>1368226306_1325.ico</ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -47,6 +46,12 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="GUI\View.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\View.Designer.cs">
+      <DependentUpon>View.cs</DependentUpon>
+    </Compile>
     <Compile Include="Logic\ClientParams.cs" />
     <Compile Include="Logic\FRSearch.cs" />
     <Compile Include="Logic\FR.cs" />
@@ -116,6 +121,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Setup.resx">
       <DependentUpon>Setup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\View.resx">
+      <DependentUpon>View.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

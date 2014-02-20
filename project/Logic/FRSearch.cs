@@ -48,6 +48,12 @@ namespace RQS.Logic
 
         private void LoadXLSFilesList()
         {
+            if (!Directory.Exists(ClientParams.Parameters.XLSLocation))
+            {
+                MessageBox.Show("Path '" + ClientParams.Parameters.XLSLocation + "' not found.", "RQS",
+                     MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
             DirectoryInfo XLSLocation = new DirectoryInfo(ClientParams.Parameters.XLSLocation);
             FileInfo[] XLSFilesInfo = XLSLocation.GetFiles("*.xls");
             int XLSFilesCount = XLSFilesInfo.Length;
@@ -115,6 +121,7 @@ namespace RQS.Logic
                 int cFRID = 0;        // 1st column by default
                 int cFRTMSTask = 1;   // 2nd column by default
                 int cFRText = 3;      // 4rd column by default
+                int cFRObject = -1;
                 int cCCP = -1;
                 int cCreated = -1;
                 int cModified = -1;
@@ -149,6 +156,10 @@ namespace RQS.Logic
                             case "nfr tms task":
                                 cFRTMSTask = a;
                                 break;
+                            // Object Number
+                            case "object number":
+                                cFRObject = a;
+                                break;
                             // Functional Requirements, Non-Functional Requirements
                             case "functional requirements":
                                 cFRText = a;
@@ -158,6 +169,9 @@ namespace RQS.Logic
                                 break;
                             // CCP
                             case "ccp":
+                                cCCP = a;
+                                break;
+                            case "ccp level":
                                 cCCP = a;
                                 break;
                             // FR Date, NFR Date
@@ -225,6 +239,7 @@ namespace RQS.Logic
                     FR.FRSource = XLSFile;
                     FR.FRID = !row.GetCell(cFRID).IsEmpty ? row.GetCell(cFRID).Value.ToString() : "";
                     FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
+                    FR.FRObject = !row.GetCell(cFRObject).IsEmpty ? row.GetCell(cFRObject).Value.ToString() : "";
                     FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
                     FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
                     FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";

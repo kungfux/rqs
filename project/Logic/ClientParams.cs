@@ -56,6 +56,12 @@ namespace RQS.Logic
         public bool AutofilterEnabled = true;
         #endregion
 
+        #region Console parameters
+        public bool AutoSearchAtStartUp = false;
+        public FRSearch.SearchBy AutoSearchBy = FRSearch.SearchBy.FR_TEXT;
+        public string AutoSearchArgument = "";
+        #endregion
+
         public static ClientParams Parameters
         {
             get

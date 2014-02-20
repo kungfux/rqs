@@ -34,6 +34,7 @@ namespace RQS.Logic
         public string FRSource;   // File name which contain this FR
         public string FRID;       // FR ID number (from file)
         public string FRTMSTask;  // FR TMS task number (from file)
+        public string FRObject;   // FR Object Number (from file)
         public string FRText;     // FR text (from file)
         public string CCP;        // FR CCP (from file)
         public string Created;    // FR created date (from file)

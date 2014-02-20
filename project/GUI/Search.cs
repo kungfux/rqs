@@ -60,7 +60,7 @@ namespace RQS.GUI
         public delegate void SearchResultsAdded();
 
         private FRSearch FRSearch = new FRSearch();
-        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 10);
+        private SmartDataGridView DataGridView = new SmartDataGridView("SearchResults", 11);
         private int[] LastMouseDownLocation = new int[] { 0, 0 };
         private SmartDataGridViewColumnSorter ColumnSorter;
         private bool HandledKeyDown = false;
@@ -77,12 +77,13 @@ namespace RQS.GUI
             DataGridView.Columns.Add("", "Source");
             DataGridView.Columns.Add("", "FR ID");
             DataGridView.Columns.Add("", "TMS task");
+            DataGridView.Columns.Add("", "Object Number");
             DataGridView.Columns.Add("", "FR text");
             DataGridView.Columns.Add("", "CCP");
             DataGridView.Columns.Add("", "Created");
-            DataGridView.HideColumnByDefault(6);
-            DataGridView.Columns.Add("", "Last modified");
             DataGridView.HideColumnByDefault(7);
+            DataGridView.Columns.Add("", "Last modified");
+            DataGridView.HideColumnByDefault(8);
 
             DataGridViewCheckBoxCell checkboxCell = new DataGridViewCheckBoxCell();
             checkboxCell.Value = false;
@@ -90,10 +91,10 @@ namespace RQS.GUI
             IsChangedColumn.HeaderText = "Is changed?";
             IsChangedColumn.SortMode = DataGridViewColumnSortMode.Automatic;
             DataGridView.Columns.Add(IsChangedColumn);
-            DataGridView.HideColumnByDefault(8);
+            DataGridView.HideColumnByDefault(9);
 
             DataGridView.Columns.Add("", "Status");
-            DataGridView.HideColumnByDefault(9);
+            DataGridView.HideColumnByDefault(10);
 
             DataGridView.CellDoubleClick += new DataGridViewCellEventHandler(DataGridView_CellDoubleClick);
             DataGridView.MouseDown += new MouseEventHandler(DataGridView_MouseDown);
@@ -113,6 +114,14 @@ namespace RQS.GUI
                 ClientParams.Parameters.SearchHistory.Length > 0)
             {
                 comboSearchText.Items.AddRange(ClientParams.Parameters.SearchHistory);
+            }
+
+            // Auto search
+            if (ClientParams.Parameters.AutoSearchAtStartUp)
+            {
+                comboSearchBy.SelectedIndex = (int)ClientParams.Parameters.AutoSearchBy;
+                comboSearchText.Text = ClientParams.Parameters.AutoSearchArgument;
+                bSearch_Click(this, null);
             }
         }
 
@@ -292,6 +301,7 @@ namespace RQS.GUI
                             FRs[a].FRSource,
                             FRs[a].FRID,
                             FRs[a].FRTMSTask,
+                            FRs[a].FRObject,
                             FRs[a].FRText,
                             FRs[a].CCP,
                             FRs[a].Created,
@@ -399,6 +409,7 @@ namespace RQS.GUI
         private void AddAutoFilter()
         {
             DataGridViewRow filterRow = new DataGridViewRow();
+            filterRow.Cells.Add(new DataGridViewComboBoxCell());
             filterRow.Cells.Add(new DataGridViewComboBoxCell());
             filterRow.Cells.Add(new DataGridViewComboBoxCell());
             filterRow.Cells.Add(new DataGridViewComboBoxCell());
@@ -599,6 +610,7 @@ namespace RQS.GUI
                     Clipboard.SetText(DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
                 }
             }
+            //new View(DataGridView, e.RowIndex, new string[0]).ShowDialog();
         }
 
         private void contextCopyRows_Click(object sender, System.EventArgs e)
