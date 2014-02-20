@@ -39,11 +39,29 @@ namespace WebQA.Logic
             Red
         }
 
-        // Declare log file
-        static StreamWriter streamWriter = new StreamWriter(
+        static Trace()
+        {
+            if (!Directory.Exists("log"))
+            {
+                try
+                {
+                    Directory.CreateDirectory("log");
+                    streamWriter = new StreamWriter(
                 string.Format("log\\log_{0}.log",
                 DateTime.Now.ToString("dd.MM.yyyy")),
                 true);
+                }
+                catch (Exception ex)
+                {
+                    Add("Directory log can not be created or accessed" + ex, Color.Red);
+                    Add("Logs will be written to console only!" + ex, Color.Red);
+                    Add("Details: " + ex, Color.Red);
+                }
+            }
+        }
+
+        // Declare log file
+        static StreamWriter streamWriter;
 
         // Add record to log and console
         public static void Add(string text, Color level)
@@ -72,21 +90,24 @@ namespace WebQA.Logic
             Console.WriteLine(message);
 
             // Output to file
-            try
+            if (streamWriter != null)
             {
-                streamWriter.WriteLine(message);
-                // Flush data
-                streamWriter.Flush();
-            }
-            catch (IOException e)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(
-                    string.Concat(
-                    DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff"),
-                    "WARNING",
-                    Environment.NewLine,
-                    e.ToString()));
+                try
+                {
+                    streamWriter.WriteLine(message);
+                    // Flush data
+                    streamWriter.Flush();
+                }
+                catch (IOException e)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(
+                        string.Concat(
+                        DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff"),
+                        "WARNING",
+                        Environment.NewLine,
+                        e.ToString()));
+                }
             }
         }
     }
