@@ -41,23 +41,16 @@ namespace WebQA.Logic
 
         static Trace()
         {
-            if (!Directory.Exists("log"))
-            {
                 try
                 {
-                    Directory.CreateDirectory("log");
-                    streamWriter = new StreamWriter(
-                string.Format("log\\log_{0}.log",
-                DateTime.Now.ToString("dd.MM.yyyy")),
-                true);
+                    streamWriter = new StreamWriter("webqa.log", true);
                 }
                 catch (Exception ex)
                 {
-                    Add("Directory log can not be created or accessed" + ex, Color.Red);
+                    Add("Log file can not be created or accessed" + ex, Color.Red);
                     Add("Logs will be written to console only!" + ex, Color.Red);
                     Add("Details: " + ex, Color.Red);
                 }
-            }
         }
 
         // Declare log file
