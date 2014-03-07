@@ -213,8 +213,6 @@ namespace WebQA.Logic
                 Trace.Add(
                     string.Format("{0} bytes sent to client.", bytesSent), Trace.Color.Green);
 
-                Program.TRAFFIC_GENERATED += bytesSent;
-
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
 

@@ -69,7 +69,6 @@
     <Compile Include="Logic\RQS.cs" />
     <Compile Include="Logic\SQLiteIteractionLite.cs" />
     <Compile Include="Logic\Trace.cs" />
-    <Compile Include="Logic\Traffic.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

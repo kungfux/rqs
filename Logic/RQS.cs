@@ -35,7 +35,6 @@ namespace WebQA.Logic
     internal class RQS
     {
         StringBuilder html = new StringBuilder();
-        Traffic traffic = new Traffic();
 
         string by = "";
         string value = "";
@@ -331,10 +330,8 @@ namespace WebQA.Logic
                     {
                         Trace.Add("Requirements NOT found", Trace.Color.Yellow);
                     }
-                    html.Append("<div><p align='center'><font color='maroon'>No results to display.</font></p></div>");
+                    html.Append("<div><p align='center'><font color='maroon'>No results to display. </font><a href='/?help#sr'> Want to read help?</a></p></div>");
                 }
-
-                Program.REQUESTS_PROCESSED++;
             }
 
             html.Append(
@@ -345,11 +342,9 @@ namespace WebQA.Logic
                 "<br>",
                 "<table border=0 width=100% style='text-align: right; padding: 1em; font-size: 80%; white-space: nowrap; color: #cccccc;'>",
                 "<tr>",
-                "<td style='text-align: left;'>{0} searches already processed<br>{1} of traffic generated</td>",
-                "<td style='text-align: right;'>Powered by <a href='mailto:ofuc@isd.dp.ua?subject=WebRQS'>kungfux</a><br>{2}</td>",
+                "<td style='text-align: center;'>Powered by WebQA<br>Generated on {0}</td>",
+                //"<td style='text-align: left;'></td>",
                 "</tr></table></div>"),
-                Program.REQUESTS_PROCESSED,
-                traffic.getConvertedBytes(Program.TRAFFIC_GENERATED),
                 DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff")));
 
             html.Append("</body></html>");

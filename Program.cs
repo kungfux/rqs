@@ -36,8 +36,6 @@ namespace WebQA
     {
         public static IPEndPoint WebQAaddress;
 
-        public static Int64 REQUESTS_PROCESSED = 0;
-        public static long TRAFFIC_GENERATED = 0;
         public static long REQS_IN_THE_DB = 0;
 
         private const string db = "webqa.sqlite";
