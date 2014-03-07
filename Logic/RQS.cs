@@ -48,7 +48,7 @@ namespace WebQA.Logic
             // Display help
             if (request.ToLower().Equals("?help"))
             {
-                return new Help.Help().GetHelp();
+                return new Help().GetHelp();
             }
 
             // Clear previous request

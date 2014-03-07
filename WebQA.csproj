@@ -64,7 +64,7 @@
     <Compile Include="Converter\ReqConverter.cs" />
     <Compile Include="Converter\FR.cs" />
     <Compile Include="Converter\FRParser.cs" />
-    <Compile Include="Help\Help.cs" />
+    <Compile Include="Help.cs" />
     <Compile Include="Logic\AsynchronousSocketListener.cs" />
     <Compile Include="Logic\RQS.cs" />
     <Compile Include="Logic\SQLiteIteractionLite.cs" />
@@ -74,11 +74,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Help\Help.html">
+    <Content Include="help.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

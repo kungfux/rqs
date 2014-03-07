@@ -28,17 +28,24 @@
 using System.Text;
 using System.IO;
 
-namespace WebQA.Help
+namespace WebQA
 {
     internal class Help
     {
         public StringBuilder GetHelp()
         {
             StringBuilder strb = new StringBuilder();
-            StreamReader reader = new StreamReader(@"Help\Help.html");
-            while (!reader.EndOfStream)
+            try
             {
-                strb.Append(reader.ReadLine());
+                StreamReader reader = new StreamReader(@"help.html");
+                while (!reader.EndOfStream)
+                {
+                    strb.Append(reader.ReadLine());
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                strb.Append("<p>Sorry, help source file is not found on server. Please notify server owner about that problem. Thanks!</p>");
             }
             return strb;
         }
