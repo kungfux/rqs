@@ -64,13 +64,6 @@ namespace WebQA
                     Trace.Add("Wrong argument is specified. Expecting port number.", Trace.Color.Red);
                 }
 
-                // Prepare dir for logs
-                Directory.SetCurrentDirectory(".");
-                if (!Directory.Exists("log"))
-                {
-                    Directory.CreateDirectory("log");
-                }
-
                 // Add trace about launching
                 Trace.Add("WebQA is started", Trace.Color.Green);
 
@@ -85,7 +78,7 @@ namespace WebQA
                 if (!SQLiteIteractionLite.TestConnection(
                     string.Format(
                     "Data Source={0};Version=3;FailIfMissing=True;UTF8Encoding=True;Foreign Keys=True;Read Only=True;", db),
-                    true))
+                    true, false))
                 {
                     Trace.Add("Database not found. WebQA is stopped", Trace.Color.Red);
                     return 2; // database not found, terminate
