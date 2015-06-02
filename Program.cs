@@ -43,82 +43,75 @@ namespace WebQA
         // The main entry point
         static int Main(string[] args)
         {
-            if (args.Length == 0)
+            // Display help if requested
+            if (args.Length == 1 && (args[0] == "/?" || args[0] == "--help"))
             {
-                // Display help
                 Console.WriteLine(
                     string.Format(
-                        "Usage:{0} - webqa [port]{0}{1}start as web server;{0} - webqa requirements [path]{0}{1}convert .xls requirements to database;{0}"+
-                        " - webqa hosparams [path]{0}{1}convert hosparams from .txt to database.", 
+                        "Usage:{0} - webqa [port]{0}{1}start as web server;{0} - webqa requirements [path]{0}{1}convert .xls requirements to database;{0}" +
+                        " - webqa hosparams [path]{0}{1}convert hosparams from .txt to database.",
                         Environment.NewLine,
                         "   "));
                 return 0;
             }
 
-            if (args.Length == 1)
+            // Server configuration
+            int port = 80;
+
+            if (args.Length >= 1)
             {
-                // Start as web server
-                int port = 8080;
-                if (args.Length == 1 && !int.TryParse(args[0], out port))
+                switch (args[0])
                 {
-                    Trace.Add("Wrong argument is specified. Expecting port number.", Trace.Color.Red);
+                    case "requirements":
+                        Converter.ReqConverter rc = new Converter.ReqConverter();
+                        return rc.Convert(args);
+                    case "hosparams":
+                        Converter.HospConverter hc = new Converter.HospConverter();
+                        return hc.Convert(args);
+                    default:
+                        int.TryParse(args[0], out port);
+                        break;
                 }
+            }
 
-                // Add trace about launching
-                Trace.Add("WebQA is started", Trace.Color.Green);
 
-                IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
-                WebQAaddress = new IPEndPoint(ipAddress, port);
+            // Add trace about launching
+            Trace.Add("WebQA is started", Trace.Color.Green);
 
-                Trace.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()), Trace.Color.Green);
+            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            WebQAaddress = new IPEndPoint(ipAddress, port);
 
-                // Turn on sql traces and connect to db
-                SQLiteIteractionLite.SetTrace(true);
-                if (!SQLiteIteractionLite.TestConnection(
-                    string.Format(
-                    "Data Source={0};Version=3;FailIfMissing=True;UTF8Encoding=True;Foreign Keys=True;Read Only=True;", db),
-                    true))
-                {
-                    Trace.Add("Database not found. WebQA is stopped", Trace.Color.Red);
-                    return 2; // database not found, terminate
-                }
-                else
-                {
-                    // Count all requirements
-                    REQS_IN_THE_DB = SQLiteIteractionLite.SelectCell<Int64>(
-                        "SELECT COUNT(*) FROM REQUIREMENTS;");
-                    Trace.Add(
-                        string.Format("{0} requirements in the database", REQS_IN_THE_DB),
-                        Trace.Color.Green);
-                }
+            Trace.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()), Trace.Color.Green);
 
-                // Prepare web server and start listening
-                AsynchronousSocketListener l = new AsynchronousSocketListener();
-                l.StartListening();
-
-                // Add trace about finishing program
-                Trace.Add("WebQA is stopped", Trace.Color.Green);
-
-                return 0;
+            // Turn on sql traces and connect to db
+            SQLiteIteractionLite.SetTrace(true);
+            if (!SQLiteIteractionLite.TestConnection(
+                string.Format(
+                "Data Source={0};Version=3;FailIfMissing=True;UTF8Encoding=True;Foreign Keys=True;Read Only=True;", db),
+                true))
+            {
+                Trace.Add("Database not found. WebQA is stopped", Trace.Color.Red);
+                return 2; // database not found, terminate
             }
             else
             {
-                // Trying to start converters
-                if (args[0].Equals("requirements"))
-                {
-                    Converter.ReqConverter converter = new Converter.ReqConverter();
-                    converter.Convert(args);
-                }
-
-                if (args[0].Equals("hosparams"))
-                {
-                    Converter.HospConverter converter = new Converter.HospConverter();
-                    converter.Convert(args);
-                }
-                
-                return 2;
+                // Count all requirements
+                REQS_IN_THE_DB = SQLiteIteractionLite.SelectCell<Int64>(
+                    "SELECT COUNT(*) FROM REQUIREMENTS;");
+                Trace.Add(
+                    string.Format("{0} requirements in the database", REQS_IN_THE_DB),
+                    Trace.Color.Green);
             }
+
+            // Prepare web server and start listening
+            AsynchronousSocketListener l = new AsynchronousSocketListener();
+            l.StartListening();
+
+            // Add trace about finishing program
+            Trace.Add("WebQA is stopped", Trace.Color.Green);
+
+            return 0;
         }
     }
 }
