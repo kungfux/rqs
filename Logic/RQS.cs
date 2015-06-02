@@ -304,11 +304,11 @@ namespace WebQA.Logic
                             // created / modified dates
                             string.Concat(
                                 result.Rows[a].ItemArray[6] != null && !result.Rows[a].ItemArray[6].ToString().Equals("") ? 
-                                Convert.ToDateTime(result.Rows[a].ItemArray[6]).ToShortDateString() : 
+                                result.Rows[a].ItemArray[6].ToString() :
                                 "-",
                                 " / ",
                                 result.Rows[a].ItemArray[7] != null && !result.Rows[a].ItemArray[7].ToString().Equals("") ? 
-                                Convert.ToDateTime(result.Rows[a].ItemArray[7]).ToShortDateString() : 
+                                result.Rows[a].ItemArray[7].ToString() :
                                 "-"),                            
                             // is changed
                             Convert.ToInt32(result.Rows[a].ItemArray[8]) == 0 ? "Yes" : "No",
