@@ -185,10 +185,12 @@ namespace WebQA.Converter
                         FR.FRObject = !row.GetCell(cFRObject).IsEmpty ? row.GetCell(cFRObject).Value.ToString() : "";
                         FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
                         FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
-                        FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
-                        FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
+                        // .ToInt32() methods are commented due to date convertion issues
+                        //FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
+                        //FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
+                        FR.Created = !row.GetCell(cCreated).IsEmpty ? row.GetCell(cCreated).Value.ToString() : "";
+                        FR.Modified = !row.GetCell(cModified).IsEmpty ? row.GetCell(cModified).Value.ToString() : "";
                         FR.Status = !row.GetCell(cStatus).IsEmpty ? row.GetCell(cStatus).Value.ToString() : "";
-                        int asd = Convert.ToInt32("asd");
                     }
                     catch (Exception ex)
                     {
