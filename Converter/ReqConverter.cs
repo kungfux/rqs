@@ -56,7 +56,7 @@ namespace WebQA.Converter
                 }
                 if (File.Exists(db))
                 {
-                    Trace.Add("Database already exist! Are you sure want to continue?", Trace.Color.Red);
+                    Trace.Add("Database already exist! Press any key to continue or Ctrl+C to abort", Trace.Color.Red);
                     Console.ReadKey();
                 }
 
