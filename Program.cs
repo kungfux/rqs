@@ -64,13 +64,6 @@ namespace WebQA
                     Trace.Add("Wrong argument is specified. Expecting port number.", Trace.Color.Red);
                 }
 
-                // Prepare dir for logs
-                Directory.SetCurrentDirectory(".");
-                if (!Directory.Exists("log"))
-                {
-                    Directory.CreateDirectory("log");
-                }
-
                 // Add trace about launching
                 Trace.Add("WebQA is started", Trace.Color.Green);
 
