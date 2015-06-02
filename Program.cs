@@ -1,7 +1,7 @@
 ﻿/*   
  *  WebQA
  *  WebQA Server
- *  Copyright (C) Fuks Alexander 2013
+ *  Copyright (C) Fuks Alexander 2013-2015
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,6 @@
 using WebQA.Logic;
 using System;
 using System.Net;
-using System.IO;
 
 namespace WebQA
 {
@@ -46,12 +45,8 @@ namespace WebQA
             // Display help if requested
             if (args.Length == 1 && (args[0] == "/?" || args[0] == "--help"))
             {
-                Console.WriteLine(
-                    string.Format(
-                        "Usage:{0} - webqa [port]{0}{1}start as web server;{0} - webqa requirements [path]{0}{1}convert .xls requirements to database;{0}" +
-                        " - webqa hosparams [path]{0}{1}convert hosparams from .txt to database.",
-                        Environment.NewLine,
-                        "   "));
+                Console.WriteLine(Resources.HELP);
+
                 return 0;
             }
 

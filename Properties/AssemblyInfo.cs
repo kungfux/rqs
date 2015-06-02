@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fuks Alexander")]
 [assembly: AssemblyProduct("WebQA")]
-[assembly: AssemblyCopyright("Copyright © Fuks Alexander 2013")]
+[assembly: AssemblyCopyright("Copyright © Fuks Alexander 2013-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

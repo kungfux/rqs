@@ -1,7 +1,7 @@
 ﻿/*   
  *  WebQA
  *  WebQA Server
- *  Copyright (C) Fuks Alexander 2013
+ *  Copyright (C) Fuks Alexander 2013-2015
  *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ namespace WebQA.Logic
                     "<html>",
                     "<head>",
                     "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>",
-                    "<title>WebRQS</title>",
+                    "<title>WebQA</title>",
                     style,
                     js,
                     "</head>",
