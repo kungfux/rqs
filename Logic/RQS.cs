@@ -91,7 +91,7 @@ namespace WebQA.Logic
                 //"<style type='text/css' media='all'> #toTop { width:100px;background:#F4FFBF;border:1px solid #ccc;text-align:center;padding:5px;position:fixed;bottom:10px;right:10px;cursor:pointer;color:#666;text-decoration:none; }</style>",
                 "<style type='text/css'>",
                 //"body, div, p, table  { font: 14px 'atrament-web-1', 'atrament-web-2', Georgia, Serif; border-radius: 10px; }",
-                "body, div, p, table  { font-family: Tahoma, Verdana, Arial, sans-serif; }",
+                "body, div, p, table  { margin: 0px auto; font-family: Tahoma, Verdana, Arial, sans-serif; }",
                 //"a { text-decoration: none; color: #0080ff;}",
                 "a { text-decoration: none; color: #000000;}",
                 "input[type=text] { border:solid 1px #000000; color: #000000; height: 19px; padding-left:10px; width: 350px; box-shadow: 2px 2px 0 #000000 inset; }",
