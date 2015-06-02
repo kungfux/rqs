@@ -177,26 +177,39 @@ namespace WebQA.Converter
                     row = sheet.Cells.GetRow(a);
 
                     FR = new FR();
-                    FR.FRSource = XLSFile;
-                    FR.FRID = !row.GetCell(cFRID).IsEmpty ? row.GetCell(cFRID).Value.ToString() : "";
-                    FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
-                    FR.FRObject = !row.GetCell(cFRObject).IsEmpty ? row.GetCell(cFRObject).Value.ToString() : "";
-                    FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
-                    FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
-                    FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
-                    FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
-                    FR.Status = !row.GetCell(cStatus).IsEmpty ? row.GetCell(cStatus).Value.ToString() : "";
-
-                    SQLiteIteractionLite.ChangeData("INSERT INTO Requirements (source, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status) VALUES (@source, @fr_id, @fr_tms_task, @fr_object, @fr_text, @ccp, @created, @modified, @status)",
-                        new SQLiteParameter("@source", FR.FRSource),
-                        new SQLiteParameter("@fr_id", FR.FRID),
-                        new SQLiteParameter("@fr_tms_task", FR.FRTMSTask),
-                        new SQLiteParameter("@fr_object", FR.FRObject),
-                        new SQLiteParameter("@fr_text", FR.FRText),
-                        new SQLiteParameter("@ccp", FR.CCP),
-                        new SQLiteParameter("@created", FR.Created),
-                        new SQLiteParameter("@modified", FR.Modified),
-                        new SQLiteParameter("@status", FR.Status));
+                    try
+                    {
+                        FR.FRSource = XLSFile;
+                        FR.FRID = !row.GetCell(cFRID).IsEmpty ? row.GetCell(cFRID).Value.ToString() : "";
+                        FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
+                        FR.FRObject = !row.GetCell(cFRObject).IsEmpty ? row.GetCell(cFRObject).Value.ToString() : "";
+                        FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
+                        FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
+                        FR.Created = !row.GetCell(cCreated).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cCreated).Value)).ToShortDateString() : "";
+                        FR.Modified = !row.GetCell(cModified).IsEmpty ? DateTime.FromOADate(Convert.ToInt32(row.GetCell(cModified).Value)).ToShortDateString() : "";
+                        FR.Status = !row.GetCell(cStatus).IsEmpty ? row.GetCell(cStatus).Value.ToString() : "";
+                        int asd = Convert.ToInt32("asd");
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.Add(string.Format("Cannot parse row #{0} because of {1}", a + 1, ex.Message), Trace.Color.Red);
+                    }
+                    finally
+                    {
+                        if (FR.FRID != null)
+                        {
+                            SQLiteIteractionLite.ChangeData("INSERT INTO Requirements (source, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status) VALUES (@source, @fr_id, @fr_tms_task, @fr_object, @fr_text, @ccp, @created, @modified, @status)",
+                                new SQLiteParameter("@source", FR.FRSource),
+                                new SQLiteParameter("@fr_id", FR.FRID),
+                                new SQLiteParameter("@fr_tms_task", FR.FRTMSTask),
+                                new SQLiteParameter("@fr_object", FR.FRObject),
+                                new SQLiteParameter("@fr_text", FR.FRText),
+                                new SQLiteParameter("@ccp", FR.CCP),
+                                new SQLiteParameter("@created", FR.Created),
+                                new SQLiteParameter("@modified", FR.Modified),
+                                new SQLiteParameter("@status", FR.Status));
+                        }
+                    }
                 }
 
                 Trace.Add(string.Format("Processed: {0} records", sheet.Cells.LastRowIndex), Trace.Color.Green);
