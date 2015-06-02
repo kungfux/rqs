@@ -83,7 +83,7 @@ namespace WebQA.Converter
                 }
                 catch (IOException)
                 {
-                    Trace.Add(XLSFile + " is locked by another process and will be skipped from search results!", Trace.Color.Yellow);
+                    Trace.Add(XLSFile + " is locked by another process and will be skipped!", Trace.Color.Yellow);
                     continue;
                 }
 
