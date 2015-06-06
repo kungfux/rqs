@@ -34,20 +34,21 @@ namespace WebQA.Logic
 {
     internal class RQS
     {
+        WebPageSource webSource = new WebPageSource();
         StringBuilder html = new StringBuilder();
 
         string by = "";
         string value = "";
         string file_filter = "";
 
-        public StringBuilder ProcessRequest(string request)
+        public string ProcessRequest(string request)
         {
             html.Clear();
 
             // Display help
             if (request.ToLower().Equals("?help"))
             {
-                return new Help().GetHelp();
+                return webSource.LoadSource("help");
             }
 
             // Clear previous request
@@ -161,7 +162,7 @@ namespace WebQA.Logic
 
             GetRequirements(by, GetCriteria(by, value), file_filter);
 
-            return html;
+            return html.ToString();
         }
 
         private void GetRequirements(string by, string[] criteria, string file_filter)

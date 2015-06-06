@@ -4,3 +4,4 @@ WebQA/packages/*
 WebQA/*.suo
 WebQA/*.user
 WebQA/*.sln
+WebQA.Tests/get.pyc
