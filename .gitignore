@@ -1,6 +1,6 @@
-bin/*
-obj/*
-packages/*
-*.suo
-*.user
-*.sln
+WebQA/bin/*
+WebQA/obj/*
+WebQA/packages/*
+WebQA/*.suo
+WebQA/*.user
+WebQA/*.sln
