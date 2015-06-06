@@ -22,7 +22,8 @@ def longCalls(count=1000):
             time.sleep(0.2)
     print str(count * count)+" long calls done"
 
-def multiProcessCalls(processCount=3):
+def multiProcessCalls(processCount=50):
+    print "multi calls"
     processes = []
     for i in range(processCount):
         p = Process(target=fastCalls)
@@ -32,7 +33,7 @@ def multiProcessCalls(processCount=3):
     for p in processes:
         p.join();
     
-    print "processes with " + processCount + " processes done"
+    print "processes with " + str(processCount) + " processes done"
 
 if __name__ == '__main__':
     hostName = socket.gethostname()
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     print "IP:"+hostIP
     
     fastCalls();
-    multiProcessCalls
+    multiProcessCalls();
     longCalls();
     
     
