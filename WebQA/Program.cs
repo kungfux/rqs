@@ -33,30 +33,25 @@ namespace WebQA
 {
     class Program
     {
-        public static IPEndPoint WebQAaddress;
 
-        public static long REQS_IN_THE_DB = 0;
-
-        private const string db = "webqa.sqlite";
+        private const string DB_FILE_NAME = "webqa.sqlite";
+        private const string CONNECTION_STRING = @"Data Source={0};Version=3;FailIfMissing=True;UTF8Encoding=True;Foreign Keys=True;Read Only=True;";
 
         // The main entry point
         static int Main(string[] args)
         {
-            // Display help if requested
-            if (args.Length == 1 && (args[0] == "/?" || args[0] == "--help"))
+            for (int i = 0; i < args.Length; ++i)
             {
-                Console.WriteLine(Resources.HELP);
-
-                return 0;
-            }
-
-            // Server configuration
-            int port = 80;
-
-            if (args.Length >= 1)
-            {
-                switch (args[0])
+                switch (args[i])
                 {
+                    case "/?":
+                        Console.WriteLine(Resources.HELP);
+                        Environment.Exit(0);
+                        break;
+                    case "--help":
+                        Console.WriteLine(Resources.HELP);
+                        Environment.Exit(0);
+                        break;
                     case "requirements":
                         Converter.ReqConverter rc = new Converter.ReqConverter();
                         return rc.Convert(args);
@@ -64,49 +59,83 @@ namespace WebQA
                         Converter.HospConverter hc = new Converter.HospConverter();
                         return hc.Convert(args);
                     default:
-                        int.TryParse(args[0], out port);
+                        int port;
+                        if (int.TryParse(args[0], out port) == false)
+                        {
+                            Console.WriteLine("Unable to parse port number");
+                            Environment.Exit(1);
+                        }
+                        ServerPort = port;
                         break;
                 }
             }
 
-
             // Add trace about launching
             Trace.Add("WebQA is started", Trace.Color.Green);
-
-            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            WebQAaddress = new IPEndPoint(ipAddress, port);
-
             Trace.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()), Trace.Color.Green);
 
             // Turn on sql traces and connect to db
             SQLiteIteractionLite.SetTrace(true);
-            if (!SQLiteIteractionLite.TestConnection(
-                string.Format(
-                "Data Source={0};Version=3;FailIfMissing=True;UTF8Encoding=True;Foreign Keys=True;Read Only=True;", db),
-                true))
+            if (!SQLiteIteractionLite.TestConnection(string.Format(CONNECTION_STRING, DB_FILE_NAME), true))
             {
                 Trace.Add("Database not found. WebQA is stopped", Trace.Color.Red);
-                return 2; // database not found, terminate
+                Environment.Exit(2);
             }
             else
             {
-                // Count all requirements
-                REQS_IN_THE_DB = SQLiteIteractionLite.SelectCell<Int64>(
-                    "SELECT COUNT(*) FROM REQUIREMENTS;");
                 Trace.Add(
-                    string.Format("{0} requirements in the database", REQS_IN_THE_DB),
+                    string.Format("{0} requirements in the database", ReqsCountInDB),
                     Trace.Color.Green);
             }
 
             // Prepare web server and start listening
-            AsynchronousSocketListener l = new AsynchronousSocketListener();
-            l.StartListening();
+            (new AsynchronousSocketListener()).StartListening();
 
-            // Add trace about finishing program
             Trace.Add("WebQA is stopped", Trace.Color.Green);
 
             return 0;
+        }
+
+        private static IPEndPoint _webQAaddress;
+        public static IPEndPoint WebQAaddress
+        {
+            get
+            {
+                if (_webQAaddress == null)
+                {
+                    IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+                    IPAddress ipAddress = ipHostInfo.AddressList[0];
+                    _webQAaddress = new IPEndPoint(ipAddress, ServerPort);
+                }
+                return _webQAaddress;
+            }
+        }
+
+        private static int? _server_port;
+        public static int ServerPort
+        {
+            get
+            {
+                return _server_port.HasValue ? _server_port.Value : 80;
+            }
+            set
+            {
+                _server_port = value;
+            }
+        }
+
+        private static long? _reqsCount;
+        public static long ReqsCountInDB
+        {
+            get
+            {
+                if (!_reqsCount.HasValue)
+                {
+                    _reqsCount = SQLiteIteractionLite.SelectCell<Int64>(
+                   "SELECT COUNT(*) FROM REQUIREMENTS;");
+                }
+                return _reqsCount.Value;
+            }
         }
     }
 }

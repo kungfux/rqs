@@ -156,7 +156,7 @@ namespace WebQA.Logic
                     "</form>",
                     "</table>",
                     !by.Equals("id") && !by.Equals("fr") && !by.Equals("tms") && !by.Equals("text") ? 
-                        string.Format("<p style='font-size: 80%;'><font color='green'>{0} requirements in the database</font></p>", Program.REQS_IN_THE_DB) : "",
+                        string.Format("<p style='font-size: 80%;'><font color='green'>{0} requirements in the database</font></p>", Program.ReqsCountInDB) : "",
                     "</div><br>"
                     ));
 
