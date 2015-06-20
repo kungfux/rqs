@@ -165,7 +165,7 @@ namespace WebQA
         {
             try
             {
-                Trace.Add(
+                Trace.Instance.Add(
                     string.Concat(
                     "SQL WARNING: ",
                     LastErrorMessage,

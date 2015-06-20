@@ -81,7 +81,7 @@ namespace WebQA.Logic
                     allDone.Reset();
 
                     // Start an asynchronous socket to listen for connections
-                    Trace.Add("Waiting...", Trace.Color.Green);
+                    Trace.Instance.Add("Waiting...");
                     listener.BeginAccept(
                         new AsyncCallback(AcceptCallback),
                         listener);
@@ -93,7 +93,7 @@ namespace WebQA.Logic
             }
             catch (Exception e)
             {
-                Trace.Add("ERROR: " + e.ToString(), Trace.Color.Red);
+                Trace.Instance.Add("ERROR: " + e.ToString(), Trace.Color.Red);
             }
         }
 
@@ -120,7 +120,7 @@ namespace WebQA.Logic
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.workSocket;
 
-            Trace.Add(
+            Trace.Instance.Add(
                 string.Format("Client connected: {1} [{0}]", 
                     handler.RemoteEndPoint.ToString(),
                     Dns.GetHostByAddress(
@@ -140,7 +140,7 @@ namespace WebQA.Logic
                 int space2 = state.receivedData.ToString().IndexOf(" ", space1 + 1);
                 state.url = state.receivedData.ToString().Substring(space1 + 2, space2 - space1 - 2);
 
-                Trace.Add(
+                Trace.Instance.Add(
                     string.Format("URL: {0}", state.url), Trace.Color.Yellow);
 
                 if (state.url.StartsWith("favicon.ico"))
@@ -210,8 +210,8 @@ namespace WebQA.Logic
 
                 // Complete sending the data to the remote device
                 int bytesSent = handler.EndSend(ar);
-                Trace.Add(
-                    string.Format("{0} bytes sent to client.", bytesSent), Trace.Color.Green);
+                Trace.Instance.Add(
+                    string.Format("{0} bytes sent to client.", bytesSent));
 
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
@@ -219,7 +219,7 @@ namespace WebQA.Logic
             }
             catch (Exception e)
             {
-                Trace.Add("EXCEPTION: " + e.ToString(), Trace.Color.Red);
+                Trace.Instance.Add("EXCEPTION: " + e.ToString(), Trace.Color.Red);
             }
         }
 

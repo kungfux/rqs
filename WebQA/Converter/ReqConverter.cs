@@ -44,19 +44,19 @@ namespace WebQA.Converter
 
                 if (command == null || !command.Equals("requirements"))
                 {
-                    Trace.Add(
+                    Trace.Instance.Add(
                         string.Format("Unknown command '{0}' is specified", command), Trace.Color.Red);
                     return 2;
                 }
                 if (path == null || !Directory.Exists(path))
                 {
-                    Trace.Add(
+                    Trace.Instance.Add(
                         string.Format("Path '{0}' not found", path), Trace.Color.Red);
                     return 2;
                 }
                 if (File.Exists(db))
                 {
-                    Trace.Add("Database already exist! Press any key to continue or Ctrl+C to abort", Trace.Color.Red);
+                    Trace.Instance.Add("Database already exist! Press any key to continue or Ctrl+C to abort", Trace.Color.Red);
                     Console.ReadKey();
                 }
 
@@ -67,7 +67,7 @@ namespace WebQA.Converter
                     "Data Source={0};Version=3;FailIfMissing=False;UTF8Encoding=True;Foreign Keys=True;Journal Mode=Off;Locking Mode=EXCLUSIVE;", db),
                     true))
                 {
-                    Trace.Add("Unable to create database", Trace.Color.Red);
+                    Trace.Instance.Add("Unable to create database", Trace.Color.Red);
                     return 2; // database not found, terminate
                 }
                 else
@@ -87,24 +87,23 @@ namespace WebQA.Converter
                         "[status]		VARCHAR(15));"
                         ));
 
-                    Trace.Add("Processing excel files...", Trace.Color.Green);
+                    Trace.Instance.Add("Processing excel files...");
                     FRParser parser = new FRParser();
                     parser.SearchAndSave(path);
-                    Trace.Add("Finished", Trace.Color.Green);
+                    Trace.Instance.Add("Finished");
 
                     // Count all requirements
                     Int64 count = SQLiteIteractionLite.SelectCell<Int64>(
                         "SELECT COUNT(*) FROM REQUIREMENTS;");
-                    Trace.Add(
-                        string.Format("{0} requirements in the database", count), 
-                        Trace.Color.Green);
+                    Trace.Instance.Add(
+                        string.Format("{0} requirements in the database", count));
                 }
 
                 return 0;
             }
             else
             {
-                Trace.Add("Wrong arguments are specified", Trace.Color.Red);
+                Trace.Instance.Add("Wrong arguments are specified", Trace.Color.Red);
                 return 2;
             }
         }

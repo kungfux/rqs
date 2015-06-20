@@ -84,7 +84,7 @@ namespace WebQA.Logic
             //value = Uri.UnescapeDataString(value);
             value = value.Replace("%3B", ";").Replace("%2C", ",").Replace("+", " ");
 
-            Trace.Add(
+            Trace.Instance.Add(
                     string.Format("RQS URL: {0}", value), Trace.Color.Yellow);
 
             string style = 
@@ -253,9 +253,9 @@ namespace WebQA.Logic
 
                 if (result != null && result.Rows.Count > 0)
                 {
-                    Trace.Add(
+                    Trace.Instance.Add(
                        string.Format("Requirements found: {0}",
-                       result != null ? result.Rows.Count : 0), Trace.Color.Green);
+                       result != null ? result.Rows.Count : 0));
 
                     html.Append("<div style='text-align: center;'>");
 
@@ -329,7 +329,7 @@ namespace WebQA.Logic
                 {
                     if (result != null)
                     {
-                        Trace.Add("Requirements NOT found", Trace.Color.Yellow);
+                        Trace.Instance.Add("Requirements NOT found", Trace.Color.Yellow);
                     }
                     html.Append("<div><p align='center'><font color='maroon'>No results to display. </font><a href='/?help#sr'> Want to read help?</a></p></div>");
                 }

@@ -51,7 +51,7 @@ namespace WebQA.Converter
                 }
                 XLSFiles[a] = XLSFilesInfo[a].Name;
             }
-            Trace.Add(string.Format("{0} excel files are found", XLSFiles.Length), Trace.Color.Green);
+            Trace.Instance.Add(string.Format("{0} excel files are found", XLSFiles.Length));
         }
 
         public void SearchAndSave(string XLSFilesLocation)
@@ -83,15 +83,15 @@ namespace WebQA.Converter
                 }
                 catch (IOException)
                 {
-                    Trace.Add(XLSFile + " is locked by another process and will be skipped!", Trace.Color.Yellow);
+                    Trace.Instance.Add(XLSFile + " is locked by another process and will be skipped!", Trace.Color.Yellow);
                     continue;
                 }
 
-                Trace.Add(string.Format("Processing file: {0}", XLSFile), Trace.Color.Green);
+                Trace.Instance.Add(string.Format("Processing file: {0}", XLSFile));
 
                 sheet = book.Worksheets[0];
 
-                Trace.Add(string.Format("{0} records to be processed", sheet.Cells.LastRowIndex), Trace.Color.Green);
+                Trace.Instance.Add(string.Format("{0} records to be processed", sheet.Cells.LastRowIndex));
 
                 // Determine columns
                 int cFRID = 0;        // 1st column by default
@@ -194,7 +194,7 @@ namespace WebQA.Converter
                     }
                     catch (Exception ex)
                     {
-                        Trace.Add(string.Format("Cannot parse row #{0} because of {1}", a + 1, ex.Message), Trace.Color.Red);
+                        Trace.Instance.Add(string.Format("Cannot parse row #{0} because of {1}", a + 1, ex.Message), Trace.Color.Red);
                     }
                     finally
                     {
@@ -214,7 +214,7 @@ namespace WebQA.Converter
                     }
                 }
 
-                Trace.Add(string.Format("Processed: {0} records", sheet.Cells.LastRowIndex), Trace.Color.Green);
+                Trace.Instance.Add(string.Format("Processed: {0} records", sheet.Cells.LastRowIndex));
             }
         }
     }

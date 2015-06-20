@@ -71,27 +71,26 @@ namespace WebQA
             }
 
             // Add trace about launching
-            Trace.Add("WebQA is started", Trace.Color.Green);
-            Trace.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()), Trace.Color.Green);
+            Trace.Instance.Add("WebQA is started");
+            Trace.Instance.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()));
 
             // Turn on sql traces and connect to db
             SQLiteIteractionLite.SetTrace(true);
             if (!SQLiteIteractionLite.TestConnection(string.Format(CONNECTION_STRING, DB_FILE_NAME), true))
             {
-                Trace.Add("Database not found. WebQA is stopped", Trace.Color.Red);
+                Trace.Instance.Add("Database not found. WebQA is stopped", Trace.Color.Red);
                 Environment.Exit(2);
             }
             else
             {
-                Trace.Add(
-                    string.Format("{0} requirements in the database", ReqsCountInDB),
-                    Trace.Color.Green);
+                Trace.Instance.Add(
+                    string.Format("{0} requirements in the database", ReqsCountInDB));
             }
 
             // Prepare web server and start listening
             (new AsynchronousSocketListener()).StartListening();
 
-            Trace.Add("WebQA is stopped", Trace.Color.Green);
+            Trace.Instance.Add("WebQA is stopped");
 
             return 0;
         }

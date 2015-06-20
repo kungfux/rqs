@@ -30,8 +30,17 @@ using System.IO;
 
 namespace WebQA.Logic
 {
-    internal static class Trace
+    public class Trace : IDisposable
     {
+        private static readonly Lazy<Trace> _instance = new Lazy<Trace>(() => new Trace());
+        public static Trace Instance
+        {
+            get
+            {
+                return _instance.Value;
+            }
+        }
+
         public enum Color
         {
             Green,
@@ -39,27 +48,23 @@ namespace WebQA.Logic
             Red
         }
 
-        static Trace()
+        private Trace()
         {
-                try
-                {
-                    streamWriter = new StreamWriter("webqa.log", true);
-                }
-                catch (Exception ex)
-                {
-                    Add("Log file can not be created or accessed" + ex, Color.Red);
-                    Add("Logs will be written to console only!" + ex, Color.Red);
-                    Add("Details: " + ex, Color.Red);
-                }
+            try
+            {
+                _logStreamWriter = new StreamWriter(LogFileName, true);
+            }
+            catch (Exception ex)
+            {
+                Add("Log file can not be created or accessed" + ex, Color.Red);
+                Add("Logs will be written to console only!" + ex, Color.Red);
+                Add("Details: " + ex, Color.Red);
+            }
         }
 
-        // Declare log file
-        static StreamWriter streamWriter;
-
         // Add record to log and console
-        public static void Add(string text, Color level)
+        public void Add(string text, Color level = Color.Green)
         {
-            // Set appropriate color for console
             switch (level)
             {
                 case Color.Red:
@@ -73,23 +78,19 @@ namespace WebQA.Logic
                     break;
             }
 
-            // Prepare string for output
             string message = string.Concat(
                 DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff"),
                 "   ",
                 text);
 
-            // Output to console
             Console.WriteLine(message);
 
-            // Output to file
-            if (streamWriter != null)
+            if (_logStreamWriter != null)
             {
                 try
                 {
-                    streamWriter.WriteLine(message);
-                    // Flush data
-                    streamWriter.Flush();
+                    _logStreamWriter.WriteLine(message);
+                    _logStreamWriter.Flush();
                 }
                 catch (IOException e)
                 {
@@ -103,5 +104,23 @@ namespace WebQA.Logic
                 }
             }
         }
+
+        public static string LogFileName
+        {
+            get
+            {
+                return "webqa.log";
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            if (_logStreamWriter != null)
+            {
+                _logStreamWriter.Close();
+            }
+        }
+
+        private StreamWriter _logStreamWriter;
     }
 }

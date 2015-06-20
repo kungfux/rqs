@@ -53,7 +53,7 @@ namespace WebQA.Logic
             }
             catch (FileNotFoundException)
             {
-                Trace.Add(string.Format("Requested file was not found: {0}.html", pSourceFileName), Trace.Color.Red);
+                Trace.Instance.Add(string.Format("Requested file was not found: {0}.html", pSourceFileName), Trace.Color.Red);
                 return string.Format(
                     "<p>Requested file {0}.html was not found on server.<br>" + 
                     "Please notify server owner about that problem.<br>Thanks!</p>" + 
