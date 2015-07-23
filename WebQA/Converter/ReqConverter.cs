@@ -68,7 +68,7 @@ namespace WebQA.Converter
                     true))
                 {
                     Trace.Instance.Add("Unable to create database", Trace.Color.Red);
-                    if (!SQLiteIteractionLite.LastErrorMessage.Equals(""))
+                    if (!string.IsNullOrEmpty(SQLiteIteractionLite.LastErrorMessage))
                     {
                         Trace.Instance.Add(SQLiteIteractionLite.LastErrorMessage, Trace.Color.Red);
                     }
