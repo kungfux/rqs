@@ -312,8 +312,9 @@ namespace WebQA.Logic
                                 result.Rows[a].ItemArray[7].ToString() :
                                 "-"),                            
                             // is changed
-                            result.Rows[a].ItemArray[8] != null && !result.Rows[a].ItemArray[8].ToString().Equals("") ?
-                            Convert.ToInt32(result.Rows[a].ItemArray[8]) == 0 ? "Yes" : "No" : "&nbsp;",
+                            result.Rows[a].ItemArray[8] != null && !string.IsNullOrEmpty(result.Rows[a].ItemArray[8].ToString()) && 
+                            result.Rows[a].ItemArray[7] != null && !string.IsNullOrEmpty(result.Rows[a].ItemArray[7].ToString()) ?
+                            !Convert.ToBoolean(result.Rows[a].ItemArray[8]) ? "Yes" : "No" : "No",
                             // fr status
                             result.Rows[a].ItemArray[9] != null ? result.Rows[a].ItemArray[9] : "&nbsp;",
                             // source/file
