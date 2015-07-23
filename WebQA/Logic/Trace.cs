@@ -56,8 +56,8 @@ namespace WebQA.Logic
             }
             catch (Exception ex)
             {
-                Add("Log file can not be created or accessed" + ex, Color.Red);
-                Add("Logs will be written to console only!" + ex, Color.Red);
+                Add("Log file can not be created or accessed", Color.Red);
+                Add("Logs will be written to console only!", Color.Red);
                 Add("Details: " + ex, Color.Red);
             }
         }
@@ -79,7 +79,7 @@ namespace WebQA.Logic
             }
 
             string message = string.Concat(
-                DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff"),
+                DateTime.Now.ToString(_timestampFormat),
                 "   ",
                 text);
 
@@ -97,7 +97,7 @@ namespace WebQA.Logic
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(
                         string.Concat(
-                        DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff"),
+                        DateTime.Now.ToString(_timestampFormat),
                         "WARNING",
                         Environment.NewLine,
                         e.ToString()));
@@ -122,5 +122,6 @@ namespace WebQA.Logic
         }
 
         private StreamWriter _logStreamWriter;
+        private const string _timestampFormat = "dd.MM.yyyy HH:mm:ss:fff";
     }
 }
