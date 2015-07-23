@@ -72,7 +72,7 @@ namespace WebQA
 
             // Add trace about launching
             Trace.Instance.Add("WebQA is started");
-            Trace.Instance.Add(string.Format("WebQA address: {0}", WebQAaddress.ToString()));
+            Trace.Instance.Add(string.Format("WebQA is listening on port {0}", ServerPort));
 
             // Turn on sql traces and connect to db
             SQLiteIteractionLite.SetTrace(true);
@@ -102,9 +102,7 @@ namespace WebQA
             {
                 if (_webQAaddress == null)
                 {
-                    IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-                    IPAddress ipAddress = ipHostInfo.AddressList[0];
-                    _webQAaddress = new IPEndPoint(ipAddress, ServerPort);
+                    _webQAaddress = new IPEndPoint(IPAddress.Any, ServerPort);
                 }
                 return _webQAaddress;
             }
