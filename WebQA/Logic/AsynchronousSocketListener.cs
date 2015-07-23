@@ -123,7 +123,7 @@ namespace WebQA.Logic
             Trace.Instance.Add(
                 string.Format("Client connected: {1} [{0}]", 
                     handler.RemoteEndPoint.ToString(),
-                    Dns.GetHostByAddress(
+                    Dns.GetHostEntry(
                         IPAddress.Parse(handler.RemoteEndPoint.ToString().Substring(0,handler.RemoteEndPoint.ToString().IndexOf(":")))).HostName), 
                 Trace.Color.Yellow);
 
