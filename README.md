@@ -6,4 +6,4 @@
 
    Note: you can use pre-existing test data which are located in the WebQA.TestData folder
 
-   Command: webqa.exe requirements <path to excel files>
+   Command: webqa.exe requirements C:\TestData
