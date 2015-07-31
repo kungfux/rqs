@@ -102,7 +102,7 @@ namespace WebQA.Logic
                 "table, th, td { border: 1px solid #ffffff; } ",
                 "table.results { border-collapse: collapse; border: 1px solid #000000; empty-cells: show; font-size: 80%; }",
                 "table.results th { border-collapse: collapse; border: 1px solid #5f5f5f; empty-cells: show; }",
-                "table.results td { border-collapse: collapse; border: 1px solid #5f5f5f; empty-cells: show; }",
+                "table.results td { border-collapse: collapse; border: 1px solid #5f5f5f; empty-cells: show; padding: 2px 3px; }",
                 "</style>"
 		        );
 
