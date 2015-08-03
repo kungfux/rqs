@@ -89,28 +89,25 @@ namespace WebQA.Logic
 
             string style = 
                 string.Concat(
-                //"<style type='text/css' media='all'> #toTop { width:100px;background:#F4FFBF;border:1px solid #ccc;text-align:center;padding:5px;position:fixed;bottom:10px;right:10px;cursor:pointer;color:#666;text-decoration:none; }</style>",
                 "<style type='text/css'>",
-                //"body, div, p, table  { font: 14px 'atrament-web-1', 'atrament-web-2', Georgia, Serif; border-radius: 10px; }",
-                "body, div, p, table  { margin: 0px auto; font-family: Tahoma, Verdana, Arial, sans-serif; }",
-                //"a { text-decoration: none; color: #0080ff;}",
+                "body { font-family: Tahoma, Verdana, Arial, sans-serif; }",
+                "body, div, p, table  { margin: 0px auto; }",
                 "a { text-decoration: none; color: #000000;}",
                 "input[type=text] { border:solid 1px #000000; color: #000000; height: 19px; padding-left:10px; width: 350px; box-shadow: 2px 2px 0 #000000 inset; }",
                 "input[type=button] { color: #0080ff; height: 21px; width: 100px; color: #000000; text-transform:uppercase; box-shadow:-1px 2px #000000 inset; }",
                 "input[type=button], input[type=text] { border: 1px; border-radius:5px; font: 14px 'atrament-web-1', 'atrament-web-2', Georgia, Serif; }",
-                "select { border: solid 1px #000000; color: #000000; height: 21px; box-shadow: 2px 2px 0 #000000 inset; font: 14px 'atrament-web-1', 'atrament-web-2', Georgia, Serif; }",
-                "table, th, td { border: 1px solid #ffffff; } ",
-                "table.results { border-collapse: collapse; border: 1px solid #000000; empty-cells: show; font-size: 80%; }",
-                "table.results th { border-collapse: collapse; border: 1px solid #5f5f5f; empty-cells: show; }",
-                "table.results td { border-collapse: collapse; border: 1px solid #5f5f5f; empty-cells: show; }",
+                "select { border: solid 1px #000000; color: #000000; height: 21px; box-shadow: 2px 2px 0 #000000 inset; }",
+                "table.results { border-collapse: collapse; empty-cells: show; font-size: 80%; }",
+                "table.results th { border: 1px solid #5f5f5f; padding: 2px 3px; }",
+                "table.results td { border: 1px solid #5f5f5f; padding: 2px 3px; }",
                 "</style>"
 		        );
 
             string js = 
                 string.Concat(
                 "<script type='text/javascript'>",
-                //"<script type='text/javascript'>var stepTime=20;var docBody=document.body;var focElem=document.documentElement;var scrollAnimationStep=function(initPos,stepAmount){var newPos=initPos-stepAmount>0?initPos-stepAmount:0;docBody.scrollTop=focElem.scrollTop=newPos;newPos&&setTimeout(function(){scrollAnimationStep(newPos,stepAmount);},stepTime);}var scrollTopAnimated=function(speed){var topOffset=docBody.scrollTop||focElem.scrollTop;var stepAmount=topOffset;speed&&(stepAmount=(topOffset*stepTime)/speed);scrollAnimationStep(topOffset,stepAmount);};</script>"
-                "function SwitchBy(e) { var k = e.keyCode ? e.keyCode : e.charCode; sel = document.getElementById('by'); if (k == 40 && sel.selectedIndex < 2) { sel.selectedIndex++; } if (k == 38 && sel.selectedIndex > 0) { sel.selectedIndex--; } }",
+                "function SwitchBy(e) { var k = e.keyCode ? e.keyCode : e.charCode; sel = document.getElementById('by'); ",
+                "if (k == 40 && sel.selectedIndex < 2) { sel.selectedIndex++; } if (k == 38 && sel.selectedIndex > 0) { sel.selectedIndex--; } }",
                 "</script>"
                 );
 
