@@ -1,0 +1,5 @@
+# Ignore Visual Studio user files
+Fuse/bin/*
+Fuse/obj/*
+Fuse/*.suo
+Fuse/*.user
