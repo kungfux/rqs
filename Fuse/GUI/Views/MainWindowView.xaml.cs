@@ -109,6 +109,14 @@ namespace Fuse.GUI.Views
             throw new NotImplementedException();
         }
 
+        public static bool IsOnline
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 

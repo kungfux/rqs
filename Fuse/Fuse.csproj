@@ -60,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GUI\Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="GUI\Converters\InverseBooleanConverter.cs" />
     <Compile Include="GUI\Models\WebServerModel.cs" />
     <Compile Include="WebServer\Client.cs" />
     <Compile Include="WebServer\ContentType.cs" />
