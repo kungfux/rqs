@@ -60,11 +60,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GUI\Models\WebServerModel.cs" />
     <Compile Include="WebServer\Client.cs" />
     <Compile Include="WebServer\ContentType.cs" />
     <Compile Include="WebServer\Headers.cs" />
     <Compile Include="WebServer\Server.cs" />
-    <Page Include="GUI\MainWindowView.xaml">
+    <Page Include="GUI\Views\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -72,7 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GUI\MainWindowView.xaml.cs">
+    <Compile Include="GUI\Views\MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
