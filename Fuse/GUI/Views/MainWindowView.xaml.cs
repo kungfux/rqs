@@ -1,5 +1,6 @@
 ﻿using Fuse.GUI.Models;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -107,6 +108,12 @@ namespace Fuse.GUI.Views
         private void preferences_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        public static RoutedCommand GitHubCommand = new RoutedCommand();
+        private void github_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Process.Start("https://github.com/kungfux/rqs");
         }
 
         public static bool IsOnline

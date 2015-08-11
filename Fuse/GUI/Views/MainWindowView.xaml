@@ -15,6 +15,7 @@
         <CommandBinding Command="{x:Static commands:MainWindowView.ExitCommand}" CanExecute="exit_CanExecute" Executed="exit_Executed" />
         <CommandBinding Command="{x:Static commands:MainWindowView.ViewLogsCommand}" CanExecute="viewLogs_CanExecute" Executed="viewLogs_Executed" />
         <CommandBinding Command="{x:Static commands:MainWindowView.PreferencesCommand}" CanExecute="preferences_CanExecute" Executed="preferences_Executed" />
+        <CommandBinding Command="{x:Static commands:MainWindowView.GitHubCommand}" Executed="github_Executed" />
     </Window.CommandBindings>
     
     <Window.Resources>
@@ -42,9 +43,10 @@
                 <Separator Visibility="Collapsed"/>
                 <MenuItem Header="_Logs" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Help" Visibility="Collapsed">
-                <MenuItem Header="_Online help" Visibility="Collapsed"/>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Help" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
+                <MenuItem Header="_GitHub..." Command="{x:Static commands:MainWindowView.GitHubCommand}"/>
                 <MenuItem Header="_About" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
