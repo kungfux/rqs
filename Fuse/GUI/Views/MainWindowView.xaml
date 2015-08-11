@@ -43,7 +43,7 @@
             </MenuItem>
             <MenuItem Header="_View">
                 <MenuItem Header="_Requests" Visibility="Collapsed"/>
-                <MenuItem Header="_Updates" Visibility="Collapsed"/>
+                <MenuItem Header="_Uploads" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
                 <MenuItem Header="_Logs" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
             </MenuItem>
