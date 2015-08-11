@@ -15,6 +15,8 @@ namespace Fuse.GUI.Views
         public MainWindowView()
         {
             InitializeComponent();
+
+            this.DataContext = this;
         }
 
         public static RoutedCommand StartServerCommand = new RoutedCommand();
@@ -85,7 +87,6 @@ namespace Fuse.GUI.Views
                     return false;
                 }
             }
-            return false;
         }
 
         public static RoutedCommand ViewLogsCommand = new RoutedCommand();
@@ -120,7 +121,7 @@ namespace Fuse.GUI.Views
         {
             get
             {
-                return false;
+                return WebServerModel.Instance.IsAlive;
             }
         }
 

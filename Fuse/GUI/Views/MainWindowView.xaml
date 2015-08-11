@@ -21,6 +21,10 @@
     <Window.Resources>
         <!--<converters:InverseBooleanConverter x:Key="InverseBoolean" />-->
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <DoubleAnimation x:Key="daOpacity" Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.5"/>
+        <Storyboard BeginTime="0" x:Key="sbOpacity" TargetProperty="Opacity">
+            <StaticResourceExtension ResourceKey="daOpacity"/>
+        </Storyboard>
     </Window.Resources>
     
     <DockPanel>
@@ -50,7 +54,20 @@
                 <MenuItem Header="_About" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
-        <!--<Label DockPanel.Dock="Top" Visibility="{Binding IsOnline, Converter={StaticResource BooleanToVisibility}}">You're online</Label>-->
+        <Label DockPanel.Dock="Top" Visibility="{Binding Path=IsOnline, Converter={StaticResource BooleanToVisibility}}" Content="You're online">
+            <Label.Triggers>
+                <EventTrigger RoutedEvent="Label.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
+                </EventTrigger>
+            </Label.Triggers>
+        </Label>
+        <Label DockPanel.Dock="Top" Visibility="Visible" Content="Notification: Test text">
+            <Label.Triggers>
+                <EventTrigger RoutedEvent="Label.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
+                </EventTrigger>
+            </Label.Triggers>
+        </Label>
         <StackPanel>
             
         </StackPanel>
