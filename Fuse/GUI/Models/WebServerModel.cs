@@ -1,15 +1,10 @@
 ﻿using Fuse.WebServer;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Fuse.GUI.Models
 {
-    internal class WebServerModel
+    internal class WebServerModel : IDisposable
     {
         private static readonly Lazy<WebServerModel> _instance = new Lazy<WebServerModel>(() => new WebServerModel());
         public static WebServerModel Instance
@@ -29,6 +24,7 @@ namespace Fuse.GUI.Models
         }
 
         private Thread _thread;
+
         private Server _serverInstance;
         private Server _server
         {
@@ -57,6 +53,15 @@ namespace Fuse.GUI.Models
             {
                 _server.Stop();
                 _thread.Abort();
+            }
+        }
+
+        public void Dispose()
+        {
+            StopInstance();
+            if (_server != null)
+            {
+                _server.Dispose();
             }
         }
     }
