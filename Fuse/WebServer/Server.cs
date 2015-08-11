@@ -7,18 +7,7 @@ namespace Fuse.WebServer
 {
     internal class Server : IDisposable
     {
-        private TcpListener _listener;
-        private TcpListener Listener
-        {
-            get
-            {
-                if (_listener == null)
-                {
-                    _listener = new TcpListener(IPAddress.Any, 80);
-                }
-                return _listener;
-            }
-        }
+        private readonly TcpListener _listener = new TcpListener(IPAddress.Any, 80);
 
         private void ClientThread(Object pStateInfo)
         {
@@ -27,17 +16,17 @@ namespace Fuse.WebServer
 
         public void Start()
         {
-            Listener.Start();
+            _listener.Start();
 
             while(true)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), Listener.AcceptTcpClient());
+                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), _listener.AcceptTcpClient());
             }
         }
 
         public void Stop()
         {
-            Listener.Stop();
+            _listener.Stop();
         }
 
         public void Dispose()
