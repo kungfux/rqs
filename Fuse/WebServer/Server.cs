@@ -12,9 +12,15 @@ namespace Fuse.WebServer
         private readonly int maxThreadsCount = Environment.ProcessorCount * 4;
         private readonly int minThreadsCount = 2;
 
+        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+
         private void ClientThread(Object pStateInfo)
         {
-            new Client((TcpClient)pStateInfo);
+            var x = (Tuple<TcpClient, CancellationTokenSource>)pStateInfo;
+            if (!x.Item2.IsCancellationRequested)
+            {
+                new Client(x.Item1);
+            }
         }
 
         public Server()
@@ -27,14 +33,16 @@ namespace Fuse.WebServer
         {
             _listener.Start();
 
-            while(true)
+            while (!cancelTokenSource.IsCancellationRequested)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), _listener.AcceptTcpClient());
+                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread),
+                    new Tuple<TcpClient, CancellationTokenSource>(_listener.AcceptTcpClient(), cancelTokenSource));
             }
         }
 
         public void Stop()
         {
+            cancelTokenSource.Cancel();
             _listener.Stop();
         }
 
