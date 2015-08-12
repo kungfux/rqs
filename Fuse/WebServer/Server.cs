@@ -7,19 +7,22 @@ namespace Fuse.WebServer
 {
     internal class Server : IDisposable
     {
-        private readonly TcpListener _listener = new TcpListener(IPAddress.Any, 80);
+        private readonly IPAddress ipAddress = IPAddress.Any;
+        private const int port = 80;
+
+        private readonly TcpListener listener;
 
         private readonly int maxThreadsCount = Environment.ProcessorCount * 4;
-        private readonly int minThreadsCount = 2;
+        private const int minThreadsCount = 2;
 
-        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
-        private void ClientThread(Object pStateInfo)
+        private void ClientThread(object pClientWithToken)
         {
-            var x = (Tuple<TcpClient, CancellationTokenSource>)pStateInfo;
-            if (!x.Item2.IsCancellationRequested)
+            var clientWithToken = (Tuple<TcpClient, CancellationTokenSource>)pClientWithToken;
+            if (!clientWithToken.Item2.IsCancellationRequested)
             {
-                new Client(x.Item1);
+                new Client(clientWithToken.Item1);
             }
         }
 
@@ -27,30 +30,33 @@ namespace Fuse.WebServer
         {
             ThreadPool.SetMaxThreads(maxThreadsCount, maxThreadsCount);
             ThreadPool.SetMinThreads(minThreadsCount, minThreadsCount);
+
+            listener = new TcpListener(ipAddress, port);
         }
 
         public void Start()
         {
-            _listener.Start();
+            listener.Start();
 
-            while (!cancelTokenSource.IsCancellationRequested)
+            while (!cts.IsCancellationRequested)
             {
-                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread),
-                    new Tuple<TcpClient, CancellationTokenSource>(_listener.AcceptTcpClient(), cancelTokenSource));
+                var clientConnected = listener.AcceptTcpClient();
+                var clientWithToken = Tuple.Create<TcpClient, CancellationTokenSource>(clientConnected, cts);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), clientWithToken);
             }
         }
 
         public void Stop()
         {
-            cancelTokenSource.Cancel();
-            _listener.Stop();
+            cts.Cancel();
+            listener.Stop();
         }
 
         public void Dispose()
         {
-            if (_listener != null)
+            if (listener != null)
             {
-                _listener.Stop();
+                listener.Stop();
             }
         }
     }
