@@ -12,9 +12,6 @@ namespace Fuse.WebServer
 
         private readonly TcpListener listener;
 
-        private readonly int maxThreadsCount = Environment.ProcessorCount * 4;
-        private const int minThreadsCount = 2;
-
         private readonly CancellationTokenSource cts = new CancellationTokenSource();
 
         private void ClientThread(object pClientWithToken)
@@ -28,9 +25,6 @@ namespace Fuse.WebServer
 
         public Server()
         {
-            ThreadPool.SetMaxThreads(maxThreadsCount, maxThreadsCount);
-            ThreadPool.SetMinThreads(minThreadsCount, minThreadsCount);
-
             listener = new TcpListener(ipAddress, port);
         }
 
@@ -40,9 +34,24 @@ namespace Fuse.WebServer
 
             while (!cts.IsCancellationRequested)
             {
-                var clientConnected = listener.AcceptTcpClient();
-                var clientWithToken = Tuple.Create<TcpClient, CancellationTokenSource>(clientConnected, cts);
-                ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), clientWithToken);
+                try
+                {
+                    var clientConnected = listener.AcceptTcpClient();
+                    var clientWithToken = Tuple.Create<TcpClient, CancellationTokenSource>(clientConnected, cts);
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), clientWithToken);
+                }
+                catch (SocketException e)
+                {
+                    if (e.SocketErrorCode == SocketError.Interrupted &&
+                        cts.IsCancellationRequested)
+                    {
+                        // It's okay, user is stopped the server
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
