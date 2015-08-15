@@ -3,3 +3,4 @@ Fuse/bin/*
 Fuse/obj/*
 Fuse/*.suo
 Fuse/*.user
+*.pyc
