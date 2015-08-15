@@ -2,12 +2,14 @@
 # These tests checks HTTP headers level responses
 
 import httplib
+import socket
 
-fuse_host = "localhost"
+fuseHostName = socket.gethostname()
+fuseIpAddress = socket.gethostbyname(fuseHostName)
 
 def get_status_code(uri):
 	try:
-		conn = httplib.HTTPConnection(fuse_host)
+		conn = httplib.HTTPConnection(fuseIpAddress)
 		conn.request("HEAD", uri)
 		return conn.getresponse().status
 	except StandardError:
