@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Fuse.WebServer
 {
@@ -11,17 +12,7 @@ namespace Fuse.WebServer
         private const int port = 80;
 
         private readonly TcpListener listener;
-
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
-
-        private void ClientThread(object pClientWithToken)
-        {
-            var clientWithToken = (Tuple<TcpClient, CancellationTokenSource>)pClientWithToken;
-            if (!clientWithToken.Item2.IsCancellationRequested)
-            {
-                new Client(clientWithToken.Item1);
-            }
-        }
+        private CancellationTokenSource cts;
 
         public Server()
         {
@@ -30,43 +21,71 @@ namespace Fuse.WebServer
 
         public void Start()
         {
-            listener.Start();
-
-            while (!cts.IsCancellationRequested)
+            if (cts != null && !cts.IsCancellationRequested)
             {
-                try
-                {
-                    var clientConnected = listener.AcceptTcpClient();
-                    var clientWithToken = Tuple.Create<TcpClient, CancellationTokenSource>(clientConnected, cts);
-                    ThreadPool.QueueUserWorkItem(new WaitCallback(ClientThread), clientWithToken);
-                }
-                catch (SocketException e)
-                {
-                    if (e.SocketErrorCode == SocketError.Interrupted &&
-                        cts.IsCancellationRequested)
-                    {
-                        // It's okay, user is stopped the server
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                throw new InvalidOperationException("Server is already started.");
             }
+            Task.Run(() => { beginLoop(); });
         }
 
         public void Stop()
         {
             cts.Cancel();
-            listener.Stop();
         }
 
         public void Dispose()
         {
+            cts.Dispose();
             if (listener != null)
             {
                 listener.Stop();
             }
+        }
+
+        private async void beginLoop()
+        {
+            cts = new CancellationTokenSource();
+
+            listener.Start();
+
+            while (!cts.IsCancellationRequested)
+            {
+                if (!listener.Pending())
+                {
+                    // no pending connections, continue
+                    Thread.Sleep(20);
+                    continue;
+                }
+
+                try
+                {
+                    // client is awaiting
+                    var clientConnected = await listener.AcceptTcpClientAsync();
+                    ClientThread(clientConnected);
+                }
+                catch (SocketException e)
+                {
+                    if (cts.IsCancellationRequested && e.SocketErrorCode == SocketError.Interrupted)
+                    {
+                        // cancellation is requested
+                        listener.Stop();
+                        return;
+                    }
+                    if (e.SocketErrorCode == SocketError.ConnectionReset)
+                    {
+                        // remote host breaks the connection
+                        continue;
+                    }
+                    throw;
+                }
+            }
+
+            listener.Stop();
+        }
+
+        private void ClientThread(TcpClient tcpClient)
+        {
+            Task.Run(() => { new Client(tcpClient); });
         }
     }
 }
