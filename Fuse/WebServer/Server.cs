@@ -8,67 +8,66 @@ namespace Fuse.WebServer
 {
     internal class Server : IDisposable
     {
-        private readonly IPAddress ipAddress = IPAddress.Any;
-        private const int port = 80;
+        private static readonly IPAddress _ipAddress = IPAddress.Any;
+        private const int PORT = 80;
 
-        private readonly TcpListener listener;
-        private CancellationTokenSource cts;
+        private readonly TcpListener _listener;
+        private CancellationTokenSource _cts;
 
         public Server()
         {
-            listener = new TcpListener(ipAddress, port);
+            _listener = new TcpListener(_ipAddress, PORT);
         }
 
-        public void Start()
+        public async void Start()
         {
-            if (cts != null && !cts.IsCancellationRequested)
+            if (_cts != null && !_cts.IsCancellationRequested)
             {
                 throw new InvalidOperationException("Server is already started.");
             }
-            Task.Run(() => { beginLoop(); });
+            await Task.Run(() => { StartClientsAwaiting(); });
         }
 
         public void Stop()
         {
-            cts.Cancel();
+            _cts.Cancel();
         }
 
         public void Dispose()
         {
-            cts.Dispose();
-            if (listener != null)
-            {
-                listener.Stop();
-            }
+            if (_cts != null)
+                _cts.Dispose();
+            if (_listener != null)
+                _listener.Stop();
         }
 
-        private async void beginLoop()
+        private async void StartClientsAwaiting()
         {
-            cts = new CancellationTokenSource();
+            _cts = new CancellationTokenSource();
 
-            listener.Start();
+            _listener.Start();
 
-            while (!cts.IsCancellationRequested)
+            while (!_cts.IsCancellationRequested)
             {
-                if (!listener.Pending())
+                if (!_listener.Pending())
                 {
                     // no pending connections, continue
-                    Thread.Sleep(20);
+                    await Task.Delay(20);
                     continue;
                 }
 
                 try
                 {
                     // client is awaiting
-                    var clientConnected = await listener.AcceptTcpClientAsync();
-                    ClientThread(clientConnected);
+                    var tcpClient = await _listener.AcceptTcpClientAsync();
+                    ProcessClient(tcpClient);
                 }
                 catch (SocketException e)
                 {
-                    if (cts.IsCancellationRequested && e.SocketErrorCode == SocketError.Interrupted)
+                    if (_cts.IsCancellationRequested && e.SocketErrorCode == SocketError.Interrupted)
                     {
                         // cancellation is requested
-                        listener.Stop();
+                        _listener.Stop();
                         return;
                     }
                     if (e.SocketErrorCode == SocketError.ConnectionReset)
@@ -80,12 +79,12 @@ namespace Fuse.WebServer
                 }
             }
 
-            listener.Stop();
+            _listener.Stop();
         }
 
-        private void ClientThread(TcpClient tcpClient)
+        private void ProcessClient(TcpClient tcpClient)
         {
-            Task.Run(() => { new Client(tcpClient); });
+            Task.Run(() => { new Client(tcpClient).ProcessRequest(); });
         }
     }
 }

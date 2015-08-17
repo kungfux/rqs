@@ -12,13 +12,22 @@ namespace Fuse.WebServer
         private const string cRootPath = "www";
         private const string cIndexFile = "index.html";
 
-        public Client(TcpClient pClient)
+        private readonly TcpClient _client;
+
+        public Client(TcpClient client)
+        {
+            if (client == null)
+                throw new ArgumentNullException("client");
+            _client = client;
+        }
+
+        public void ProcessRequest()
         {
             string request = string.Empty;
             byte[] buffer = new byte[1024];
 
             int requestLength;
-            while ((requestLength = pClient.GetStream().Read(buffer, 0, buffer.Length)) > 0)
+            while ((requestLength = _client.GetStream().Read(buffer, 0, buffer.Length)) > 0)
             {
                 request += UTF8Encoding.UTF8.GetString(buffer, 0, requestLength);
 
@@ -32,7 +41,7 @@ namespace Fuse.WebServer
 
             if (requestMatch == Match.Empty)
             {
-                Headers.Instance.SendHeader(pClient.GetStream(), HttpStatusCode.NotFound);
+                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -41,7 +50,7 @@ namespace Fuse.WebServer
 
             if (requestUri.IndexOf("..") >= 0)
             {
-                Headers.Instance.SendHeader(pClient.GetStream(), HttpStatusCode.NotFound);
+                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -54,7 +63,7 @@ namespace Fuse.WebServer
 
             if (!File.Exists(requestFullPath))
             {
-                Headers.Instance.SendHeader(pClient.GetStream(), HttpStatusCode.NotFound);
+                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -68,11 +77,11 @@ namespace Fuse.WebServer
             }
             catch (Exception)
             {
-                Headers.Instance.SendHeader(pClient.GetStream(), HttpStatusCode.InternalServerError);
+                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.InternalServerError);
                 return;
             }
 
-            Headers.Instance.SendHeader(pClient.GetStream(), HttpStatusCode.OK, contentType, fileStream.Length);
+            Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.OK, contentType, fileStream.Length);
 
             int responceLength;
             byte[] responceBuffer = new byte[1024];
@@ -80,11 +89,11 @@ namespace Fuse.WebServer
             while (fileStream.Position < fileStream.Length)
             {
                 responceLength = fileStream.Read(responceBuffer, 0, responceBuffer.Length);
-                pClient.GetStream().Write(responceBuffer, 0, responceLength);
+                _client.GetStream().Write(responceBuffer, 0, responceLength);
             }
 
             fileStream.Close();
-            pClient.Close();
+            _client.Close();
         }
     }
 }
