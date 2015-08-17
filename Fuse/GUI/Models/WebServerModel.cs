@@ -2,10 +2,11 @@
 using System;
 using System.ComponentModel;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Fuse.GUI.Models
 {
-    internal class WebServerModel : IDisposable
+    internal class WebServerModel : INotifyPropertyChanged
     {
         private static readonly Lazy<WebServerModel> _instance = new Lazy<WebServerModel>(() => new WebServerModel());
         public static WebServerModel Instance
@@ -16,53 +17,37 @@ namespace Fuse.GUI.Models
             }
         }
 
-        public bool IsAlive
+        public WebServerModel()
         {
-            get
-            {
-                return _thread != null ? _thread.IsAlive : false;
-            }
+            server.StatusChanged += server_StatusChanged;
         }
 
-        private Thread _thread;
-
-        private Server _serverInstance;
-        private Server _server
+        void server_StatusChanged(object sender, Status e)
         {
-            get
-            {
-                if (_serverInstance == null)
-                {
-                    _serverInstance = new Server();
-                }
-                return _serverInstance;
-            }
+            IsAlive = e == Status.Started;
+            OnProperyChanged();
         }
+
+        private readonly Server server = new Server();
+
+        public bool IsAlive = false;
 
         public void StartInstance()
         {
-            if (_thread == null)
-            {
-                _thread = new Thread(_server.Start);
-                _thread.Start();
-            }
+            server.Start();
         }
 
         public void StopInstance()
         {
-            if (_thread != null)
-            {
-                _server.Stop();
-                _thread.Abort();
-            }
+            server.Stop();
         }
 
-        public void Dispose()
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnProperyChanged(string pProperty = "IsAlive")
         {
-            StopInstance();
-            if (_server != null)
+            if (PropertyChanged != null)
             {
-                _server.Dispose();
+                PropertyChanged(this, new PropertyChangedEventArgs(pProperty));
             }
         }
     }

@@ -67,6 +67,7 @@
     <Compile Include="WebServer\ContentType.cs" />
     <Compile Include="WebServer\Headers.cs" />
     <Compile Include="WebServer\Server.cs" />
+    <Compile Include="WebServer\Status.cs" />
     <Page Include="GUI\Views\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -47,6 +47,8 @@ namespace Fuse.WebServer
 
             _listener.Start();
 
+            NotifyStatusChanged(Status.Started);
+
             while (!_cts.IsCancellationRequested)
             {
                 if (!_listener.Pending())
@@ -80,11 +82,21 @@ namespace Fuse.WebServer
             }
 
             _listener.Stop();
+
+            NotifyStatusChanged(Status.Stopped);
         }
 
         private void ProcessClient(TcpClient tcpClient)
         {
             Task.Run(() => { new Client(tcpClient).ProcessRequest(); });
         }
+
+        private void NotifyStatusChanged(Status status)
+        {
+            if (StatusChanged != null)
+                StatusChanged(this, status);
+        }
+
+        public event EventHandler<Status> StatusChanged;
     }
 }
