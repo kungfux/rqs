@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fuse.WebServer.Response;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -41,7 +42,7 @@ namespace Fuse.WebServer
 
             if (requestMatch == Match.Empty)
             {
-                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
+                Header.Instance.WriteHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -50,7 +51,7 @@ namespace Fuse.WebServer
 
             if (requestUri.IndexOf("..") >= 0)
             {
-                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
+                Header.Instance.WriteHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -61,38 +62,8 @@ namespace Fuse.WebServer
 
             string requestFullPath = ROOT_PATH + "/" + requestUri;
 
-            if (!File.Exists(requestFullPath))
-            {
-                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
-                return;
-            }
+            FileProcessor.Instance.WriteFile(_client.GetStream(), requestFullPath);
 
-            string extension = requestUri.Substring(requestUri.LastIndexOf('.'));
-            string contentType = ContentType.Instance.GetByExtension(extension);
-
-            FileStream fileStream;
-            try
-            {
-                fileStream = new FileStream(requestFullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            }
-            catch (Exception)
-            {
-                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.InternalServerError);
-                return;
-            }
-
-            ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.OK, contentType, fileStream.Length);
-
-            int responceLength;
-            byte[] responceBuffer = new byte[1024];
-
-            while (fileStream.Position < fileStream.Length)
-            {
-                responceLength = fileStream.Read(responceBuffer, 0, responceBuffer.Length);
-                _client.GetStream().Write(responceBuffer, 0, responceLength);
-            }
-
-            fileStream.Close();
             _client.Close();
         }
     }

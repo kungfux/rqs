@@ -64,11 +64,11 @@
     <Compile Include="GUI\Converters\InverseBooleanConverter.cs" />
     <Compile Include="GUI\Models\WebServerModel.cs" />
     <Compile Include="WebServer\Client.cs" />
-    <Compile Include="WebServer\ContentType.cs" />
-    <Compile Include="WebServer\Request.cs" />
-    <Compile Include="WebServer\RequestedSourceType.cs" />
-    <Compile Include="WebServer\RequestType.cs" />
-    <Compile Include="WebServer\ResponseHeader.cs" />
+    <Compile Include="WebServer\Request\Request.cs" />
+    <Compile Include="WebServer\Request\RequestSource.cs" />
+    <Compile Include="WebServer\Request\RequestType.cs" />
+    <Compile Include="WebServer\Response\FileProcessor.cs" />
+    <Compile Include="WebServer\Response\Header.cs" />
     <Compile Include="WebServer\Server.cs" />
     <Compile Include="WebServer\Status.cs" />
     <Page Include="GUI\Views\MainWindowView.xaml">
@@ -111,18 +111,19 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="www\images\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\favicon.ico" />
     <Resource Include="Resources\favicon_image.png" />
     <None Include="www\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="www\index.html">
+    <None Include="www\images\favicon_image.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="www\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
