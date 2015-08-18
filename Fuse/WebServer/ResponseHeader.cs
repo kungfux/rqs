@@ -5,11 +5,12 @@ using System.Text;
 
 namespace Fuse.WebServer
 {
-    internal class Headers
+    internal class ResponseHeader
     {
-        private static readonly Lazy<Headers> _instance = new Lazy<Headers>(() => new Headers());
+        private static readonly Lazy<ResponseHeader> _instance = new Lazy<ResponseHeader>(() => new ResponseHeader());
+        private const string HEADER_FORMAT = "HTTP/1.1 {0}\nContent-Type: {1}\nContent-Length: {2}\n\n";
         
-        public static Headers Instance
+        public static ResponseHeader Instance
         {
             get
             {
@@ -21,7 +22,7 @@ namespace Fuse.WebServer
             string pContentType = null, long pContentLength = 0)
         {
             string header = 
-                string.Format("HTTP/1.1 {0}\nContent-Type: {1}\nContent-Length: {2}\n\n",
+                string.Format(HEADER_FORMAT,
                 (int)pHttpStatusCode + " " + pHttpStatusCode.ToString(),
                 pContentType,
                 pContentLength);

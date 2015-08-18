@@ -14,7 +14,7 @@ namespace Fuse.WebServer
             }
         }
 
-        public string ContentTypeByExtension(string pExtension)
+        public string GetByExtension(string pExtension)
         {
             switch(pExtension)
             {

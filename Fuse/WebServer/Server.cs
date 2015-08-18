@@ -22,9 +22,7 @@ namespace Fuse.WebServer
         public async void Start()
         {
             if (_cts != null && !_cts.IsCancellationRequested)
-            {
                 throw new InvalidOperationException("Server is already started.");
-            }
             await Task.Run(() => { StartClientsAwaiting(); });
         }
 
@@ -72,12 +70,15 @@ namespace Fuse.WebServer
                         _listener.Stop();
                         return;
                     }
-                    if (e.SocketErrorCode == SocketError.ConnectionReset)
+                    else if (e.SocketErrorCode == SocketError.ConnectionReset)
                     {
                         // remote host breaks the connection
                         continue;
                     }
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
 

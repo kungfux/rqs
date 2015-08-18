@@ -9,8 +9,8 @@ namespace Fuse.WebServer
 {
     internal class Client
     {
-        private const string cRootPath = "www";
-        private const string cIndexFile = "index.html";
+        private const string ROOT_PATH = "www";
+        private const string INDEX_FILE = "index.html";
 
         private readonly TcpClient _client;
 
@@ -41,7 +41,7 @@ namespace Fuse.WebServer
 
             if (requestMatch == Match.Empty)
             {
-                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
+                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
@@ -50,25 +50,25 @@ namespace Fuse.WebServer
 
             if (requestUri.IndexOf("..") >= 0)
             {
-                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
+                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
             if (requestUri.EndsWith("/"))
             {
-                requestUri += cIndexFile;
+                requestUri += INDEX_FILE;
             }
 
-            string requestFullPath = cRootPath + "/" + requestUri;
+            string requestFullPath = ROOT_PATH + "/" + requestUri;
 
             if (!File.Exists(requestFullPath))
             {
-                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
+                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.NotFound);
                 return;
             }
 
             string extension = requestUri.Substring(requestUri.LastIndexOf('.'));
-            string contentType = ContentType.Instance.ContentTypeByExtension(extension);
+            string contentType = ContentType.Instance.GetByExtension(extension);
 
             FileStream fileStream;
             try
@@ -77,11 +77,11 @@ namespace Fuse.WebServer
             }
             catch (Exception)
             {
-                Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.InternalServerError);
+                ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.InternalServerError);
                 return;
             }
 
-            Headers.Instance.SendHeader(_client.GetStream(), HttpStatusCode.OK, contentType, fileStream.Length);
+            ResponseHeader.Instance.SendHeader(_client.GetStream(), HttpStatusCode.OK, contentType, fileStream.Length);
 
             int responceLength;
             byte[] responceBuffer = new byte[1024];
