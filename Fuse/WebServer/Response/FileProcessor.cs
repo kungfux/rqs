@@ -16,16 +16,30 @@ namespace Fuse.WebServer.Response
             }
         }
 
-        private static readonly object fileReadLock = new object();
-        private FileStream _fileStream;
+        private const string ROOT_PATH = "www";
+        private const string INDEX_FILE = "index.html";
 
-        public bool WriteFile(NetworkStream clientStream, string file)
+        private static readonly object fileReadLock = new object();
+        private static FileStream _fileStream;
+
+        public void WriteFile(NetworkStream clientStream, string file)
         {
+            if (file.IndexOf("..") >= 0)
+            {
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
+                return;
+            }
+            else if (file.EndsWith("/"))
+            {
+                file += INDEX_FILE;
+            }
+
+            file = ROOT_PATH + "/" + file;
+
             if (!File.Exists(file))
             {
-                if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound))
-                    return false;
-                else return true;
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                return;
             }
 
             string fileExtension = file.Substring(file.LastIndexOf('.'));
@@ -41,7 +55,7 @@ namespace Fuse.WebServer.Response
                     _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
 
                     if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, _fileStream.Length))
-                        return false;
+                        return;
 
                     while (_fileStream.Position < _fileStream.Length)
                     {
@@ -49,8 +63,6 @@ namespace Fuse.WebServer.Response
                         clientStream.Write(buffer, 0, responceLength);
                     }
                 }
-
-                return true;
             }
             catch (Exception e)
             {
@@ -62,7 +74,6 @@ namespace Fuse.WebServer.Response
                 {
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
                 }
-                return false;
             }
             finally
             {
