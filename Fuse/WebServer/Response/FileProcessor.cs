@@ -7,9 +7,6 @@ namespace Fuse.WebServer.Response
 {
     internal class FileProcessor
     {
-        private const string ROOT_PATH = "www";
-        private const string INDEX_FILE = "index.html";
-
         private static readonly Lazy<FileProcessor> _instance = new Lazy<FileProcessor>(() => new FileProcessor());
         public static FileProcessor Instance
         {
@@ -19,6 +16,7 @@ namespace Fuse.WebServer.Response
             }
         }
 
+        private static readonly object fileReadLock = new object();
         private FileStream _fileStream;
 
         public bool WriteFile(NetworkStream clientStream, string file)
@@ -38,15 +36,18 @@ namespace Fuse.WebServer.Response
 
             try
             {
-                _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-                if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, _fileStream.Length))
-                    return false;
-
-                while (_fileStream.Position < _fileStream.Length)
+                lock (fileReadLock)
                 {
-                    responceLength = _fileStream.Read(buffer, 0, buffer.Length);
-                    clientStream.Write(buffer, 0, responceLength);
+                    _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+                    if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, _fileStream.Length))
+                        return false;
+
+                    while (_fileStream.Position < _fileStream.Length)
+                    {
+                        responceLength = _fileStream.Read(buffer, 0, buffer.Length);
+                        clientStream.Write(buffer, 0, responceLength);
+                    }
                 }
 
                 return true;
