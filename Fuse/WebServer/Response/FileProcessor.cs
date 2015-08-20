@@ -78,6 +78,7 @@ namespace Fuse.WebServer.Response
             finally
             {
                 _fileStream.Close();
+                _fileStream.Dispose();
             }
         }
 
