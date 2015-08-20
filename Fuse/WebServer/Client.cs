@@ -24,15 +24,24 @@ namespace Fuse.WebServer
 
             Request request = parser.ReadAndParseRequest(clientStream);
 
-            if (request.Method != Method.GET)
-            {
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotImplemented);
-                return;
-            }
-
             if (request.Target == Target.FILE)
             {
-                FileProcessor.Instance.WriteFile(clientStream, request.Url);
+                switch (request.Method)
+                {
+                    case Method.HEAD:
+                        FileProcessor.Instance.WriteFile(clientStream, request.Url, true);
+                        break;
+                    case Method.GET:
+                        FileProcessor.Instance.WriteFile(clientStream, request.Url);
+                        break;
+                    default:
+                        Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotImplemented);
+                        break;
+                }
+            }
+            else
+            {
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotImplemented);
             }
 
             _client.Close();

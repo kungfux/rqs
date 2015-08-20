@@ -34,7 +34,7 @@ do_test("/index.html", 200)
 do_test("/index.html?param=value", 200)
 do_test("/index.html?param1=&param2=", 200)
 
-do_test("/../", 404)
+do_test("/../", 400)
 do_test("C:\\", 404)
 do_test("C:\\pagefile.sys", 404)
 do_test("%WINDIR%\\notepad.exe", 404)

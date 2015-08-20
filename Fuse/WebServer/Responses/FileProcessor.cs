@@ -22,11 +22,11 @@ namespace Fuse.WebServer.Responses
         private static readonly object fileReadLock = new object();
         private static FileStream _fileStream;
 
-        public void WriteFile(NetworkStream clientStream, string file)
+        public void WriteFile(NetworkStream clientStream, string file, bool sendOnlyHeader = false)
         {
             if (file.IndexOf("..") >= 0)
             {
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.BadRequest);
                 return;
             }
             else if (file.EndsWith("/"))
@@ -57,10 +57,13 @@ namespace Fuse.WebServer.Responses
                     if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, _fileStream.Length))
                         return;
 
-                    while (_fileStream.Position < _fileStream.Length)
+                    if (!sendOnlyHeader)
                     {
-                        responceLength = _fileStream.Read(buffer, 0, buffer.Length);
-                        clientStream.Write(buffer, 0, responceLength);
+                        while (_fileStream.Position < _fileStream.Length)
+                        {
+                            responceLength = _fileStream.Read(buffer, 0, buffer.Length);
+                            clientStream.Write(buffer, 0, responceLength);
+                        }
                     }
                 }
             }
