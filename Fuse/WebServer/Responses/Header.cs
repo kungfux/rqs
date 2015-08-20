@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Fuse.WebServer.Response
+namespace Fuse.WebServer.Responses
 {
     internal class Header
     {
@@ -18,12 +18,12 @@ namespace Fuse.WebServer.Response
             }
         }
 
-        public bool WriteHeader(NetworkStream clientStream, HttpStatusCode HttpStatusCode, 
+        public bool WriteHeader(NetworkStream clientStream, HttpStatusCode httpStatusCode, 
             string contentType = null, long contentLength = 0)
         {
             string header = 
                 string.Format(HEADER_FORMAT,
-                (int)HttpStatusCode + " " + HttpStatusCode.ToString(),
+                (int)httpStatusCode + " " + httpStatusCode.ToString(),
                 contentType,
                 contentLength);
 

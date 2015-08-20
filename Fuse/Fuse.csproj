@@ -64,11 +64,12 @@
     <Compile Include="GUI\Converters\InverseBooleanConverter.cs" />
     <Compile Include="GUI\Models\WebServerModel.cs" />
     <Compile Include="WebServer\Client.cs" />
-    <Compile Include="WebServer\Request\Request.cs" />
-    <Compile Include="WebServer\Request\RequestSource.cs" />
-    <Compile Include="WebServer\Request\RequestType.cs" />
-    <Compile Include="WebServer\Response\FileProcessor.cs" />
-    <Compile Include="WebServer\Response\Header.cs" />
+    <Compile Include="WebServer\Requests\Request.cs" />
+    <Compile Include="WebServer\Requests\RequestParser.cs" />
+    <Compile Include="WebServer\Requests\Target.cs" />
+    <Compile Include="WebServer\Requests\Method.cs" />
+    <Compile Include="WebServer\Responses\FileProcessor.cs" />
+    <Compile Include="WebServer\Responses\Header.cs" />
     <Compile Include="WebServer\Server.cs" />
     <Compile Include="WebServer\Status.cs" />
     <Page Include="GUI\Views\MainWindowView.xaml">

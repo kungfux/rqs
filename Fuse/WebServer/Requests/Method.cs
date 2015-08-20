@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Fuse.WebServer.Request
+namespace Fuse.WebServer.Requests
 {
-    internal enum RequestType
+    internal enum Method
     {
         CONNECT,
         DELETE,

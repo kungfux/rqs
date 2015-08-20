@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fuse.GUI.Models
 {
-    internal class WebServerModel : INotifyPropertyChanged
+    internal class WebServerModel : INotifyPropertyChanged, IDisposable
     {
         private static readonly Lazy<WebServerModel> _instance = new Lazy<WebServerModel>(() => new WebServerModel());
         public static WebServerModel Instance
@@ -49,6 +49,11 @@ namespace Fuse.GUI.Models
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(pProperty));
             }
+        }
+
+        public void Dispose()
+        {
+            server.Dispose();
         }
     }
 }

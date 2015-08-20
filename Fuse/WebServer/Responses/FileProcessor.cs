@@ -1,9 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-namespace Fuse.WebServer.Response
+
+namespace Fuse.WebServer.Responses
 {
     internal class FileProcessor
     {

@@ -1,15 +1,15 @@
-﻿using Fuse.WebServer.Request;
-using Fuse.WebServer.Response;
+﻿using Fuse.WebServer.Requests;
+using Fuse.WebServer.Responses;
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text.RegularExpressions;
 
 namespace Fuse.WebServer
 {
     internal class Client
     {
         private readonly TcpClient _client;
+        private static readonly RequestParser parser = new RequestParser();
 
         public Client(TcpClient client)
         {
@@ -20,17 +20,19 @@ namespace Fuse.WebServer
 
         public void ProcessRequest()
         {
-            Request.Request request = new Request.Request(_client.GetStream());
+            NetworkStream clientStream = _client.GetStream();
 
-            if (request.RequestType != RequestType.GET)
+            Request request = parser.ReadAndParseRequest(clientStream);
+
+            if (request.Method != Method.GET)
             {
-                Header.Instance.WriteHeader(_client.GetStream(), HttpStatusCode.NotImplemented);
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotImplemented);
                 return;
             }
 
-            if (request.RequestSource == RequestSource.FILE)
+            if (request.Target == Target.FILE)
             {
-                FileProcessor.Instance.WriteFile(_client.GetStream(), request.RequestUri);
+                FileProcessor.Instance.WriteFile(clientStream, request.Url);
             }
 
             _client.Close();
