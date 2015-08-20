@@ -9,6 +9,7 @@ def fastCalls(hostIP, itrange=1000):
     for i in range(itrange):
         urllib2.urlopen("http://"+hostIP+"/?value="+str(i)).read()
         time.sleep(0.3)
+	print ".",
  
 def longCalls(hostIP, count=1000):
     for j in range(count) :
