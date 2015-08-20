@@ -34,6 +34,9 @@ namespace Fuse.WebServer
                     case Method.GET:
                         FileProcessor.Instance.WriteFile(clientStream, request.Url);
                         break;
+                    case Method.OPTIONS:
+                        Header.Instance.SendOptionsHeader(clientStream, HttpStatusCode.OK);
+                        break;
                     default:
                         Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotImplemented);
                         break;

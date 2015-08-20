@@ -8,8 +8,10 @@ namespace Fuse.WebServer.Responses
     internal class Header
     {
         private static readonly Lazy<Header> _instance = new Lazy<Header>(() => new Header());
-        private const string HEADER_FORMAT = "HTTP/1.1 {0}\nContent-Type: {1}\nContent-Length: {2}\n\n";
-        
+        private const string HEADER_GENERAL_FORMAT = "HTTP/1.1 {0}\nServer: Fuse\nX-Powered-By: Alexander Fuks and contributors\n{1}\n\n";
+        private const string HEADER_CONTENT_FORMAT = "Content-Language: en\nContent-Type: {0}; charset=utf-8\nContent-Length: {1}";
+        private const string HEADER_ALLOW = "Allow: GET, HEAD, OPTIONS";
+
         public static Header Instance
         {
             get
@@ -18,14 +20,47 @@ namespace Fuse.WebServer.Responses
             }
         }
 
-        public bool WriteHeader(NetworkStream clientStream, HttpStatusCode httpStatusCode, 
+        public bool WriteHeader(NetworkStream clientStream, HttpStatusCode httpStatusCode,
             string contentType = null, long contentLength = 0)
         {
-            string header = 
-                string.Format(HEADER_FORMAT,
-                (int)httpStatusCode + " " + httpStatusCode.ToString(),
-                contentType,
-                contentLength);
+            if (httpStatusCode == HttpStatusCode.MethodNotAllowed || httpStatusCode == HttpStatusCode.NotImplemented)
+            {
+                return SendOptionsHeader(clientStream, httpStatusCode);
+            }
+            else
+            {
+                string header =
+                    string.Format(HEADER_GENERAL_FORMAT,
+                        (int)httpStatusCode + " " + httpStatusCode.ToString(),
+                        string.Format(HEADER_CONTENT_FORMAT,
+                            contentType,
+                            contentLength
+                            )
+                        );
+
+                return SendHeader(clientStream, header);
+            }
+        }
+
+        public bool SendOptionsHeader(NetworkStream clientStream, HttpStatusCode httpStatusCode)
+        {
+            if (httpStatusCode != HttpStatusCode.OK &&
+                httpStatusCode != HttpStatusCode.MethodNotAllowed &&
+                httpStatusCode != HttpStatusCode.NotImplemented)
+                throw new InvalidOperationException("OPTIONS header can be sent only in case status code equals to 200, 405 or 501");
+
+            string header =
+                    string.Format(HEADER_GENERAL_FORMAT,
+                    (int)httpStatusCode + " " + httpStatusCode.ToString(),
+                    HEADER_ALLOW);
+
+            return SendHeader(clientStream, header);
+        }
+
+        private bool SendHeader(NetworkStream clientStream, string header)
+        {
+            if (string.IsNullOrEmpty(header))
+                throw new ArgumentException("header");
 
             try
             {
@@ -33,7 +68,7 @@ namespace Fuse.WebServer.Responses
                 clientStream.Write(headersBuffer, 0, headersBuffer.Length);
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 // TODO: Log exception
                 return false;
