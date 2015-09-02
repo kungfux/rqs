@@ -16,7 +16,8 @@ namespace Fuse.WebServer.Requests
             byte[] buffer = new byte[4096];
 
             int requestLength;
-            while ((requestLength = clientStream.Read(buffer, 0, buffer.Length)) > 0)
+            while (clientStream.DataAvailable && 
+                (requestLength = clientStream.Read(buffer, 0, buffer.Length)) > 0)
             {
                 request += UTF8Encoding.UTF8.GetString(buffer, 0, requestLength);
 
