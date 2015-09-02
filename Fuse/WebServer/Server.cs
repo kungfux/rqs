@@ -68,7 +68,7 @@ namespace Fuse.WebServer
                     {
                         // cancellation is requested
                         _listener.Stop();
-                        return;
+                        break;
                     }
                     else if (e.SocketErrorCode == SocketError.ConnectionReset)
                     {
