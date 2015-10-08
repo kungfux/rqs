@@ -28,7 +28,8 @@ namespace Fuse.WebServer
 
         public void Stop()
         {
-            _cts.Cancel();
+            if (_cts != null)
+                _cts.Cancel();
         }
 
         public void Dispose()

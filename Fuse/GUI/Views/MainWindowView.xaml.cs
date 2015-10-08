@@ -1,6 +1,8 @@
 ﻿using Fuse.GUI.Models;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -16,8 +18,8 @@ namespace Fuse.GUI.Views
         {
             InitializeComponent();
 
-            this.DataContext = this;
-        }
+            lblStatus.DataContext = WebServerModel.Instance;
+        }      
 
         public static RoutedCommand StartServerCommand = new RoutedCommand();
         private void startServer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -44,7 +46,7 @@ namespace Fuse.GUI.Views
         public static RoutedCommand RestartServerCommand = new RoutedCommand();
         private void restartServer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = WebServerModel.Instance.IsAlive;
+            e.CanExecute = false;
         }
 
         private void restartServer_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -115,14 +117,6 @@ namespace Fuse.GUI.Views
         private void github_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Process.Start("https://github.com/kungfux/rqs");
-        }
-
-        public static bool IsOnline
-        {
-            get
-            {
-                return WebServerModel.Instance.IsAlive;
-            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

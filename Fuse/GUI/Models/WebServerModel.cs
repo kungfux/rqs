@@ -25,12 +25,20 @@ namespace Fuse.GUI.Models
         void server_StatusChanged(object sender, Status e)
         {
             IsAlive = e == Status.Started;
-            OnProperyChanged();
         }
 
         private readonly Server server = new Server();
 
-        public bool IsAlive = false;
+        private bool _isAlive;
+        public bool IsAlive
+        {
+            get { return _isAlive; }
+            set 
+            { 
+                _isAlive = value;
+                OnProperyChanged();
+            }
+        }
 
         public void StartInstance()
         {

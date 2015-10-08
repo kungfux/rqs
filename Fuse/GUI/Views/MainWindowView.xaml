@@ -54,14 +54,15 @@
                 <MenuItem Header="_About" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
-        <Label DockPanel.Dock="Top" Visibility="{Binding Path=IsOnline, Converter={StaticResource BooleanToVisibility}}" Content="You're online">
+        <Label DockPanel.Dock="Top" Visibility="Visible" Content="Notification: Test text">
             <Label.Triggers>
                 <EventTrigger RoutedEvent="Label.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
                 </EventTrigger>
             </Label.Triggers>
         </Label>
-        <Label DockPanel.Dock="Top" Visibility="Visible" Content="Notification: Test text">
+        <Label DockPanel.Dock="Bottom" Visibility="{Binding Path=IsAlive, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}" 
+               Name="lblStatus" Content="You're online!" Background="LightGreen">
             <Label.Triggers>
                 <EventTrigger RoutedEvent="Label.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
