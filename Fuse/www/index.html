@@ -4,11 +4,40 @@
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <title>Fuse</title>
+	<!-- TODO: Update title with " - %looking_for% search results" -->
+    <title>FUSE Search Engine</title>
 </head>
 <body>
-    <h2>Test page</h2>
-    <img src="images/favicon_image.png" alt="Favicon image" />
-    <img src="images/not_found_image.png" alt="This image is not available" />
+	<header>
+		<h2>
+			<img height="32" width="32" src="images/favicon_image.png" alt="Favicon image" />
+			FUSE Search Engine Logo
+		</h2>
+	</header>
+    <article>
+		<section>
+			<p>Searching: <progress min="0" max="100" value="35" /></p>
+			<p>Search results will appear here.</p>
+		</section>
+		<aside>
+			<p>Additional actions for the search results will appear here.</p>
+		</aside>
+	</article>
+	
+	<article>
+		<svg width="1000" height="250">
+			<rect width="150" height="150" fill="orange">
+			<animate attributeName="x" from="0" to="300" dur="2" fill="freeze" repeatCount="10"/>
+			</rect>
+		</svg>
+	</article>
+	
+	<footer>
+		<p>
+			<a href="http://github.com/kungfux/rqs">Contact Us</a>
+			<a href="http://github.com/kungfux/rqs">License</a>
+			Alexander Fuks & contibutors (c) 2015
+		</p>
+	</footer>
 </body>
 </html>
