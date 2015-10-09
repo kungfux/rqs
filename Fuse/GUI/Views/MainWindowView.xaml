@@ -54,21 +54,25 @@
                 <MenuItem Header="_About" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
-        <Label DockPanel.Dock="Top" Visibility="Visible" Content="Notification: Test text">
-            <Label.Triggers>
-                <EventTrigger RoutedEvent="Label.Loaded">
+        <Border DockPanel.Dock="Top"
+                CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2">
+        <Label Content="Notification: The program is still under development!" />
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
                 </EventTrigger>
-            </Label.Triggers>
-        </Label>
-        <Label DockPanel.Dock="Bottom" Visibility="{Binding Path=IsAlive, Converter={StaticResource BooleanToVisibility}, Mode=OneWay}" 
-               Name="lblStatus" Content="You're online!" Background="LightGreen">
-            <Label.Triggers>
-                <EventTrigger RoutedEvent="Label.Loaded">
+            </Border.Triggers>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Name="brdStatus"
+                CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2"
+                Visibility="{Binding Path=IsServerRunning, Converter={StaticResource BooleanToVisibility}, Mode=OneWay, NotifyOnTargetUpdated=True}">
+            <Label Content="You're online!" />
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Binding.TargetUpdated">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
                 </EventTrigger>
-            </Label.Triggers>
-        </Label>
+            </Border.Triggers>
+        </Border>
         <StackPanel>
             
         </StackPanel>

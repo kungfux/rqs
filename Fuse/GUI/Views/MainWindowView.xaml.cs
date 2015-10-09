@@ -1,4 +1,5 @@
 ﻿using Fuse.GUI.Models;
+using Fuse.WebServer;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -12,19 +13,20 @@ namespace Fuse.GUI.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindowView : Window
+    public partial class MainWindowView : Window, INotifyPropertyChanged
     {
         public MainWindowView()
         {
             InitializeComponent();
 
-            lblStatus.DataContext = WebServerModel.Instance;
-        }      
+            brdStatus.DataContext = this;
+        }
 
+        #region Commands
         public static RoutedCommand StartServerCommand = new RoutedCommand();
         private void startServer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = !WebServerModel.Instance.IsAlive;
+            e.CanExecute = !IsServerRunning;
         }
 
         private void startServer_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -35,7 +37,7 @@ namespace Fuse.GUI.Views
         public static RoutedCommand StopServerCommand = new RoutedCommand();
         private void stopServer_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = WebServerModel.Instance.IsAlive;
+            e.CanExecute = IsServerRunning;
         }
 
         private void stopServer_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -67,7 +69,7 @@ namespace Fuse.GUI.Views
 
         private bool exit_Confirm()
         {
-            bool isServerRunning = WebServerModel.Instance.IsAlive;
+            bool isServerRunning = IsServerRunning;
             if (!isServerRunning)
             {
                 Application.Current.Shutdown();
@@ -118,15 +120,43 @@ namespace Fuse.GUI.Views
         {
             Process.Start("https://github.com/kungfux/rqs");
         }
+        #endregion Commands
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            WebServerModel.Instance.server.StatusChanged += server_StatusChanged;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !exit_Confirm();
         }
+
+        void server_StatusChanged(object sender, Status e)
+        {
+            IsServerRunning = e == Status.Started;
+        }
+        #region
+
+        private bool _isServerRunning;
+        public bool IsServerRunning
+        {
+            get { return _isServerRunning; }
+            set
+            {
+                _isServerRunning = value;
+                OnProperyChanged("IsServerRunning");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnProperyChanged(string pProperty)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(pProperty));
+            }
+        }
+        #endregion
     }
 }
