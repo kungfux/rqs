@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Fuse.GUI.Models;
+using System;
+using System.Threading;
 using System.Windows;
 
 namespace Fuse
@@ -16,6 +13,7 @@ namespace Fuse
         public App()
         {
             this.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
+            LanguageDictionary.Instance.FindString("Init LanguageDictionary");
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Fuse.GUI.Views
             else
             {
                 MessageBoxResult exitDialogResult =
-                    MessageBox.Show("Do you want to stop the server and exit?", this.Title,
+                    MessageBox.Show(LanguageDictionary.Instance.FindString("messageWantToStopAndExit"), this.Title,
                     MessageBoxButton.YesNo, MessageBoxImage.Asterisk, MessageBoxResult.No);
                 if (exitDialogResult == MessageBoxResult.Yes)
                 {

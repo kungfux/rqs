@@ -29,34 +29,34 @@
     
     <DockPanel>
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_Start" Command="{x:Static commands:MainWindowView.StartServerCommand}"/>
-                <MenuItem Header="S_top" Command="{x:Static commands:MainWindowView.StopServerCommand}"/>
-                <MenuItem Header="_Restart" Command="{x:Static commands:MainWindowView.RestartServerCommand}"/>
+            <MenuItem Header="{StaticResource menuFile}">
+                <MenuItem Header="{StaticResource menuStart}" Command="{x:Static commands:MainWindowView.StartServerCommand}"/>
+                <MenuItem Header="{StaticResource menuStop}" Command="{x:Static commands:MainWindowView.StopServerCommand}"/>
+                <MenuItem Header="{StaticResource menuRestart}" Command="{x:Static commands:MainWindowView.RestartServerCommand}"/>
                 <Separator />
-                <MenuItem Header="_Exit" Command="{x:Static commands:MainWindowView.ExitCommand}"/>
+                <MenuItem Header="{StaticResource menuExit}" Command="{x:Static commands:MainWindowView.ExitCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="Permi_ssions" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource menuEdit}">
+                <MenuItem Header="{StaticResource menuEditPermissions}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="_Preferences" Command="{x:Static commands:MainWindowView.PreferencesCommand}"/>
+                <MenuItem Header="{StaticResource menuPreferences}" Command="{x:Static commands:MainWindowView.PreferencesCommand}"/>
             </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Requests" Visibility="Collapsed"/>
-                <MenuItem Header="_Uploads" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource menuView}">
+                <MenuItem Header="{StaticResource menuViewRequests}" Visibility="Collapsed"/>
+                <MenuItem Header="{StaticResource menuViewUploads}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="_Logs" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
+                <MenuItem Header="{StaticResource menuViewLogs}" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="_Help" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource menuHelp}">
+                <MenuItem Header="{StaticResource menuHelp}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="_GitHub..." Command="{x:Static commands:MainWindowView.GitHubCommand}"/>
-                <MenuItem Header="_About" Visibility="Collapsed"/>
+                <MenuItem Header="{StaticResource menuHelpGitHub}" Command="{x:Static commands:MainWindowView.GitHubCommand}"/>
+                <MenuItem Header="{StaticResource menuHelpAbout}" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
         <Border DockPanel.Dock="Top"
                 CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2">
-        <Label Content="Notification: The program is still under development!" />
+            <Label Content="{StaticResource notificationUnderDevelopment}" />
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Border.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
@@ -66,7 +66,7 @@
         <Border DockPanel.Dock="Bottom" Name="brdStatus"
                 CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2"
                 Visibility="{Binding Path=IsServerRunning, Converter={StaticResource BooleanToVisibility}, Mode=OneWay, NotifyOnTargetUpdated=True}">
-            <Label Content="You're online!" />
+            <Label Content="{StaticResource notificationYouAreOnline}" />
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Binding.TargetUpdated">
                     <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
