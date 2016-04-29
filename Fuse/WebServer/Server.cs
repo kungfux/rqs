@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -8,6 +9,8 @@ namespace Fuse.WebServer
 {
     internal class Server : IDisposable
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static readonly IPAddress _ipAddress = IPAddress.Any;
         private const int PORT = 80;
 
@@ -16,7 +19,15 @@ namespace Fuse.WebServer
 
         public Server()
         {
-            _listener = new TcpListener(_ipAddress, PORT);
+            try
+            {
+                _listener = new TcpListener(_ipAddress, PORT);
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal("Exception occurs while initializing the server.", ex);
+                throw;
+            }
         }
 
         public async void Start()

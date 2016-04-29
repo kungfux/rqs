@@ -4,3 +4,4 @@ Fuse/obj/*
 Fuse/*.suo
 Fuse/*.user
 *.pyc
+Fuse/packages
