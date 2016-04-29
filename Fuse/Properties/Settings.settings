@@ -1,7 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Fuse.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ROOT_PATH" Type="System.String" Scope="User">
+      <Value Profile="(Default)">www</Value>
+    </Setting>
+    <Setting Name="PORT" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="INDEX_FILE" Type="System.String" Scope="User">
+      <Value Profile="(Default)">index.html</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

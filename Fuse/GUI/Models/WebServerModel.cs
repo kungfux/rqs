@@ -23,12 +23,20 @@ namespace Fuse.GUI.Models
 
         public void StartInstance()
         {
+            ReadConfig();
             server.Start();
         }
 
         public void StopInstance()
         {
             server.Stop();
+        }
+
+        public void ReadConfig()
+        {
+            Config.Instance.Port = Properties.Settings.Default.PORT;
+            Config.Instance.RootPath = Properties.Settings.Default.ROOT_PATH;
+            Config.Instance.IndexFile = Properties.Settings.Default.INDEX_FILE;
         }
     }
 }

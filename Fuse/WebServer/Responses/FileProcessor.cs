@@ -16,8 +16,8 @@ namespace Fuse.WebServer.Responses
             }
         }
 
-        private const string ROOT_PATH = "www";
-        private const string INDEX_FILE = "index.html";
+        private readonly string ROOT_PATH = Config.Instance.RootPath;
+        private readonly string INDEX_FILE = Config.Instance.IndexFile;
 
         private static readonly object fileReadLock = new object();
         private static FileStream _fileStream;

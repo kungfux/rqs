@@ -12,7 +12,7 @@ namespace Fuse.WebServer
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly IPAddress _ipAddress = IPAddress.Any;
-        private const int PORT = 80;
+        private readonly int PORT = Config.Instance.Port;
 
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
