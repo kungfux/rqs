@@ -55,7 +55,15 @@ namespace Fuse.WebServer
         {
             _cts = new CancellationTokenSource();
 
-            _listener.Start();
+            try
+            {
+                _listener.Start();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal("Exception occurs while starting listening the port.", ex);
+                throw;
+            }
 
             NotifyStatusChanged(Status.Started);
 

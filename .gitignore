@@ -1,7 +1,7 @@
 # Ignore Visual Studio user files
 Fuse/bin/*
 Fuse/obj/*
-Fuse/*.suo
-Fuse/*.user
+*.suo
+*.user
 *.pyc
 Fuse/packages
