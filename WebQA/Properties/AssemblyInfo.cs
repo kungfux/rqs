@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WebQA")]
-[assembly: AssemblyDescription("Web server that provide web utils for QA department")]
+[assembly: AssemblyDescription("Web server that provides search requirements feature")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fuks Alexander")]
+[assembly: AssemblyCompany("Alexander Fuks")]
 [assembly: AssemblyProduct("WebQA")]
-[assembly: AssemblyCopyright("Copyright © Fuks Alexander 2013-2015")]
+[assembly: AssemblyCopyright("Copyright © Alexander Fuks 2013-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.10")]
+[assembly: AssemblyFileVersion("1.0.0.10")]
