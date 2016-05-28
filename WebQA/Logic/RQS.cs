@@ -283,12 +283,12 @@ namespace WebQA.Logic
                             "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td></tr>",
                             // internal id and fr id
                             result.Rows[a].ItemArray[1] != null ?
-                                string.Format("<a href='/?by=id&value={0}' title='Search by FR ID {1}'>{1}</a>", 
+                                string.Format("<a href='/?by=id&value={0}' title='Search by FR ID: {1}'>{1}</a>", 
                                 result.Rows[a].ItemArray[0], result.Rows[a].ItemArray[1]) : 
                                 "&nbsp;",
                             // fr tms task number
                             result.Rows[a].ItemArray[2] != null && !result.Rows[a].ItemArray[2].ToString().Equals("") ? 
-                                string.Format("<a href='/?by=tms&value={0}' title='Search by TMS Task {0}'>{0}</a>", 
+                                string.Format("<a href='/?by=tms&value={0}' title='Search by TMS Task: {0}'>{0}</a>", 
                                 result.Rows[a].ItemArray[2]) : 
                                 "&nbsp;",
                             // fr object number
@@ -315,7 +315,7 @@ namespace WebQA.Logic
                             // fr status
                             result.Rows[a].ItemArray[9] != null ? result.Rows[a].ItemArray[9] : "&nbsp;",
                             // source/file
-                            string.Format("<a href='/?by={0}&value={1}&filter={2}' title='Repeat searching in this source only.'>{2}</a>", 
+                            string.Format("<a href='/?by={0}&value={1}&filter={2}' title='Repeat search using this source only'>{2}</a>", 
                                 by,
                                 value,
                                 result.Rows[a].ItemArray[10])));

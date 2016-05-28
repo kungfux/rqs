@@ -131,7 +131,7 @@ namespace WebQA.Logic
             // Read data from the client socket
             int bytesRead = handler.EndReceive(ar);
 
-            // There  might be more data, so store the data received so far
+            // Store the data received
             state.receivedData.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
 
             int space1 = state.receivedData.ToString().IndexOf(" ");
@@ -153,6 +153,21 @@ namespace WebQA.Logic
             }
 
             state.url = state.receivedData.ToString().Substring(space1 + 2, space2 - space1 - 2);
+
+            //// Store the data received
+            //state.receivedData.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
+
+            //string[] request = state.receivedData.ToString().Split(null);
+
+            //if (request.Length < 2 || string.IsNullOrEmpty(request[1]))
+            //{
+            //    // if empty request or has no requested data
+            //    Trace.Instance.Add("URL: Wrong or empty request received", Trace.Color.Yellow);
+            //    Send(handler, rqs.ProcessRequest(state.url).ToString());
+            //    return;
+            //}
+
+            //state.url = request[1];
 
             Trace.Instance.Add(
                 string.Format("URL: {0}", state.url), Trace.Color.Yellow);
