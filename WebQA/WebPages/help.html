@@ -7,6 +7,9 @@
 			body, p, table  { font: 14px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
 			h1  { font: bold 18px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
 			h2  { font: bold 16px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
+			table { border-collapse: collapse; }
+			table, th, td { border: 1px solid black; }
+			th, td { padding: 5px; }
 		</style>
 	</head>
 	<body>
@@ -56,9 +59,13 @@
 			<li>"Search" button</li><br>
 			Press "Search" button to perform searching.
 		</ul>
+		
 		<p>WebQA allows to search requirements by FR ID, FR TMS Task and FR text. You should specify search criteria by selecting appropriate option from the "Search by" list and then define search keyword(s). <u>All searching is case-insensitive.</u></p>
+		
 		<p>Search keywords can be separated by comma or semicolon. In this case found requirements will contain all specified keywords (AND logic). There is one more option available and can be used for searching groups of requirements by FR ID only. For this purpose specify two numbers separated by dash. This lind of search is called as "FR ID diapason" and has limitation by 5000 numbers.</p>
+		
 		<b>There are examples of search keywords:</b>
+		
 		<table border=1 style=' text-align: left; '>
 			<tr>
 				<th>Search by</th>
@@ -68,62 +75,62 @@
 			<tr>
 				<td>FR ID</td>
 				<td>FR1</td>
-				<td>will search for requirement with number 'FR1'</td>
+				<td>search for requirement with number 'FR1'</td>
 			</tr>
 			<tr>
 				<td>FR ID</td>
 				<td>FR1;fr3</td>
-				<td>will search requirements with numbers 'FR1' or 'FR3'</td>
+				<td>search for requirements with numbers 'FR1' or 'FR3'</td>
 			</tr>
 			<tr>
 				<td>FR ID</td>
 				<td>FR1,fr3</td>
-				<td>will search requirements with numbers 'FR1' or 'FR3'</td>
+				<td>search for requirements with numbers 'FR1' or 'FR3'</td>
 			</tr>
 			<tr>
 				<td>FR ID</td>
 				<td>FR1-FR3</td>
-				<td>will search requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
+				<td>search for requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
 			</tr>
 			<tr>
 				<td>FR ID</td>
 				<td>FR1-3</td>
-				<td>will search requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
+				<td>search for requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
 			</tr>
 			<tr>
 				<td>FR ID</td>
 				<td>NFR1-3</td>
-				<td>will search requirements with numbers 'NFR1' or 'NFR2' or 'NFR3'</td>
+				<td>search for requirements with numbers 'NFR1' or 'NFR2' or 'NFR3'</td>
 			</tr>
 			<tr>
 				<td>FR TMS Task</td>
 				<td>PCC-43345</td>
-				<td>will search requirements which contain in FR TMS Task 'PCC-43345'</td>
+				<td>search for requirements which contain in FR TMS Task 'PCC-43345'</td>
 			</tr>
 			<tr>
 				<td>FR TMS Task</td>
 				<td>PCC;mar5</td>
-				<td>will search requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
+				<td>search for requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
 			</tr>
 			<tr>
 				<td>FR TMS Task</td>
 				<td>PCC,mar5</td>
-				<td>will search requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
+				<td>search for requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
 			</tr>
 			<tr>
 				<td>FR Text</td>
 				<td>OE_param_micro</td>
-				<td>will search requirements which contain in text specified keyword</td>
+				<td>search for requirements which contain in text specified keyword</td>
 			</tr>
 			<tr>
 				<td>FR Text</td>
 				<td>oe;specimen;collect;receive</td>
-				<td>will search requirements which contain in text all the keywords specified</td>
+				<td>search for requirements which contain in text all the keywords specified</td>
 			</tr>
 			<tr>
 				<td>FR Text</td>
 				<td>oe,specimen,collect,receive</td>
-				<td>will search requirements which contain in text all the keywords specified</td>
+				<td>search for requirements which contain in text all the keywords specified</td>
 			</tr>
 		</table>
 		
@@ -163,7 +170,8 @@
       or (at your option) any later version.<br>WebQA is designed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
       even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU General Public Licence</a> for more details.</p>
       <p><b><u>Disclaimer:</b></u> Use WebQA on your own risk; nobody respond in case search results are wrong.<br>Author, hereby disclaims all copyright interest in the program WebQA (which makes passed at compilers).</p>
-
-      <p style='text-align: right;'>Written by <a href='mailto:ofuc@isd.dp.ua'>Fuks Alexander</a></p>
+	  
+	  <p>View project on <a href='http://github.com/kungfux/rqs'>GitHub</a></p>
+	  
 	</body>
 </html>

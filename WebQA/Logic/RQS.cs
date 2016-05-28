@@ -330,7 +330,7 @@ namespace WebQA.Logic
                     {
                         Trace.Instance.Add("Requirements NOT found", Trace.Color.Yellow);
                     }
-                    html.Append("<div><p align='center'><font color='maroon'>No results to display. </font><a href='/?help#sr'> Want to read help?</a></p></div>");
+                    html.Append("<div><p align='center'><font color='maroon'>No results to display. </font><a href='/?help'> Want to read help?</a></p></div>");
                 }
             }
 
@@ -342,7 +342,7 @@ namespace WebQA.Logic
                 "<br>",
                 "<table border=0 width=100% style='text-align: right; padding: 1em; font-size: 80%; white-space: nowrap; color: #cccccc;'>",
                 "<tr>",
-                "<td style='text-align: center;'>Powered by WebQA<br>Generated on {0}</td>",
+                "<td style='text-align: center;'>Powered by <a href='http://github.com/kungfux/rqs' title='View project on GitHub'>WebQA</a><br>Generated on {0}</td>",
                 //"<td style='text-align: left;'></td>",
                 "</tr></table></div>"),
                 DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss:fff")));
