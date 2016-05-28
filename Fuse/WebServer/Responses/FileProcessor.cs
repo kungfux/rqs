@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -7,6 +8,8 @@ namespace Fuse.WebServer.Responses
 {
     internal class FileProcessor
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static readonly Lazy<FileProcessor> _instance = new Lazy<FileProcessor>(() => new FileProcessor());
         public static FileProcessor Instance
         {
@@ -24,9 +27,12 @@ namespace Fuse.WebServer.Responses
 
         public void WriteFile(NetworkStream clientStream, string file, bool sendOnlyHeader = false)
         {
+            Log.Debug(string.Format("File is requested: {0}", file));
+
             if (file.IndexOf("..") >= 0)
             {
                 Header.Instance.WriteHeader(clientStream, HttpStatusCode.BadRequest);
+                Log.Warn("Attempt to read up folder is detected.");
                 return;
             }
             else if (file.EndsWith("/"))
@@ -38,6 +44,7 @@ namespace Fuse.WebServer.Responses
 
             if (!File.Exists(file))
             {
+                Log.Info(string.Format("Requested file was not found: {0}", file));
                 Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
                 return;
             }
@@ -71,10 +78,12 @@ namespace Fuse.WebServer.Responses
             {
                 if (e is FileNotFoundException || e is DirectoryNotFoundException)
                 {
+                    Log.Error(string.Format("Requested file or folder was not found: {0}", file), e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
                 }
                 else
                 {
+                    Log.Fatal(string.Format("Requested file was not found: {0}", file), e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
                 }
             }

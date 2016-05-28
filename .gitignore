@@ -5,3 +5,4 @@ Fuse/obj/*
 *.user
 *.pyc
 Fuse/packages
+WebQA/*

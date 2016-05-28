@@ -22,10 +22,11 @@ namespace Fuse.WebServer
             try
             {
                 _listener = new TcpListener(_ipAddress, PORT);
+                Log.Debug(string.Format("Listener initialized on {0}:{1}.", _ipAddress, PORT));
             }
             catch (Exception ex)
             {
-                Log.Fatal("Exception occurs while initializing the server.", ex);
+                Log.Fatal("Exception occurs while initializing the listener.", ex);
                 throw;
             }
         }
@@ -33,7 +34,10 @@ namespace Fuse.WebServer
         public async void Start()
         {
             if (_cts != null && !_cts.IsCancellationRequested)
+            {
+                Log.Warn("The code tried to start already started listener.");
                 throw new InvalidOperationException("Server is already started.");
+            }
             await Task.Run(() => { StartClientsAwaiting(); });
         }
 
@@ -80,6 +84,13 @@ namespace Fuse.WebServer
                 {
                     // client is awaiting
                     var tcpClient = await _listener.AcceptTcpClientAsync();
+
+                    Log.Debug(string.Format("Client {0} ({1}) is connected.", 
+                        tcpClient.Client.RemoteEndPoint,
+                        Dns.GetHostEntry(
+                            IPAddress.Parse(tcpClient.Client.RemoteEndPoint.ToString().
+                            Substring(0, tcpClient.Client.RemoteEndPoint.ToString().IndexOf(":")))).HostName));
+
                     ProcessClient(tcpClient);
                 }
                 catch (SocketException e)
@@ -88,15 +99,18 @@ namespace Fuse.WebServer
                     {
                         // cancellation is requested
                         _listener.Stop();
+                        Log.Debug("Listener stopped as requested.");
                         break;
                     }
                     else if (e.SocketErrorCode == SocketError.ConnectionReset)
                     {
                         // remote host breaks the connection
+                        Log.Debug("Connection was reset by client.");
                         continue;
                     }
                     else
                     {
+                        Log.Fatal("Exception occurs while accepting the client.", e);
                         throw;
                     }
                 }

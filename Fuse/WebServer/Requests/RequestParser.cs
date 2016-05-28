@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,6 +8,8 @@ namespace Fuse.WebServer.Requests
 {
     internal class RequestParser
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public Request ReadAndParseRequest(NetworkStream clientStream)
         {
             if (clientStream == null)
@@ -42,6 +45,9 @@ namespace Fuse.WebServer.Requests
             string methodValue = requestMatch.Groups["type"].Value;
             if (!string.IsNullOrEmpty(methodValue))
                 method = ParseEnum<Method>(methodValue);
+
+            Log.Info(string.Format("Request received: length={0}, url='{1}', method={2}, target={3}",
+                request.Length, url, method, Target.FILE));
 
             return new Request(request.Length, url, method, Target.FILE);
         }

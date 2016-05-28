@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -7,6 +8,8 @@ namespace Fuse.WebServer.Responses
 {
     internal class Header
     {
+        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private static readonly Lazy<Header> _instance = new Lazy<Header>(() => new Header());
         private const string HEADER_GENERAL_FORMAT = "HTTP/1.1 {0}\nServer: Fuse\nX-Powered-By: Alexander Fuks and contributors\n{1}\n\n";
         private const string HEADER_CONTENT_FORMAT = "Content-Language: en\nContent-Type: {0}; charset=utf-8\nContent-Length: {1}";
@@ -47,7 +50,10 @@ namespace Fuse.WebServer.Responses
             if (httpStatusCode != HttpStatusCode.OK &&
                 httpStatusCode != HttpStatusCode.MethodNotAllowed &&
                 httpStatusCode != HttpStatusCode.NotImplemented)
+            {
+                Log.Fatal("OPTIONS header cannot be send for status " + (int)httpStatusCode);
                 throw new InvalidOperationException("OPTIONS header can be sent only in case status code equals to 200, 405 or 501");
+            }
 
             string header =
                     string.Format(HEADER_GENERAL_FORMAT,
@@ -60,7 +66,10 @@ namespace Fuse.WebServer.Responses
         private bool SendHeader(NetworkStream clientStream, string header)
         {
             if (string.IsNullOrEmpty(header))
+            {
+                Log.Fatal("Header cannot be null or empty.");
                 throw new ArgumentException("header");
+            }
 
             try
             {
@@ -70,7 +79,7 @@ namespace Fuse.WebServer.Responses
             }
             catch (Exception e)
             {
-                // TODO: Log exception
+                Log.Error("Exception occurs while sending the header to client.", e);
                 return false;
             }
         }
