@@ -32,7 +32,8 @@ namespace Fuse.API.Requirements
             //  PUT     Update if exists
             //  DELETE  Delete FR1
 
-            // We need here: Url, document type?, method?
+            // TODO: We need here: Url, document type?, method?
+            // TODO: How to catch both v1 and v2 api requests by the same module?
             get { return "/api/v1/requirement/"; }
         }
 
