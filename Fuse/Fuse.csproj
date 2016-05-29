@@ -65,12 +65,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="API\Requirements\RequirementsPlugin.cs" />
     <Compile Include="GUI\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="GUI\Converters\InverseBooleanConverter.cs" />
     <Compile Include="GUI\Models\LanguageDictionary.cs" />
     <Compile Include="GUI\Models\WebServerModel.cs" />
     <Compile Include="WebServer\Client.cs" />
     <Compile Include="WebServer\Config.cs" />
+    <Compile Include="WebServer\API\IPlugin.cs" />
     <Compile Include="WebServer\Requests\Request.cs" />
     <Compile Include="WebServer\Requests\RequestParser.cs" />
     <Compile Include="WebServer\Requests\Target.cs" />

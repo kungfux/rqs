@@ -46,10 +46,16 @@ namespace Fuse.WebServer.Requests
             if (!string.IsNullOrEmpty(methodValue))
                 method = ParseEnum<Method>(methodValue);
 
-            Log.Info(string.Format("Request received: length={0}, url='{1}', method={2}, target={3}",
-                request.Length, url, method, Target.FILE));
+            Target target = Target.FILE;
+            if (!string.IsNullOrEmpty(url) && url.StartsWith("/api/"))
+            {
+                target = Target.API;
+            }
 
-            return new Request(request.Length, url, method, Target.FILE);
+            Log.Info(string.Format("Request received: length={0}, url='{1}', method={2}, target={3}",
+                request.Length, url, method, target));
+
+            return new Request(request.Length, url, method, target);
         }
 
         private T ParseEnum<T>(string value)

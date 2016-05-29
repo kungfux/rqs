@@ -1,5 +1,7 @@
-﻿using log4net;
+﻿using Fuse.WebServer.API;
+using log4net;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -17,8 +19,12 @@ namespace Fuse.WebServer
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
 
+        private readonly List<IPlugin> plugins = new List<IPlugin>();
+
         public Server()
         {
+            plugins.Add(new Fuse.API.Requirements.RequirementsPlugin());
+
             try
             {
                 _listener = new TcpListener(_ipAddress, PORT);
@@ -85,7 +91,7 @@ namespace Fuse.WebServer
                     // client is awaiting
                     var tcpClient = await _listener.AcceptTcpClientAsync();
 
-                    Log.Debug(string.Format("Client {0} ({1}) is connected.", 
+                    Log.Info(string.Format("Client {0} ({1}) is connected.", 
                         tcpClient.Client.RemoteEndPoint,
                         Dns.GetHostEntry(
                             IPAddress.Parse(tcpClient.Client.RemoteEndPoint.ToString().
@@ -117,13 +123,14 @@ namespace Fuse.WebServer
             }
 
             _listener.Stop();
+            Log.Debug("Listener is stopped.");
 
             NotifyStatusChanged(Status.Stopped);
         }
 
         private void ProcessClient(TcpClient tcpClient)
         {
-            Task.Run(() => { new Client(tcpClient).ProcessRequest(); });
+            Task.Run(() => { new Client(tcpClient).ProcessRequest(plugins); });
         }
 
         private void NotifyStatusChanged(Status status)
