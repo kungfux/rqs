@@ -52,6 +52,7 @@ namespace Fuse.WebServer
                     ProcessTargetApi(request, plugins);
                     break;
                 default:
+                    // TODO: Has no any sense since enum has no another values
                     Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
                     break;
             }

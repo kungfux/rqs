@@ -10,5 +10,8 @@ namespace Fuse.WebServer.API
         string AcceptedUrlStartsWith { get; }
 
         void ProcessRequest(NetworkStream clientStream, Request request);
+
+        // TODO: Add dependency link?
+        // TODO: Move to separate dll?
     }
 }
