@@ -10,6 +10,8 @@ namespace Fuse.WebServer.Requests
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private const string _apiUrlBeginsWith = "/api";
+
         public Request ReadAndParseRequest(NetworkStream clientStream)
         {
             if (clientStream == null)
@@ -47,7 +49,7 @@ namespace Fuse.WebServer.Requests
                 method = ParseEnum<Method>(methodValue);
 
             Target target = Target.FILE;
-            if (!string.IsNullOrEmpty(url) && url.StartsWith("/api/"))
+            if (!string.IsNullOrEmpty(url) && url.StartsWith(_apiUrlBeginsWith))
             {
                 target = Target.API;
             }

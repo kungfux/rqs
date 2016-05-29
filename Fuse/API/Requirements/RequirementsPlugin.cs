@@ -32,21 +32,19 @@ namespace Fuse.API.Requirements
             //  PUT     Update if exists
             //  DELETE  Delete FR1
 
-            // We need here: Url, document type?, method?н
+            // We need here: Url, document type?, method?
             get { return "/api/v1/requirement/"; }
         }
 
+        // TODO: Isolate plugins from accessing web server objects
         public void ProcessRequest(NetworkStream clientStream, Request request)
         {
             Log.Debug("Request for API is received.");
 
-            // TODO: Not all text can be sent at once
-            string response = "<html><h1>Requirement Search</h1><p>Here is your requirement.</p></html>";
+            byte[] response = GetBytes("<html><h1>Requirement Search</h1><p>Here is your requirement.</p></html>");
 
             Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "text/html", response.Length);
-            clientStream.Write(GetBytes(response), 0, response.Length);
-
-            //throw new NotImplementedException();
+            clientStream.Write(response, 0, response.Length);
         }
 
         private byte[] GetBytes(string value)

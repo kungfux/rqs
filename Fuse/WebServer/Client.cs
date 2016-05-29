@@ -52,14 +52,9 @@ namespace Fuse.WebServer
                     ProcessTargetApi(request, plugins);
                     break;
                 default:
-                    ProcessAsNotImplemented();
+                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
                     break;
             }
-        }
-
-        private void ProcessAsNotImplemented()
-        {
-            Header.Instance.WriteHeader(_clientStream, HttpStatusCode.NotImplemented);
         }
 
         private void ProcessTargetFile(Request request)
@@ -76,7 +71,7 @@ namespace Fuse.WebServer
                     Header.Instance.SendOptionsHeader(_clientStream, HttpStatusCode.OK);
                     break;
                 default:
-                    ProcessAsNotImplemented();
+                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
                     break;
             }
         }
@@ -95,6 +90,7 @@ namespace Fuse.WebServer
                         }
                         catch (Exception e)
                         {
+                            // TODO: Send header???
                             Log.Error("Exception occurs in plugin.", e);
                         }
                         return;
@@ -103,7 +99,7 @@ namespace Fuse.WebServer
             }
 
             // If nobody can process the api request
-            Header.Instance.WriteHeader(_clientStream, HttpStatusCode.NotFound);
+            Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
         }
     }
 }
