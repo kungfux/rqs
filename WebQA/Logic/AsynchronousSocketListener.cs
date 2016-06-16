@@ -120,55 +120,60 @@ namespace WebQA.Logic
             StateObject state = (StateObject)ar.AsyncState;
             Socket handler = state.workSocket;
 
+            string clientIp = handler.RemoteEndPoint.ToString();
+            string clientName = Dns.GetHostEntry(
+                        IPAddress.Parse(handler.RemoteEndPoint.ToString().Substring(0, handler.RemoteEndPoint.ToString().IndexOf(":")))).HostName;
+
             Trace.Instance.Add(
-                string.Format("Client connected: {1} [{0}]", 
-                    handler.RemoteEndPoint.ToString(),
-                    Dns.GetHostEntry(
-                        IPAddress.Parse(handler.RemoteEndPoint.ToString().Substring(0,handler.RemoteEndPoint.ToString().IndexOf(":")))).HostName), 
-                Trace.Color.Yellow);
+                string.Format("Client connected: {1} [{0}]", clientIp, clientName,
+                Trace.Color.Yellow));
 
             // Read data from the client socket
             int bytesRead = handler.EndReceive(ar);
 
-            if (bytesRead > 0)
+            // Store the data received
+            state.receivedData.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
+
+            int space1 = state.receivedData.ToString().IndexOf(" ");
+            int space2 = 0;
+
+            if (state.receivedData.Length > 1)
             {
-                // There  might be more data, so store the data received so far
-                state.receivedData.Append(Encoding.UTF8.GetString(
-                    state.buffer, 0, bytesRead));
-
-                int space1 = state.receivedData.ToString().IndexOf(" ");
-                int space2 = state.receivedData.ToString().IndexOf(" ", space1 + 1);
-                state.url = state.receivedData.ToString().Substring(space1 + 2, space2 - space1 - 2);
-
-                Trace.Instance.Add(
-                    string.Format("URL: {0}", state.url), Trace.Color.Yellow);
-
-                if (state.url.StartsWith("favicon.ico"))
-                {
-
-                }
-                else
-                {
-                    // Call RQS instance to process request
-                    Send(handler, rqs.ProcessRequest(state.url).ToString());
-                }
-
-                //if (content.IndexOf("<EOF>") > -1)
-                //{
-                //    // All the data has been read from the 
-                //    // client. Display it on the console.
-                //    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
-                //        content.Length, content);
-                //    // Echo the data back to the client.
-                //    Send(handler, content);
-                //}
-                //else
-                //{
-                //    // Not all data received. Get more.
-                //    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                //    new AsyncCallback(ReadCallback), state);
-                //}
+                space2 = state.receivedData.ToString().IndexOf(" ", space1 + 1);
             }
+
+            if (space1 < 0 ||
+                state.receivedData.Length - space1 < 1 ||
+                space2 - space1 - 2 < 0)
+            {
+                // if empty request or has no requested data
+                Trace.Instance.Add("URL: Wrong request received", Trace.Color.Yellow);
+                Send(handler, rqs.ProcessRequest(state.url).ToString());
+                return;
+            }
+
+            state.url = state.receivedData.ToString().Substring(space1 + 2, space2 - space1 - 2);
+
+            //// Store the data received
+            //state.receivedData.Append(Encoding.UTF8.GetString(state.buffer, 0, bytesRead));
+
+            //string[] request = state.receivedData.ToString().Split(null);
+
+            //if (request.Length < 2 || string.IsNullOrEmpty(request[1]))
+            //{
+            //    // if empty request or has no requested data
+            //    Trace.Instance.Add("URL: Wrong or empty request received", Trace.Color.Yellow);
+            //    Send(handler, rqs.ProcessRequest(state.url).ToString());
+            //    return;
+            //}
+
+            //state.url = request[1];
+
+            Trace.Instance.Add(
+                string.Format("URL: {0}", state.url), Trace.Color.Yellow);
+
+            // Call RQS instance to process request
+            Send(handler, rqs.ProcessRequest(state.url).ToString());
         }
 
         private void Send(Socket handler, String data)
@@ -187,13 +192,6 @@ namespace WebQA.Logic
             // Begin sending the data to the remote device
             handler.BeginSend(byteData, 0, header.Length + data.Length, 0,
                 new AsyncCallback(SendCallback), handler);
-
-            //int sent = 0;
-            //while (sent < data.Length)
-            //{
-            //    handler.Send(StringToByte(data.Substring(sent, sent < data.Length ? 1024 : data.Length - sent)), SocketFlags.Truncated);
-            //    sent += 1024;
-            //}
         }
 
         private byte[] StringToByte(string str)
@@ -222,48 +220,5 @@ namespace WebQA.Logic
                 Trace.Instance.Add("EXCEPTION: " + e.ToString(), Trace.Color.Red);
             }
         }
-
-        //public string GetContent(string file_path)
-        //{
-        //    string ext = "";
-        //    int dot = file_path.LastIndexOf(".");
-        //    if (dot >= 0)
-        //        ext = file_path.Substring(dot, file_path.Length - dot).ToUpper();
-        //    if (Contents[ext] == null)
-        //        return "application/" + ext;
-        //    else
-        //        return (string)Contents[ext];
-        //}
-
-        //public void WriteHeaderToClient(string content_type, long length)
-        //{
-        //    string str = "HTTP/1.1 200 OK\nContent-type: " + content_type
-        //           + "\nContent-Encoding: 8bit\nContent-Length:" + length.ToString()
-        //           + "\n\n";
-        //    Client.GetStream().Write(Encoding.ASCII.GetBytes(str), 0, str.Length);
-        //}
-
-        //public void WriteToClient(string request)
-        //{
-        //    string file_path = GetPath(request);
-        //    if (file_path.IndexOf("..") >= 0 || !File.Exists(file_path))
-        //    {
-        //        Error_Message = "Source file not found on server side.\r\nStack trace: " + file_path + " not found.";
-        //        WriteHeaderToClient("text/plain", Error_Message.Length);
-        //        Client.GetStream().Write(Encoding.ASCII.GetBytes(Error_Message), 0, Error_Message.Length);
-        //        return;
-        //    }
-        //    FileStream file = File.Open(file_path, FileMode.Open);
-        //    WriteHeaderToClient(GetContent(file_path), file.Length);
-        //    byte[] buf = new byte[1024];
-        //    int len;
-        //    while ((len = file.Read(buf, 0, 1024)) != 0)
-        //        Client.GetStream().Write(buf, 0, len);
-        //    file.Close();
-        //    if (file_path.Contains("~tmp"))
-        //    {
-        //        File.Delete(file_path);
-        //    }
-        //}
     }
 }
