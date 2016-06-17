@@ -52,7 +52,7 @@ namespace Fuse.WebServer.Responses
                 httpStatusCode != HttpStatusCode.NotImplemented)
             {
                 Log.Fatal("OPTIONS header cannot be send for status " + (int)httpStatusCode);
-                throw new InvalidOperationException("OPTIONS header can be sent only in case status code equals to 200, 405 or 501");
+                throw new InvalidOperationException("OPTIONS header should not be sent for statuses 200, 405 or 501");
             }
 
             string header =

@@ -31,7 +31,7 @@ namespace Fuse.WebServer.Responses
 
             if (file.IndexOf("..") >= 0)
             {
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.BadRequest);
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
                 Log.Warn("Attempt to read up folder is detected.");
                 return;
             }

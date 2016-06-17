@@ -10,6 +10,7 @@ namespace Fuse.WebServer.Requests
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private const int _bufferSize = 4096;
         private const string _apiUrlBeginsWith = "/api";
 
         public Request ReadAndParseRequest(NetworkStream clientStream)
@@ -18,7 +19,7 @@ namespace Fuse.WebServer.Requests
                 throw new ArgumentNullException("clientStream");
 
             string request = string.Empty;
-            byte[] buffer = new byte[4096];
+            byte[] buffer = new byte[_bufferSize];
 
             int requestLength;
             while (clientStream.DataAvailable && 
@@ -30,7 +31,6 @@ namespace Fuse.WebServer.Requests
                 {
                     break;
                 }
-                // TODO: What if request length > 4 Kb?
             }
 
             Match requestMatch = Regex.Match(request, @"^(?<type>\w+)\s+(?<uri>[^\s\?]+)[^\s]*\s+HTTP/.*|");
