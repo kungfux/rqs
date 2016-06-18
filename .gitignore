@@ -1,8 +1,9 @@
 # Ignore Visual Studio user files
-Fuse/bin/*
-Fuse/obj/*
 *.suo
 *.user
 *.pyc
-Fuse/packages
+.vs
+bin
+obj
+packages
 WebQA/*
