@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuseControlSystem", "FuseControlSystem\FuseControlSystem.csproj", "{A4280289-4092-4573-873D-6952A9C95EEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB74FBBA-1C33-43E8-B900-FFCA99C86FB3} = {BB74FBBA-1C33-43E8-B900-FFCA99C86FB3}
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuseWebServer", "FuseWebServer\FuseWebServer.csproj", "{BB74FBBA-1C33-43E8-B900-FFCA99C86FB3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9B714D55-6362-4CC4-8136-DB30C0E03127}"
@@ -10,11 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9B714D
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuseControlSystem", "FuseControlSystem\FuseControlSystem.csproj", "{A4280289-4092-4573-873D-6952A9C95EEE}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BB74FBBA-1C33-43E8-B900-FFCA99C86FB3} = {BB74FBBA-1C33-43E8-B900-FFCA99C86FB3}
 	EndProjectSection
 EndProject
 Global
