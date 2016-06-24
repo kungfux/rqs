@@ -2,8 +2,10 @@
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,11 +21,12 @@ namespace FuseWebServer.WebServer
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
 
-        private readonly List<IPlugin> plugins = new List<IPlugin>();
+        private readonly string PLUGINS_LOCATION = ".";
+        private readonly ICollection<IPlugin> plugins;
 
         public Server()
         {
-            plugins.Add(new FuseWebServer.API.Requirements.RequirementsPlugin());
+            plugins = LoadPlugins();
 
             try
             {
@@ -133,11 +136,58 @@ namespace FuseWebServer.WebServer
             Task.Run(() => { new Client(tcpClient).ProcessRequest(plugins); });
         }
 
+        public event EventHandler<Status> StatusChanged;
         private void NotifyStatusChanged(Status status)
         {
             StatusChanged?.Invoke(this, status);
         }
 
-        public event EventHandler<Status> StatusChanged;
+        private ICollection<IPlugin> LoadPlugins()
+        {
+            string[] dllFileNames = null;
+            dllFileNames = Directory.GetFiles(PLUGINS_LOCATION, "*.dll");
+
+            ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+            foreach (string dllFile in dllFileNames)
+            {
+                AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
+                Assembly assembly = Assembly.Load(an);
+                assemblies.Add(assembly);
+            }
+
+            Type pluginType = typeof(IPlugin);
+            ICollection<Type> pluginTypes = new List<Type>();
+            foreach (Assembly assembly in assemblies)
+            {
+                if (assembly != null)
+                {
+                    Type[] types = assembly.GetTypes();
+
+                    foreach (Type type in types)
+                    {
+                        if (type.IsInterface || type.IsAbstract)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (type.GetInterface(pluginType.FullName) != null)
+                            {
+                                pluginTypes.Add(type);
+                            }
+                        }
+                    }
+                }
+            }
+
+            ICollection<IPlugin> plugins = new List<IPlugin>(pluginTypes.Count);
+            foreach (Type type in pluginTypes)
+            {
+                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                plugins.Add(plugin);
+            }
+
+            return plugins;
+        } 
     }
 }

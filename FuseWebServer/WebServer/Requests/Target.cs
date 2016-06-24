@@ -2,7 +2,7 @@
 
 namespace FuseWebServer.WebServer.Requests
 {
-    internal enum Target
+    public enum Target
     {
         FILE,
         API

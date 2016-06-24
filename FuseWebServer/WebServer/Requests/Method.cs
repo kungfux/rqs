@@ -2,7 +2,7 @@
 
 namespace FuseWebServer.WebServer.Requests
 {
-    internal enum Method
+    public enum Method
     {
         CONNECT,
         DELETE,

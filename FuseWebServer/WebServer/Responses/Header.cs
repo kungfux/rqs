@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FuseWebServer.WebServer.Responses
 {
-    internal class Header
+    public class Header
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -2,7 +2,7 @@
 
 namespace FuseWebServer.WebServer.Requests
 {
-    internal class Request
+    public class Request
     {
         private int? _lenght;
         public int? Length
@@ -61,7 +61,7 @@ namespace FuseWebServer.WebServer.Requests
 
         }
 
-        public Request(int? length, string url, Method method, Target target)
+        internal Request(int? length, string url, Method method, Target target)
         {
             Length = length;
             Url = url;

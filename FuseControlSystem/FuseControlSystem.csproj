@@ -125,6 +125,10 @@
       <Project>{bb74fbba-1c33-43e8-b900-ffca99c86fb3}</Project>
       <Name>FuseWebServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RqsPlugin\RqsPlugin.csproj">
+      <Project>{5fd17156-8840-431a-baaf-2f053f0b9519}</Project>
+      <Name>RqsPlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

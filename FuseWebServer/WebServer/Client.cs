@@ -25,7 +25,7 @@ namespace FuseWebServer.WebServer
             _clientStream = _client.GetStream();
         }
 
-        public void ProcessRequest(List<IPlugin> plugins)
+        public void ProcessRequest(ICollection<IPlugin> plugins)
         {
             Request request = parser.ReadAndParseRequest(_clientStream);
 
@@ -41,7 +41,7 @@ namespace FuseWebServer.WebServer
             _client.Close();
         }
 
-        private void ProcessByTarget(Request request, List<IPlugin> plugins)
+        private void ProcessByTarget(Request request, ICollection<IPlugin> plugins)
         {
             switch(request.Target)
             {
@@ -77,7 +77,7 @@ namespace FuseWebServer.WebServer
             }
         }
 
-        private void ProcessTargetApi(Request request, List<IPlugin> plugins)
+        private void ProcessTargetApi(Request request, ICollection<IPlugin> plugins)
         {
             if (plugins != null)
             {

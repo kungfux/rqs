@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -67,10 +68,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Requirements\RequirementsPlugin.cs" />
+    <Compile Include="WebServer\API\IPlugin.cs" />
     <Compile Include="WebServer\Client.cs" />
     <Compile Include="WebServer\Config.cs" />
-    <Compile Include="WebServer\API\IPlugin.cs" />
     <Compile Include="WebServer\Requests\Request.cs" />
     <Compile Include="WebServer\Requests\RequestParser.cs" />
     <Compile Include="WebServer\Requests\Target.cs" />

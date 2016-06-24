@@ -1,13 +1,14 @@
-﻿using System;
-using log4net;
-using System.Net.Sockets;
-using FuseWebServer.WebServer.Responses;
-using FuseWebServer.WebServer.API;
+﻿using FuseWebServer.WebServer.API;
 using FuseWebServer.WebServer.Requests;
+using FuseWebServer.WebServer.Responses;
+using log4net;
+using System;
+using System.Net.Sockets;
+using System.Text;
 
-namespace FuseWebServer.API.Requirements
+namespace RqsPlugin
 {
-    internal class RequirementsPlugin : IPlugin
+    public class Plugin : IPlugin
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -42,7 +43,7 @@ namespace FuseWebServer.API.Requirements
         {
             Log.Debug("Request for API is received.");
 
-            byte[] response = GetBytes("<html><h1>Requirement Search</h1><p>Here is your requirement.</p></html>");
+            byte[] response = Encoding.UTF8.GetBytes("<html><h1>Requirement Search</h1><p>Here is your requirement.</p></html>");
 
             Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "text/html", response.Length);
             clientStream.Write(response, 0, response.Length);
