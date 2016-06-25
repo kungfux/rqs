@@ -1,6 +1,6 @@
-﻿using FuseWebServer.WebServer.API;
-using FuseWebServer.WebServer.Requests;
-using FuseWebServer.WebServer.Responses;
+﻿using FuseWebServer.API;
+using FuseWebServer.Requests;
+using FuseWebServer.Responses;
 using log4net;
 using System;
 using System.Net.Sockets;

@@ -1,8 +1,8 @@
-﻿using FuseWebServer.WebServer.Requests;
+﻿using FuseWebServer.Requests;
 using System;
 using System.Net.Sockets;
 
-namespace FuseWebServer.WebServer.API
+namespace FuseWebServer.API
 {
     public interface IPlugin
     {

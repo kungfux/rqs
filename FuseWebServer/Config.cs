@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FuseWebServer.WebServer
+namespace FuseWebServer
 {
     public class Config
     {

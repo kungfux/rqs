@@ -9,7 +9,6 @@ namespace FuseControlSystem
     /// </summary>
     public partial class App : Application
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public App()
         {

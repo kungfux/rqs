@@ -25,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -70,17 +70,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WebServer\API\IPlugin.cs" />
-    <Compile Include="WebServer\Client.cs" />
-    <Compile Include="WebServer\Config.cs" />
-    <Compile Include="WebServer\Requests\Request.cs" />
-    <Compile Include="WebServer\Requests\RequestParser.cs" />
-    <Compile Include="WebServer\Requests\Target.cs" />
-    <Compile Include="WebServer\Requests\Method.cs" />
-    <Compile Include="WebServer\Responses\FileProcessor.cs" />
-    <Compile Include="WebServer\Responses\Header.cs" />
-    <Compile Include="WebServer\Server.cs" />
-    <Compile Include="WebServer\Status.cs" />
+    <Compile Include="API\IPlugin.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Requests\Request.cs" />
+    <Compile Include="Requests\RequestParser.cs" />
+    <Compile Include="Requests\Target.cs" />
+    <Compile Include="Requests\Method.cs" />
+    <Compile Include="Responses\FileProcessor.cs" />
+    <Compile Include="Responses\Header.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Status.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

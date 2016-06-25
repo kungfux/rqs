@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace FuseWebServer.WebServer.Responses
+namespace FuseWebServer.Responses
 {
     public class Header
     {

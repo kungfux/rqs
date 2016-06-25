@@ -1,13 +1,13 @@
-﻿using FuseWebServer.WebServer.API;
-using FuseWebServer.WebServer.Requests;
-using FuseWebServer.WebServer.Responses;
+﻿using FuseWebServer.API;
+using FuseWebServer.Requests;
+using FuseWebServer.Responses;
 using log4net;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace FuseWebServer.WebServer
+namespace FuseWebServer
 {
     internal class Client
     {

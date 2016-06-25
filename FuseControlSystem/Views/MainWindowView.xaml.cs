@@ -1,5 +1,5 @@
 ﻿using FuseControlSystem.Models;
-using FuseWebServer.WebServer;
+using FuseWebServer;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using static FuseWebServer.Status;
 
 namespace FuseControlSystem.Views
 {
@@ -132,9 +133,9 @@ namespace FuseControlSystem.Views
             e.Cancel = !exit_Confirm();
         }
 
-        void server_StatusChanged(object sender, Status e)
+        void server_StatusChanged(object sender, ServerStatus e)
         {
-            IsServerRunning = e == Status.Started;
+            IsServerRunning = e == ServerStatus.Started;
         }
 
         #region

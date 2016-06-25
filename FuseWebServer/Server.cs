@@ -1,4 +1,4 @@
-﻿using FuseWebServer.WebServer.API;
+﻿using FuseWebServer.API;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,9 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using static FuseWebServer.Status;
 
-namespace FuseWebServer.WebServer
+namespace FuseWebServer
 {
     public class Server : IDisposable
     {
@@ -78,7 +79,7 @@ namespace FuseWebServer.WebServer
                 throw;
             }
 
-            NotifyStatusChanged(Status.Started);
+            NotifyStatusChanged(ServerStatus.Started);
 
             while (!_cts.IsCancellationRequested)
             {
@@ -128,7 +129,7 @@ namespace FuseWebServer.WebServer
             _listener.Stop();
             Log.Debug("Listener is stopped.");
 
-            NotifyStatusChanged(Status.Stopped);
+            NotifyStatusChanged(ServerStatus.Stopped);
         }
 
         private void ProcessClient(TcpClient tcpClient)
@@ -136,8 +137,8 @@ namespace FuseWebServer.WebServer
             Task.Run(() => { new Client(tcpClient).ProcessRequest(plugins); });
         }
 
-        public event EventHandler<Status> StatusChanged;
-        private void NotifyStatusChanged(Status status)
+        public event EventHandler<ServerStatus> StatusChanged;
+        private void NotifyStatusChanged(ServerStatus status)
         {
             StatusChanged?.Invoke(this, status);
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FuseWebServer.WebServer.Requests
+namespace FuseWebServer.Requests
 {
     public class Request
     {

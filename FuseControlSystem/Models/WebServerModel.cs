@@ -1,4 +1,4 @@
-﻿using FuseWebServer.WebServer;
+﻿using FuseWebServer;
 using System;
 
 namespace FuseControlSystem.Models
