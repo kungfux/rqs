@@ -1,0 +1,73 @@
+@themeDarkColor: #039be5;
+@themeLightColor: #eee;
+@linkColor: #fff;
+@headerHeight: 50px;
+@footerHeight: 30px;
+@tabSize: 30px;
+
+body {
+	background-color: @themeLightColor;
+	margin: 0;
+	font-family: Slab,Georgia,serif;
+	font-size: 14px;
+}
+
+header {
+	background-color: @themeDarkColor;
+	height: @headerHeight;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+}
+
+article {
+	margin: @headerHeight + 10 10px @footerHeight;
+}
+
+footer {
+	background-color: @themeDarkColor;
+	height: @footerHeight;
+}
+
+footer p {
+	line-height: @footerHeight;
+}
+
+a {
+	text-decoration: none;
+	color: @linkColor;
+}
+
+.maxWidth {
+	width: 100%;
+}
+
+.logo {
+	width: 48px;
+	height: 48px;
+}
+
+.doSearch {
+	width: 20px;
+	height: 20px;
+}
+
+.headerDiv {
+	height: @headerHeight;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.tab {
+	margin-left: @tabSize;
+}
+
+.search {
+	width: 300px;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	outline: none;
+    display: block;
+	background: transparent;
+	color: #fff;
+}
