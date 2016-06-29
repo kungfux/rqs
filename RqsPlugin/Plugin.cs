@@ -5,6 +5,9 @@ using log4net;
 using System;
 using System.Net.Sockets;
 using System.Text;
+using RqsPlugin.Entity;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace RqsPlugin
 {
@@ -43,9 +46,23 @@ namespace RqsPlugin
         {
             Log.Debug("Request for API is received.");
 
-            byte[] response = Encoding.UTF8.GetBytes("<html><h1>Requirement Search</h1><p>Here is your requirement.</p></html>");
+            ICollection<Requirement> reqs = new List<Requirement>()
+            {
+                new Requirement()
+                {
+                     ID = "FR1"
+                },
+                new Requirement()
+                {
+                    ID = "FR2"
+                }
+            };
 
-            Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "text/html", response.Length);
+            string json = GetJSON(reqs);
+
+            byte[] response = Encoding.UTF8.GetBytes(json);
+
+            Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "application/json", response.Length);
             clientStream.Write(response, 0, response.Length);
         }
 
@@ -54,6 +71,13 @@ namespace RqsPlugin
             byte[] bytes = new byte[value.Length * sizeof(char)];
             Buffer.BlockCopy(value.ToCharArray(), 0, bytes, 0, bytes.Length);
             return bytes;
+        }
+
+        private string GetJSON(ICollection<Requirement> requirements)
+        {
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string json = serializer.Serialize(requirements);
+            return json;
         }
     }
 }
