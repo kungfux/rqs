@@ -1,5 +1,4 @@
 ﻿using FuseControlSystem.Models;
-using log4net;
 using System.Windows;
 
 namespace FuseControlSystem
