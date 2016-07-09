@@ -21,55 +21,55 @@
     <Window.Resources>
         <!--<converters:InverseBooleanConverter x:Key="InverseBoolean" />-->
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
-        <DoubleAnimation x:Key="daOpacity" Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.5"/>
-        <Storyboard BeginTime="0" x:Key="sbOpacity" TargetProperty="Opacity">
-            <StaticResourceExtension ResourceKey="daOpacity"/>
+        <DoubleAnimation x:Key="DaOpacity" Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.5"/>
+        <Storyboard BeginTime="0" x:Key="SbOpacity" TargetProperty="Opacity">
+            <StaticResourceExtension ResourceKey="DaOpacity"/>
         </Storyboard>
     </Window.Resources>
     
     <DockPanel>
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
-            <MenuItem Header="{StaticResource menuFile}">
-                <MenuItem Header="{StaticResource menuStart}" Command="{x:Static commands:MainWindowView.StartServerCommand}"/>
-                <MenuItem Header="{StaticResource menuStop}" Command="{x:Static commands:MainWindowView.StopServerCommand}"/>
-                <MenuItem Header="{StaticResource menuRestart}" Command="{x:Static commands:MainWindowView.RestartServerCommand}"/>
+            <MenuItem Header="{StaticResource MenuFile}">
+                <MenuItem Header="{StaticResource MenuStart}" Command="{x:Static commands:MainWindowView.StartServerCommand}"/>
+                <MenuItem Header="{StaticResource MenuStop}" Command="{x:Static commands:MainWindowView.StopServerCommand}"/>
+                <MenuItem Header="{StaticResource MenuRestart}" Command="{x:Static commands:MainWindowView.RestartServerCommand}"/>
                 <Separator />
-                <MenuItem Header="{StaticResource menuExit}" Command="{x:Static commands:MainWindowView.ExitCommand}"/>
+                <MenuItem Header="{StaticResource MenuExit}" Command="{x:Static commands:MainWindowView.ExitCommand}"/>
             </MenuItem>
-            <MenuItem Header="{StaticResource menuEdit}">
-                <MenuItem Header="{StaticResource menuEditPermissions}" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource MenuEdit}">
+                <MenuItem Header="{StaticResource MenuEditPermissions}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="{StaticResource menuPreferences}" Command="{x:Static commands:MainWindowView.PreferencesCommand}"/>
+                <MenuItem Header="{StaticResource MenuPreferences}" Command="{x:Static commands:MainWindowView.PreferencesCommand}"/>
             </MenuItem>
-            <MenuItem Header="{StaticResource menuView}">
-                <MenuItem Header="{StaticResource menuViewRequests}" Visibility="Collapsed"/>
-                <MenuItem Header="{StaticResource menuViewUploads}" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource MenuView}">
+                <MenuItem Header="{StaticResource MenuViewRequests}" Visibility="Collapsed"/>
+                <MenuItem Header="{StaticResource MenuViewUploads}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="{StaticResource menuViewLogs}" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
+                <MenuItem Header="{StaticResource MenuViewLogs}" Command="{x:Static commands:MainWindowView.ViewLogsCommand}"/>
             </MenuItem>
-            <MenuItem Header="{StaticResource menuHelp}">
-                <MenuItem Header="{StaticResource menuHelp}" Visibility="Collapsed"/>
+            <MenuItem Header="{StaticResource MenuHelp}">
+                <MenuItem Header="{StaticResource MenuHelp}" Visibility="Collapsed"/>
                 <Separator Visibility="Collapsed"/>
-                <MenuItem Header="{StaticResource menuHelpGitHub}" Command="{x:Static commands:MainWindowView.GitHubCommand}"/>
-                <MenuItem Header="{StaticResource menuHelpAbout}" Visibility="Collapsed"/>
+                <MenuItem Header="{StaticResource MenuHelpGitHub}" Command="{x:Static commands:MainWindowView.GitHubCommand}"/>
+                <MenuItem Header="{StaticResource MenuHelpAbout}" Visibility="Collapsed"/>
             </MenuItem>
         </Menu>
         <Border DockPanel.Dock="Top"
                 CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2">
-            <Label Content="{StaticResource notificationUnderDevelopment}" />
+            <Label Content="{StaticResource NotificationUnderDevelopment}" />
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Border.Loaded">
-                    <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
+                    <BeginStoryboard Storyboard="{StaticResource SbOpacity}"/>
                 </EventTrigger>
             </Border.Triggers>
         </Border>
-        <Border DockPanel.Dock="Bottom" Name="brdStatus"
+        <Border DockPanel.Dock="Bottom" Name="BrdStatus"
                 CornerRadius="10" BorderThickness="2" BorderBrush="LightGreen" Background="LightGreen" Margin="2"
                 Visibility="{Binding Path=IsServerRunning, Converter={StaticResource BooleanToVisibility}, Mode=OneWay, NotifyOnTargetUpdated=True}">
-            <Label Content="{StaticResource notificationYouAreOnline}" />
+            <Label Content="{StaticResource NotificationYouAreOnline}" />
             <Border.Triggers>
                 <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                    <BeginStoryboard Storyboard="{StaticResource sbOpacity}"/>
+                    <BeginStoryboard Storyboard="{StaticResource SbOpacity}"/>
                 </EventTrigger>
             </Border.Triggers>
         </Border>

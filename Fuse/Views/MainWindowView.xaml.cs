@@ -1,9 +1,6 @@
-﻿using WebServer;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Fuse.Models;
@@ -14,13 +11,13 @@ namespace Fuse.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindowView : Window, INotifyPropertyChanged
+    public partial class MainWindowView : INotifyPropertyChanged
     {
         public MainWindowView()
         {
             InitializeComponent();
 
-            brdStatus.DataContext = this;
+            BrdStatus.DataContext = this;
         }
 
         #region Commands
@@ -79,7 +76,7 @@ namespace Fuse.Views
             else
             {
                 MessageBoxResult exitDialogResult =
-                    MessageBox.Show(LanguageDictionary.Instance.FindString("messageWantToStopAndExit"), this.Title,
+                    MessageBox.Show(LanguageDictionary.Instance.FindString("MessageWantToStopAndExit"), Title,
                     MessageBoxButton.YesNo, MessageBoxImage.Asterisk, MessageBoxResult.No);
                 if (exitDialogResult == MessageBoxResult.Yes)
                 {
@@ -125,10 +122,10 @@ namespace Fuse.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            WebServerModel.Instance.server.StatusChanged += server_StatusChanged;
+            WebServerModel.Instance.Server.StatusChanged += server_StatusChanged;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             e.Cancel = !exit_Confirm();
         }

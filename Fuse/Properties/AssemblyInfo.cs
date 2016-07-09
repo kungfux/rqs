@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -8,7 +6,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Fuse")]
-[assembly: AssemblyDescription("Control center of Fuse web server and services")]
+[assembly: AssemblyDescription("Control center of Fuse web Server and services")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Alexander Fuks")]
 [assembly: AssemblyProduct("Fuse")]

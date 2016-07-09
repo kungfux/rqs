@@ -16,7 +16,7 @@ namespace Fuse.Converters
                 isVisible = !isVisible;
             }
 
-            return (isVisible ? Visibility.Visible : Visibility.Collapsed);
+            return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object pValue, Type pTargetType, object pParam, System.Globalization.CultureInfo pCulture)
@@ -59,7 +59,7 @@ namespace Fuse.Converters
 
         private static bool IsVisibilityInverted(object pParam)
         {
-            return (GetVisibilityMode(pParam) == Visibility.Collapsed);
+            return GetVisibilityMode(pParam) == Visibility.Collapsed;
         }
     }
 }

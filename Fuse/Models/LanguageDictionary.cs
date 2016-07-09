@@ -1,21 +1,19 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
+using log4net;
 
 namespace Fuse.Models
 {
     internal class LanguageDictionary
     {
-        private static readonly Lazy<LanguageDictionary> _instance = new Lazy<LanguageDictionary>(() => new LanguageDictionary());
-        public static LanguageDictionary Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public LanguageDictionary()
+        private static LanguageDictionary _instance;
+        public static LanguageDictionary Instance => _instance ?? (_instance = new LanguageDictionary());
+
+        private LanguageDictionary()
         {
             ResourceDictionary dict = new ResourceDictionary();
             switch (Thread.CurrentThread.CurrentCulture.ToString())
@@ -24,19 +22,23 @@ namespace Fuse.Models
                     dict.Source = new Uri("..\\Resources\\StringResources.en-US.xaml", UriKind.Relative);
                     break;
             }
-            App.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Add(dict);
         }
 
         public string FindString(string key)
         {
             try
             {
-                return App.Current.FindResource(key).ToString();
+                var findResource = Application.Current.FindResource(key);
+                if (findResource != null)
+                    return findResource.ToString();
             }
-            catch(ResourceReferenceKeyNotFoundException)
+            catch(ResourceReferenceKeyNotFoundException ex)
             {
-                return "No translation available!";
+                Log.Error($"Resource string was not found by key: {key}", ex);
+                return key;
             }
+            return key;
         }
     }
 }

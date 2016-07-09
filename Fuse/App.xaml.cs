@@ -6,7 +6,7 @@ namespace Fuse
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
 
         public App()
@@ -19,7 +19,7 @@ namespace Fuse
             //  Warn -  to log not critical situations not handled by implementation
             log4net.Config.XmlConfigurator.Configure();
 
-            this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
             LanguageDictionary.Instance.FindString("Init LanguageDictionary");
         }
     }

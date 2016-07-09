@@ -2,22 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <!-- MainWindowView -->
-    <system:String x:Key="menuFile">_File</system:String>
-    <system:String x:Key="menuStart">_Start</system:String>
-    <system:String x:Key="menuStop">S_top</system:String>
-    <system:String x:Key="menuRestart">_Restart</system:String>
-    <system:String x:Key="menuExit">_Exit</system:String>
-    <system:String x:Key="menuEdit">_Edit</system:String>
-    <system:String x:Key="menuEditPermissions">Permi_ssions</system:String>
-    <system:String x:Key="menuPreferences">_Preferences</system:String>
-    <system:String x:Key="menuView">_View</system:String>
-    <system:String x:Key="menuViewRequests">_Requests</system:String>
-    <system:String x:Key="menuViewUploads">_Uploads</system:String>
-    <system:String x:Key="menuViewLogs">_Logs</system:String>
-    <system:String x:Key="menuHelp">_Help</system:String>
-    <system:String x:Key="menuHelpGitHub">_GitHub</system:String>
-    <system:String x:Key="menuHelpAbout">_About</system:String>
-    <system:String x:Key="notificationUnderDevelopment">Notification: The program is still under development!</system:String>
-    <system:String x:Key="notificationYouAreOnline">You're online!</system:String>
-    <system:String x:Key="messageWantToStopAndExit">Do you want to stop the server and exit?</system:String>
+    <system:String x:Key="MenuFile">_File</system:String>
+    <system:String x:Key="MenuStart">_Start</system:String>
+    <system:String x:Key="MenuStop">S_top</system:String>
+    <system:String x:Key="MenuRestart">_Restart</system:String>
+    <system:String x:Key="MenuExit">_Exit</system:String>
+    <system:String x:Key="MenuEdit">_Edit</system:String>
+    <system:String x:Key="MenuEditPermissions">Permi_ssions</system:String>
+    <system:String x:Key="MenuPreferences">_Preferences</system:String>
+    <system:String x:Key="MenuView">_View</system:String>
+    <system:String x:Key="MenuViewRequests">_Requests</system:String>
+    <system:String x:Key="MenuViewUploads">_Uploads</system:String>
+    <system:String x:Key="MenuViewLogs">_Logs</system:String>
+    <system:String x:Key="MenuHelp">_Help</system:String>
+    <system:String x:Key="MenuHelpGitHub">_GitHub</system:String>
+    <system:String x:Key="MenuHelpAbout">_About</system:String>
+    <system:String x:Key="NotificationUnderDevelopment">Notification: The program is still under development!</system:String>
+    <system:String x:Key="NotificationYouAreOnline">You're online!</system:String>
+    <system:String x:Key="MessageWantToStopAndExit">Do you want to stop the Server and exit?</system:String>
 </ResourceDictionary>

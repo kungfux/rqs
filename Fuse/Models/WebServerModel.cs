@@ -5,31 +5,26 @@ namespace Fuse.Models
 {
     internal class WebServerModel : IDisposable
     {
-        private static readonly Lazy<WebServerModel> _instance = new Lazy<WebServerModel>(() => new WebServerModel());
-        public static WebServerModel Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        private static WebServerModel _instance;
+        public static WebServerModel Instance => _instance ?? (_instance = new WebServerModel());
+        private WebServerModel() { }
 
-        public readonly Server server = new Server();
+        public readonly Server Server = new Server();
 
         public void Dispose()
         {
-            server.Dispose();
+            Server.Dispose();
         }
 
         public void StartInstance()
         {
             ReadConfig();
-            server.Start();
+            Server.Start();
         }
 
         public void StopInstance()
         {
-            server.Stop();
+            Server.Stop();
         }
 
         public void ReadConfig()
