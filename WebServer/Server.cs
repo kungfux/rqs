@@ -14,25 +14,25 @@ namespace WebServer
 {
     public class Server : IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static readonly IPAddress _ipAddress = IPAddress.Any;
-        private readonly int PORT = Config.Instance.Port;
+        private static readonly IPAddress IpAddress = IPAddress.Any;
+        private readonly int _port = Config.Instance.Port;
 
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
 
-        private readonly string PLUGINS_LOCATION = ".";
-        private readonly ICollection<IPlugin> plugins;
+        private readonly string EXTENSIONS_LOCATION = ".";
+        private readonly ICollection<IExtension> _extensions;
 
         public Server()
         {
-            plugins = LoadPlugins();
+            _extensions = LoadExtensions();
 
             try
             {
-                _listener = new TcpListener(_ipAddress, PORT);
-                Log.Debug(string.Format("Listener initialized on {0}:{1}.", _ipAddress, PORT));
+                _listener = new TcpListener(IpAddress, _port);
+                Log.Debug($"Listener initialized on {IpAddress}:{_port}.");
             }
             catch (Exception ex)
             {
@@ -53,16 +53,13 @@ namespace WebServer
 
         public void Stop()
         {
-            if (_cts != null)
-                _cts.Cancel();
+            _cts?.Cancel();
         }
 
         public void Dispose()
         {
-            if (_cts != null)
-                _cts.Dispose();
-            if (_listener != null)
-                _listener.Stop();
+            _cts?.Dispose();
+            _listener?.Stop();
         }
 
         private async void StartClientsAwaiting()
@@ -95,11 +92,7 @@ namespace WebServer
                     // client is awaiting
                     var tcpClient = await _listener.AcceptTcpClientAsync();
 
-                    Log.Info(string.Format("Client {0} ({1}) is connected.", 
-                        tcpClient.Client.RemoteEndPoint,
-                        Dns.GetHostEntry(
-                            IPAddress.Parse(tcpClient.Client.RemoteEndPoint.ToString().
-                            Substring(0, tcpClient.Client.RemoteEndPoint.ToString().IndexOf(":")))).HostName));
+                    Log.Info($"Client {tcpClient.Client.RemoteEndPoint} ({GetResolvedClientName(tcpClient)}) is connected.");
 
                     ProcessClient(tcpClient);
                 }
@@ -112,17 +105,14 @@ namespace WebServer
                         Log.Debug("Listener stopped as requested.");
                         break;
                     }
-                    else if (e.SocketErrorCode == SocketError.ConnectionReset)
+                    if (e.SocketErrorCode == SocketError.ConnectionReset)
                     {
                         // remote host breaks the connection
                         Log.Debug("Connection was reset by client.");
                         continue;
                     }
-                    else
-                    {
-                        Log.Fatal("Exception occurs while accepting the client.", e);
-                        throw;
-                    }
+                    Log.Fatal("Exception occurs while accepting the client.", e);
+                    throw;
                 }
             }
 
@@ -134,7 +124,7 @@ namespace WebServer
 
         private void ProcessClient(TcpClient tcpClient)
         {
-            Task.Run(() => { new Client(tcpClient).ProcessRequest(plugins); });
+            Task.Run(() => { new Client(tcpClient).ProcessRequest(_extensions); });
         }
 
         public event EventHandler<ServerStatus> StatusChanged;
@@ -143,10 +133,16 @@ namespace WebServer
             StatusChanged?.Invoke(this, status);
         }
 
-        private ICollection<IPlugin> LoadPlugins()
+        private string GetResolvedClientName(TcpClient client)
         {
-            string[] dllFileNames = null;
-            dllFileNames = Directory.GetFiles(PLUGINS_LOCATION, "*.dll");
+            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            IPAddress ipAddress = endPoint.Address;
+            return Dns.GetHostEntry(ipAddress).HostName;
+        }
+
+        private ICollection<IExtension> LoadExtensions()
+        {
+            var dllFileNames = Directory.GetFiles(EXTENSIONS_LOCATION, "*.dll");
 
             ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
             foreach (string dllFile in dllFileNames)
@@ -156,8 +152,8 @@ namespace WebServer
                 assemblies.Add(assembly);
             }
 
-            Type pluginType = typeof(IPlugin);
-            ICollection<Type> pluginTypes = new List<Type>();
+            Type extensionType = typeof(IExtension);
+            ICollection<Type> extensionTypes = new List<Type>();
             foreach (Assembly assembly in assemblies)
             {
                 if (assembly != null)
@@ -170,25 +166,22 @@ namespace WebServer
                         {
                             continue;
                         }
-                        else
+                        if (type.GetInterface(extensionType.FullName) != null)
                         {
-                            if (type.GetInterface(pluginType.FullName) != null)
-                            {
-                                pluginTypes.Add(type);
-                            }
+                            extensionTypes.Add(type);
                         }
                     }
                 }
             }
 
-            ICollection<IPlugin> plugins = new List<IPlugin>(pluginTypes.Count);
-            foreach (Type type in pluginTypes)
+            ICollection<IExtension> extensions = new List<IExtension>(extensionTypes.Count);
+            foreach (Type type in extensionTypes)
             {
-                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                plugins.Add(plugin);
+                IExtension extension = (IExtension)Activator.CreateInstance(type);
+                extensions.Add(extension);
             }
 
-            return plugins;
+            return extensions;
         } 
     }
 }

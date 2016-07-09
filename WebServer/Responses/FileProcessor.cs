@@ -10,26 +10,21 @@ namespace WebServer.Responses
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static readonly Lazy<FileProcessor> _instance = new Lazy<FileProcessor>(() => new FileProcessor());
-        public static FileProcessor Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        private static FileProcessor _instance;
+        public static FileProcessor Instance => _instance ?? (_instance = new FileProcessor());
+        private FileProcessor() { }
 
-        private readonly string ROOT_PATH = Config.Instance.RootPath;
-        private readonly string INDEX_FILE = Config.Instance.IndexFile;
+        private readonly string _rootPath = Config.Instance.RootPath;
+        private readonly string _indexFile = Config.Instance.IndexFile;
 
-        private static readonly object fileReadLock = new object();
+        private static readonly object FileReadLock = new object();
         private static FileStream _fileStream;
 
         public void WriteFile(NetworkStream clientStream, string file, bool sendOnlyHeader = false)
         {
-            Log.Debug(string.Format("File is requested: {0}", file));
+            Log.Debug($"File is requested: {file}");
 
-            if (file.IndexOf("..") >= 0)
+            if (file.IndexOf("..", StringComparison.Ordinal) >= 0)
             {
                 Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
                 Log.Warn("Attempt to read up folder is detected.");
@@ -37,14 +32,14 @@ namespace WebServer.Responses
             }
             else if (file.EndsWith("/"))
             {
-                file += INDEX_FILE;
+                file += _indexFile;
             }
 
-            file = ROOT_PATH + "/" + file;
+            file = _rootPath + "/" + file;
 
             if (!File.Exists(file))
             {
-                Log.Info(string.Format("Requested file was not found: {0}", file));
+                Log.Info($"Requested file was not found: {file}");
                 Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
                 return;
             }
@@ -52,12 +47,11 @@ namespace WebServer.Responses
             string fileExtension = file.Substring(file.LastIndexOf('.'));
             string contentType = GetContentTypeByExtension(fileExtension);
 
-            int responceLength;
             byte[] buffer = new byte[1024];
 
             try
             {
-                lock (fileReadLock)
+                lock (FileReadLock)
                 {
                     _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
 
@@ -68,7 +62,7 @@ namespace WebServer.Responses
                     {
                         while (_fileStream.Position < _fileStream.Length)
                         {
-                            responceLength = _fileStream.Read(buffer, 0, buffer.Length);
+                            var responceLength = _fileStream.Read(buffer, 0, buffer.Length);
                             clientStream.Write(buffer, 0, responceLength);
                         }
                     }
@@ -78,12 +72,12 @@ namespace WebServer.Responses
             {
                 if (e is FileNotFoundException || e is DirectoryNotFoundException)
                 {
-                    Log.Error(string.Format("Requested file or folder was not found: {0}", file), e);
+                    Log.Error($"Requested file or folder was not found: {file}", e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
                 }
                 else
                 {
-                    Log.Fatal(string.Format("Requested file was not found: {0}", file), e);
+                    Log.Fatal($"Requested file was not found: {file}", e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
                 }
             }

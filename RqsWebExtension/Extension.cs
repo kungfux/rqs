@@ -11,7 +11,7 @@ using WebServer.Responses;
 
 namespace RqsWebExtension
 {
-    public class Plugin : IPlugin
+    public class Extension : IExtension
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -22,29 +22,29 @@ namespace RqsWebExtension
 
         public string AcceptedUrlStartsWith
         {
-            //  According to: Web API Design - Crafting Interfaces that Developers Love
+            //  According to: Web Api Design - Crafting Interfaces that Developers Love
 
             // /requirement/
-            //  GET     List
-            //  POST    Create new
-            //  PUT     Bulk update
-            //  DELETE  Delete
+            //  Get     List
+            //  Post    Create new
+            //  Put     Bulk update
+            //  Delete  Delete
 
             // /requirement/FR1
-            //  GET     Show FR1
-            //  POST    Error
-            //  PUT     Update if exists
-            //  DELETE  Delete FR1
+            //  Get     Show FR1
+            //  Post    Error
+            //  Put     Update if exists
+            //  Delete  Delete FR1
 
             // TODO: We need here: Url, document type?, method?
             // TODO: How to catch both v1 and v2 api requests by the same module?
             get { return "/api/v1/requirement/"; }
         }
 
-        // TODO: Isolate plugins from accessing web server objects
+        // TODO: Isolate extensions from accessing web server objects
         public void ProcessRequest(NetworkStream clientStream, Request request)
         {
-            Log.Debug("Request for API is received.");
+            Log.Debug("Request for Api is received.");
 
             ICollection<Requirement> reqs = new List<Requirement>()
             {

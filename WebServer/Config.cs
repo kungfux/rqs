@@ -1,17 +1,10 @@
-﻿using System;
-
-namespace WebServer
+﻿namespace WebServer
 {
     public class Config
     {
-        private static readonly Lazy<Config> _instance = new Lazy<Config>(() => new Config());
-        public static Config Instance
-        {
-            get
-            {
-                return _instance.Value;
-            }
-        }
+        private static Config _instance;
+        public static Config Instance => _instance ?? (_instance = new Config());
+        private Config() { }
 
         private int _port = 80;
         public int Port
@@ -30,7 +23,7 @@ namespace WebServer
             get { return _rootPath;  }
             set 
             {
-                if (value != null && value != string.Empty)
+                if (!string.IsNullOrEmpty(value))
                     _rootPath = value;
             }
         }
@@ -41,7 +34,7 @@ namespace WebServer
             get { return _indexFile; }
             set
             {
-                if (value != null && value != string.Empty)
+                if (!string.IsNullOrEmpty(value))
                     _indexFile = value;
             }
         }

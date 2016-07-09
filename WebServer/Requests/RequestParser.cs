@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
-using WebServer.Requests;
 using log4net;
 
 namespace WebServer.Requests
@@ -11,24 +10,24 @@ namespace WebServer.Requests
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private const int _bufferSize = 4096;
-        private const string _apiUrlBeginsWith = "/api";
+        private const int BufferSize = 4096;
+        private const string ExtensionUrlBeginsWith = "/api";
 
         public Request ReadAndParseRequest(NetworkStream clientStream)
         {
             if (clientStream == null)
-                throw new ArgumentNullException("clientStream");
+                throw new ArgumentNullException(nameof(clientStream));
 
             string request = string.Empty;
-            byte[] buffer = new byte[_bufferSize];
+            byte[] buffer = new byte[BufferSize];
 
             int requestLength;
             while (clientStream.DataAvailable && 
                 (requestLength = clientStream.Read(buffer, 0, buffer.Length)) > 0)
             {
-                request += UTF8Encoding.UTF8.GetString(buffer, 0, requestLength);
+                request += Encoding.UTF8.GetString(buffer, 0, requestLength);
 
-                if (request.IndexOf("\r\n\r\n") >= 0)
+                if (request.IndexOf("\r\n\r\n", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     break;
                 }
@@ -45,18 +44,17 @@ namespace WebServer.Requests
             url = Uri.UnescapeDataString(url);
 
             Method method = Method.CONNECT;
-            string methodValue = requestMatch.Groups["type"].Value;
+            string methodValue = requestMatch.Groups["type"].Value.ToUpperInvariant();
             if (!string.IsNullOrEmpty(methodValue))
                 method = ParseEnum<Method>(methodValue);
 
-            Target target = Target.FILE;
-            if (!string.IsNullOrEmpty(url) && url.StartsWith(_apiUrlBeginsWith))
+            Target target = Target.File;
+            if (!string.IsNullOrEmpty(url) && url.StartsWith(ExtensionUrlBeginsWith))
             {
-                target = Target.API;
+                target = Target.Api;
             }
 
-            Log.Info(string.Format("Request received: length={0}, url='{1}', method={2}, target={3}",
-                request.Length, url, method, target));
+            Log.Info($"Request received: length={request.Length}, url='{url}', method={method}, target={target}");
 
             return new Request(request.Length, url, method, target);
         }

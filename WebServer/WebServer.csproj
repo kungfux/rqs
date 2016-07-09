@@ -70,7 +70,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\IPlugin.cs" />
+    <Compile Include="API\IExtension.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Requests\Request.cs" />

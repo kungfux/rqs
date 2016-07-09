@@ -15,23 +15,23 @@ namespace WebServer
 
         private readonly TcpClient _client;
         private readonly NetworkStream _clientStream;
-        private static readonly RequestParser parser = new RequestParser();
+        private static readonly RequestParser Parser = new RequestParser();
 
         public Client(TcpClient client)
         {
             if (client == null)
-                throw new ArgumentNullException("client");
+                throw new ArgumentNullException(nameof(client));
             _client = client;
             _clientStream = _client.GetStream();
         }
 
-        public void ProcessRequest(ICollection<IPlugin> plugins)
+        public void ProcessRequest(ICollection<IExtension> extensions)
         {
-            Request request = parser.ReadAndParseRequest(_clientStream);
+            Request request = Parser.ReadAndParseRequest(_clientStream);
 
             if (request != null)
             {
-                ProcessByTarget(request, plugins);
+                ProcessByTarget(request, extensions);
             }
             else
             {
@@ -41,15 +41,15 @@ namespace WebServer
             _client.Close();
         }
 
-        private void ProcessByTarget(Request request, ICollection<IPlugin> plugins)
+        private void ProcessByTarget(Request request, ICollection<IExtension> extensions)
         {
             switch(request.Target)
             {
-                case Target.FILE:
+                case Target.File:
                     ProcessTargetFile(request);
                     break;
-                case Target.API:
-                    ProcessTargetApi(request, plugins);
+                case Target.Api:
+                    ProcessTargetApi(request, extensions);
                     break;
                 default:
                     // TODO: Has no any sense since enum has no another values
@@ -77,22 +77,22 @@ namespace WebServer
             }
         }
 
-        private void ProcessTargetApi(Request request, ICollection<IPlugin> plugins)
+        private void ProcessTargetApi(Request request, ICollection<IExtension> extensions)
         {
-            if (plugins != null)
+            if (extensions != null)
             {
-                foreach(IPlugin plugin in plugins)
+                foreach(IExtension extension in extensions)
                 {
-                    if (request.Url.StartsWith(plugin.AcceptedUrlStartsWith))
+                    if (request.Url.StartsWith(extension.AcceptedUrlStartsWith))
                     {
                         try
                         {
-                            plugin.ProcessRequest(_clientStream, request);
+                            extension.ProcessRequest(_clientStream, request);
                         }
                         catch (Exception e)
                         {
                             // TODO: Send header???
-                            Log.Error("Exception occurs in plugin.", e);
+                            Log.Error("Exception occurs in extension.", e);
                         }
                         return;
                     }

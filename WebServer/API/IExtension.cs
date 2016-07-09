@@ -3,7 +3,7 @@ using WebServer.Requests;
 
 namespace WebServer.API
 {
-    public interface IPlugin
+    public interface IExtension
     {
         string Name { get; }
         string AcceptedUrlStartsWith { get; }
