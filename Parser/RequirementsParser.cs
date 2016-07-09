@@ -2,6 +2,7 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using log4net;
 
 namespace Parser
@@ -14,7 +15,13 @@ namespace Parser
 
         public void AddFromExcel(string filePath)
         {
-            
+            var file = new FileInfo(filePath);
+
+            for (var a = 0; a < 100; a++)
+            {
+                UpdateStatus(file.Name, a);
+                Thread.Sleep(100);
+            }
         }
 
         public void AddFromDirectory(string path)
@@ -48,6 +55,17 @@ namespace Parser
             {
                 AddFromExcel(file.FullName);
             }
+        }
+
+        public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
+        public event StatusUpdateHandler OnUpdateStatus;
+
+        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed)
+        {
+            if (OnUpdateStatus == null) return;
+
+            ProgressEventArgs args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed);
+            OnUpdateStatus(this, args);
         }
     }
 }

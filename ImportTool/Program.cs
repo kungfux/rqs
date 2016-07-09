@@ -18,6 +18,7 @@ namespace ImportTool
             }
 
             var parser = new RequirementsParser();
+            parser.OnUpdateStatus += Parser_OnUpdateStatus;
 
             if (!string.IsNullOrEmpty(options.File))
             {
@@ -28,6 +29,11 @@ namespace ImportTool
             {
                 parser.AddFromDirectory(options.Directory);
             }
+        }
+
+        private static void Parser_OnUpdateStatus(object sender, ProgressEventArgs e)
+        {
+            Console.WriteLine($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed}");
         }
     }
 }
