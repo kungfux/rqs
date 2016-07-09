@@ -13,33 +13,27 @@ namespace RqsWebExtension
 {
     public class Extension : IExtension
     {
+        //  According to: Web Api Design - Crafting Interfaces that Developers Love
+
+        // /requirement/
+        //  Get     List
+        //  Post    Create new
+        //  Put     Bulk update
+        //  Delete  Delete
+
+        // /requirement/FR1
+        //  Get     Show FR1
+        //  Post    Error
+        //  Put     Update if exists
+        //  Delete  Delete FR1
+
+        // TODO: We need here: Url, document type?, method?
+        // TODO: How to catch both v1 and v2 api requests by the same module?
+
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public string Name
-        {
-            get { return "Requirements Search"; }
-        }
-
-        public string AcceptedUrlStartsWith
-        {
-            //  According to: Web Api Design - Crafting Interfaces that Developers Love
-
-            // /requirement/
-            //  Get     List
-            //  Post    Create new
-            //  Put     Bulk update
-            //  Delete  Delete
-
-            // /requirement/FR1
-            //  Get     Show FR1
-            //  Post    Error
-            //  Put     Update if exists
-            //  Delete  Delete FR1
-
-            // TODO: We need here: Url, document type?, method?
-            // TODO: How to catch both v1 and v2 api requests by the same module?
-            get { return "/api/v1/requirement/"; }
-        }
+        public string Name => "Requirements Search";
+        public string AcceptedUrlStartsWith => "/api/v1/requirement/";
 
         // TODO: Isolate extensions from accessing web server objects
         public void ProcessRequest(NetworkStream clientStream, Request request)
@@ -50,11 +44,29 @@ namespace RqsWebExtension
             {
                 new Requirement()
                 {
-                     ID = "FR1"
+                     Id = "FR1",
+                     Ccp = "5",
+                     Created = DateTime.Now.ToShortDateString(),
+                     Modified = DateTime.Now.ToShortDateString(),
+                     ObjectNumber = "1.0.0.1",
+                     Project = "Pj1",
+                     Source = "hardcoded",
+                     Status = "New",
+                     Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec.",
+                     TmsTask = "TEST-001"
                 },
                 new Requirement()
                 {
-                    ID = "FR2"
+                    Id = "FR2",
+                    Ccp = "5",
+                     Created = DateTime.Now.ToShortDateString(),
+                     Modified = DateTime.Now.ToShortDateString(),
+                     ObjectNumber = "1.0.0.2",
+                     Project = "Pj1",
+                     Source = "hardcoded",
+                     Status = "New",
+                     Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                     TmsTask = "TEST-002"
                 }
             };
 
@@ -64,13 +76,6 @@ namespace RqsWebExtension
 
             Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "application/json", response.Length);
             clientStream.Write(response, 0, response.Length);
-        }
-
-        private byte[] GetBytes(string value)
-        {
-            byte[] bytes = new byte[value.Length * sizeof(char)];
-            Buffer.BlockCopy(value.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
         }
 
         private string GetJSON(ICollection<Requirement> requirements)
