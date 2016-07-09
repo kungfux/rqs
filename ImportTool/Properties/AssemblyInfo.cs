@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Parser")]
+[assembly: AssemblyTitle("ImportTool")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Parser")]
+[assembly: AssemblyProduct("ImportTool")]
 [assembly: AssemblyCopyright("Copyright © Alexander Fuks 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7ae71a6e-aabe-40d4-968b-0e6018ee376d")]
+[assembly: Guid("15e86b0c-b2e8-4655-907e-8905b01b492e")]
 
 // Version information for an assembly consists of the following four values:
 //
