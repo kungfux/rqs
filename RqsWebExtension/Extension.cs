@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Web.Script.Serialization;
 using log4net;
-using RqsWebExtension.Entity;
+using Storage.Requirements.Data;
+using Storage.Requirements.Model.Entity;
 using WebServer.API;
 using WebServer.Requests;
 using WebServer.Responses;
@@ -35,40 +35,14 @@ namespace RqsWebExtension
         public string Name => "Requirements Search";
         public string AcceptedUrlStartsWith => "/api/v1/requirement/";
 
+        private readonly Requirements _requirementsStorage = new Requirements();
+
         // TODO: Isolate extensions from accessing web server objects
         public void ProcessRequest(NetworkStream clientStream, Request request)
         {
             Log.Debug("Request for Api is received.");
 
-            ICollection<Requirement> reqs = new List<Requirement>()
-            {
-                new Requirement()
-                {
-                     Id = "FR1",
-                     Ccp = "5",
-                     Created = DateTime.Now.ToShortDateString(),
-                     Modified = DateTime.Now.ToShortDateString(),
-                     ObjectNumber = "1.0.0.1",
-                     Project = "Pj1",
-                     Source = "hardcoded",
-                     Status = "New",
-                     Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec.",
-                     TmsTask = "TEST-001"
-                },
-                new Requirement()
-                {
-                    Id = "FR2",
-                    Ccp = "5",
-                     Created = DateTime.Now.ToShortDateString(),
-                     Modified = DateTime.Now.ToShortDateString(),
-                     ObjectNumber = "1.0.0.2",
-                     Project = "Pj1",
-                     Source = "hardcoded",
-                     Status = "New",
-                     Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                     TmsTask = "TEST-002"
-                }
-            };
+            ICollection<Requirement> reqs = _requirementsStorage.GetRequirements();
 
             string json = GetJSON(reqs);
 

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Storage.Requirements.Model.Entity.Project">
+    <Position X="1" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Requirements\Model\Entity\Project.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Storage.Requirements.Model.Entity.Requirement">
+    <Position X="4.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAggAAAAAAFAACAAAAAIAAAQAAAAACAAAABA=</HashCode>
+      <FileName>Requirements\Model\Entity\Requirement.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TmsTask" />
+      <Property Name="Source" />
+      <Property Name="Project" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Storage.Requirements.Model.Entity.RequirementSource">
+    <Position X="1" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Requirements\Model\Entity\RequirementSource.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Storage.Requirements.Model.Entity.TmsTask">
+    <Position X="1" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Requirements\Model\Entity\TmsTask.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

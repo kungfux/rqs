@@ -15,8 +15,8 @@ $(document).ready(function () {
 				var tr;
 				for (var i = 0; i < json.length; i++) {
 					tr = $('<tr/>');
-					tr.append("<td>" + json[i].Id + "</td>");
-					tr.append("<td>" + json[i].TmsTask + "</td>");
+					tr.append("<td>" + json[i].Number + "</td>");
+					tr.append("<td>" + json[i].TmsTask.Number + "</td>");
 					tr.append("<td>" + json[i].Ccp + "</td>");
 					tr.append("<td>" + json[i].Text + "</td>");
 					$('#searchResults').append(tr);
