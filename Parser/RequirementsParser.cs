@@ -35,7 +35,14 @@ namespace Parser
             var targetFiles = targetFilesInfos.ToList();
             targetFiles.RemoveAll(x => x.Name.StartsWith(".~"));
 
-            Log.Debug($"Following files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
+            if (targetFiles.Count <= 0)
+            {
+                Log.Debug("No files are qualified.");
+            }
+            else
+            {
+                Log.Debug($"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
+            }
 
             foreach (var file in targetFiles)
             {
