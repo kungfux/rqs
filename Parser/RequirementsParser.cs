@@ -2,7 +2,6 @@
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using log4net;
 
 namespace Parser
