@@ -52,17 +52,17 @@ namespace Parser
 
         private void ExcelParser_StatusUpdated(object sender, ProgressEventArgs e)
         {
-            UpdateStatus(e.FileBeingProcessed, e.RecordNumberBeingProcessed);
+            UpdateStatus(e.FileBeingProcessed, e.RecordNumberBeingProcessed, e.PercentsComplete);
         }
 
         public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
         public event StatusUpdateHandler OnUpdateStatus;
 
-        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed)
+        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
         {
             if (OnUpdateStatus == null) return;
 
-            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed);
+            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
             OnUpdateStatus(this, args);
         }
     }

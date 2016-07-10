@@ -39,13 +39,20 @@ namespace Parser
 
             var result = excelReader.AsDataSet();
 
-            var recordBeingProcessed = 0;
+            var totalRows = 0;
+            foreach (DataTable table in result.Tables)
+            {
+                totalRows += table.Rows.Count;
+            }
+            Log.Debug(totalRows);
+
+            var rowBeingProcessed = 0;
             foreach (DataTable table in result.Tables)
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    recordBeingProcessed++;
-                    UpdateStatus(fileInfo.Name, recordBeingProcessed);
+                    rowBeingProcessed++;
+                    UpdateStatus(fileInfo.Name, rowBeingProcessed, rowBeingProcessed *100 / totalRows );
                     Log.Debug(string.Join(",", row.ItemArray));
                 }
             }
@@ -56,11 +63,11 @@ namespace Parser
         public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
         public event StatusUpdateHandler OnUpdateStatus;
 
-        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed)
+        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
         {
             if (OnUpdateStatus == null) return;
 
-            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed);
+            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
             OnUpdateStatus(this, args);
         }
     }

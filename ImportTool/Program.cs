@@ -29,6 +29,8 @@ namespace ImportTool
             {
                 parser.AddFromDirectory(options.Directory);
             }
+
+            Console.WriteLine();
         }
 
         private static string _lastProcessedFile;
@@ -39,7 +41,7 @@ namespace ImportTool
                 Console.Write(_lastProcessedFile != e.FileBeingProcessed ? "\r\n" : "\r");
             }
             _lastProcessedFile = e.FileBeingProcessed;
-            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed}");
+            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed} Completed: {e.PercentsComplete}%");
         }
     }
 }
