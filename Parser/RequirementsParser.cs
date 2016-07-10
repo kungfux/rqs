@@ -13,22 +13,21 @@ namespace Parser
 
         private const string ExcelFilesMask = "*.xls?";
 
+        public RequirementsParser() 
+        {
+            ExcelParser.Instance.OnUpdateStatus += ExcelParser_StatusUpdated;
+        }
+
         public void AddFromExcel(string filePath)
         {
-            var file = new FileInfo(filePath);
-
-            for (var a = 0; a <= 100; a++)
-            {
-                UpdateStatus(file.Name, a);
-                Thread.Sleep(30);
-            }
+            ExcelParser.Instance.ParseExcel(filePath);
         }
 
         public void AddFromDirectory(string path)
         {
             Contract.Requires(path != null);
 
-            DirectoryInfo targetDirectory = new DirectoryInfo(path);
+            var targetDirectory = new DirectoryInfo(path);
 
             if (!targetDirectory.Exists)
             {
@@ -42,19 +41,19 @@ namespace Parser
             var targetFiles = targetFilesInfos.ToList();
             targetFiles.RemoveAll(x => x.Name.StartsWith(".~"));
 
-            if (targetFiles.Count <= 0)
-            {
-                Log.Debug("No files are qualified.");
-            }
-            else
-            {
-                Log.Debug($"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
-            }
+            Log.Debug(targetFiles.Count <= 0
+                ? "No files are qualified."
+                : $"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
 
             foreach (var file in targetFiles)
             {
                 AddFromExcel(file.FullName);
             }
+        }
+
+        private void ExcelParser_StatusUpdated(object sender, ProgressEventArgs e)
+        {
+            UpdateStatus(e.FileBeingProcessed, e.RecordNumberBeingProcessed);
         }
 
         public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
@@ -64,7 +63,7 @@ namespace Parser
         {
             if (OnUpdateStatus == null) return;
 
-            ProgressEventArgs args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed);
+            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed);
             OnUpdateStatus(this, args);
         }
     }
