@@ -17,10 +17,10 @@ namespace Parser
         {
             var file = new FileInfo(filePath);
 
-            for (var a = 0; a < 100; a++)
+            for (var a = 0; a <= 100; a++)
             {
                 UpdateStatus(file.Name, a);
-                Thread.Sleep(100);
+                Thread.Sleep(30);
             }
         }
 

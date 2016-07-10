@@ -31,9 +31,15 @@ namespace ImportTool
             }
         }
 
+        private static string _lastProcessedFile;
         private static void Parser_OnUpdateStatus(object sender, ProgressEventArgs e)
         {
-            Console.WriteLine($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed}");
+            if (!string.IsNullOrEmpty(_lastProcessedFile))
+            {
+                Console.Write(_lastProcessedFile != e.FileBeingProcessed ? "\r\n" : "\r");
+            }
+            _lastProcessedFile = e.FileBeingProcessed;
+            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed}");
         }
     }
 }
