@@ -12,11 +12,6 @@ namespace Parser
 
         private const string ExcelFilesMask = "*.xls?";
 
-        public RequirementsParser() 
-        {
-            ExcelParser.Instance.OnUpdateStatus += ExcelParser_StatusUpdated;
-        }
-
         public void AddFromExcel(string filePath)
         {
             ExcelParser.Instance.ParseExcel(filePath);
@@ -50,20 +45,16 @@ namespace Parser
             }
         }
 
-        private void ExcelParser_StatusUpdated(object sender, ProgressEventArgs e)
+        public event Action<ProgressEventArgs> OnUpdateStatus
         {
-            UpdateStatus(e.FileBeingProcessed, e.RecordNumberBeingProcessed, e.PercentsComplete);
-        }
-
-        public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
-        public event StatusUpdateHandler OnUpdateStatus;
-
-        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
-        {
-            if (OnUpdateStatus == null) return;
-
-            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
-            OnUpdateStatus(this, args);
+            add
+            {
+                ExcelParser.Instance.OnUpdateStatus += value;
+            }
+            remove
+            {
+                ExcelParser.Instance.OnUpdateStatus -= value;
+            }
         }
     }
 }

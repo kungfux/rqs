@@ -5,6 +5,8 @@ namespace ImportTool
 {
     internal class Program
     {
+        private static string _lastProcessedFile;
+
         private static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
@@ -33,15 +35,14 @@ namespace ImportTool
             Console.WriteLine();
         }
 
-        private static string _lastProcessedFile;
-        private static void Parser_OnUpdateStatus(object sender, ProgressEventArgs e)
+        private static void Parser_OnUpdateStatus(ProgressEventArgs e)
         {
             if (!string.IsNullOrEmpty(_lastProcessedFile))
             {
                 Console.Write(_lastProcessedFile != e.FileBeingProcessed ? "\r\n" : "\r");
             }
             _lastProcessedFile = e.FileBeingProcessed;
-            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed} Completed: {e.PercentsComplete}%");
+            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed} Completed: {e.PercentsComplete}%    ");
         }
     }
 }

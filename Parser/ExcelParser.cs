@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.IO;
 using Excel;
 using log4net;
@@ -60,15 +61,14 @@ namespace Parser
             excelReader.Close();
         }
 
-        public delegate void StatusUpdateHandler(object sender, ProgressEventArgs e);
-        public event StatusUpdateHandler OnUpdateStatus;
+        public event Action<ProgressEventArgs> OnUpdateStatus;
 
         private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
         {
             if (OnUpdateStatus == null) return;
 
             var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
-            OnUpdateStatus(this, args);
+            OnUpdateStatus(args);
         }
     }
 }
