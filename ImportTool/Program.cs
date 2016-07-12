@@ -43,7 +43,7 @@ namespace ImportTool
                 Console.Write(_lastProcessedFile != e.FileBeingProcessed ? "\r\n" : "\r");
             }
             _lastProcessedFile = e.FileBeingProcessed;
-            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed} Completed: {e.PercentsComplete}%    ");
+            Console.Write($"File: {e.FileBeingProcessed} Record: {e.RecordNumberBeingProcessed} Completed: {e.PercentsComplete}%");
         }
     }
 }

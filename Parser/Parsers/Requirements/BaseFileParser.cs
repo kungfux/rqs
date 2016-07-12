@@ -6,28 +6,20 @@ using Storage.Requirements.Model.Entity;
 
 namespace Parser.Parsers.Requirements
 {
-    internal class BaseFileParser: IFileParser
+    internal abstract class BaseFileParser: IFileParser
     {
         protected static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public virtual string AcceptableFileMask
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public abstract string AcceptableFileMask { get; }
+        public abstract void ParseFile(string filePath);
 
         public event Action<ProgressEventArgs> OnUpdateStatus;
-
         public void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
         {
             if (OnUpdateStatus == null) return;
 
             var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
             OnUpdateStatus(args);
-        }
-
-        public virtual void ParseFile(string filePath)
-        {
-            throw new NotImplementedException();
         }
 
         public void ParseDirectory(string path)
@@ -62,8 +54,6 @@ namespace Parser.Parsers.Requirements
         public void AddRequirementToStorage(Requirement requirement)
         {
             // TODO: Save requirement
-        }
-
-        
+        }       
     }
 }
