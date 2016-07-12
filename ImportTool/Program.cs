@@ -1,5 +1,6 @@
 ﻿using Parser;
 using System;
+using System.Reflection;
 using Parser.Parsers.Requirements;
 
 namespace ImportTool
@@ -25,7 +26,7 @@ namespace ImportTool
                 Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
-            Console.WriteLine(MessageFilesCanBeSkipped);
+            WriteGreetings();
 
             var parser = new RequirementsFileParser();
             parser.OnUpdateStatus += Parser_OnUpdateStatus;
@@ -40,9 +41,31 @@ namespace ImportTool
                 parser.ParseDirectory(options.Directory);
             }
 
+
+            WriteGoodBye();
+        }
+
+        private static void WriteGreetings()
+        {
+            Console.WriteLine(
+                $"{GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title)} {Assembly.GetExecutingAssembly().GetName().Version} {Environment.NewLine}" +
+                $"{GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright)}");
+            Console.WriteLine();
+
+            Console.WriteLine(MessageFilesCanBeSkipped);
+        }
+
+        private static void WriteGoodBye()
+        {
             Console.WriteLine();
             Console.WriteLine($"{_filesProcessed} {MessageFilesImported}");
+        }
 
+        private static string GetAssemblyAttribute<T>(Func<T, string> value)
+            where T : Attribute
+        {
+            var attribute = (T)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(T));
+            return value.Invoke(attribute);
         }
 
         private static void Parser_OnUpdateStatus(ProgressEventArgs e)
