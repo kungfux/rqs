@@ -5,10 +5,10 @@ namespace ImportTool
 {
     internal class Options
     {
-        [Option('f', "file", HelpText = "Single Excel file to be imported")]
+        [Option('f', "file", HelpText = "File to be imported")]
         public string File { get; set; }
 
-        [Option('d', "directory", HelpText = "Directory with Excel files to be imported")]
+        [Option('d', "directory", HelpText = "Directory with files to be imported")]
         public string Directory { get; set; }
 
         [HelpOption]

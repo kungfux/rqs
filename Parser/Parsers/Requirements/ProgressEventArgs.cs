@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Parser
+namespace Parser.Parsers.Requirements
 {
     public class ProgressEventArgs : EventArgs
     {

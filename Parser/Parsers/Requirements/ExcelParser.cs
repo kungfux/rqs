@@ -1,23 +1,18 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.IO;
 using Excel;
-using log4net;
+using Storage.Requirements.Model.Entity;
 
-namespace Parser
+namespace Parser.Parsers.Requirements
 {
-    internal class ExcelParser
+    internal class ExcelParser : BaseFileParser
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private static ExcelParser _instance;
-        public static ExcelParser Instance => _instance ?? (_instance = new ExcelParser());
-        private ExcelParser() { }
+        public override string AcceptableFileMask => "*.xls?";
 
         private const string BinaryExtension = ".xls";
         private const string OpenXmlExtension = ".xlsx";
 
-        public void ParseExcel(string filePath)
+        public override void ParseFile(string filePath)
         {
             FileInfo fileInfo = new FileInfo(filePath);
             FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
@@ -53,22 +48,13 @@ namespace Parser
                 foreach (DataRow row in table.Rows)
                 {
                     rowBeingProcessed++;
-                    UpdateStatus(fileInfo.Name, rowBeingProcessed, rowBeingProcessed *100 / totalRows );
+                    UpdateStatus(fileInfo.Name, rowBeingProcessed, rowBeingProcessed * 100 / totalRows);
                     Log.Debug(string.Join(",", row.ItemArray));
+                    AddRequirementToStorage(new Requirement());
                 }
             }
 
             excelReader.Close();
-        }
-
-        public event Action<ProgressEventArgs> OnUpdateStatus;
-
-        private void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
-        {
-            if (OnUpdateStatus == null) return;
-
-            var args = new ProgressEventArgs(fileBeingProcessed, recordNumberBeingProcessed, percentsComplete);
-            OnUpdateStatus(args);
         }
     }
 }

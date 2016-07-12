@@ -1,9 +1,10 @@
 ﻿using Parser;
 using System;
+using Parser.Parsers.Requirements;
 
 namespace ImportTool
 {
-    internal class Program
+    internal static class Program
     {
         private static string _lastProcessedFile;
 
@@ -19,17 +20,17 @@ namespace ImportTool
                 Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
-            var parser = new RequirementsParser();
+            var parser = new RequirementsFileParser();
             parser.OnUpdateStatus += Parser_OnUpdateStatus;
 
             if (!string.IsNullOrEmpty(options.File))
             {
-                parser.AddFromExcel(options.File);
+                parser.ParseFile(options.File);
             }
 
             if (!string.IsNullOrEmpty(options.Directory))
             {
-                parser.AddFromDirectory(options.Directory);
+                parser.ParseDirectory(options.Directory);
             }
 
             Console.WriteLine();

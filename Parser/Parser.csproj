@@ -49,13 +49,22 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelParser.cs" />
-    <Compile Include="ProgressEventArgs.cs" />
-    <Compile Include="RequirementsParser.cs" />
+    <Compile Include="Parsers\Requirements\BaseFileParser.cs" />
+    <Compile Include="Parsers\Requirements\ExcelParser.cs" />
+    <Compile Include="Parsers\Requirements\IFileParser.cs" />
+    <Compile Include="Parsers\Requirements\IParser.cs" />
+    <Compile Include="Parsers\Requirements\ProgressEventArgs.cs" />
+    <Compile Include="RequirementsFileParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Storage\Storage.csproj">
+      <Project>{7726554B-00A6-49DC-B909-88410942D7F3}</Project>
+      <Name>Storage</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
