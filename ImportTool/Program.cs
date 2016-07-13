@@ -18,11 +18,17 @@ namespace ImportTool
             log4net.Config.XmlConfigurator.Configure();
 
             var options = new Options();
+
+            if (args.Length == 0)
+            {
+                Console.WriteLine(options.GetUsage());
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+            }
+
             CommandLine.Parser.Default.ParseArguments(args, options);
 
             if (string.IsNullOrEmpty(options.File) && string.IsNullOrEmpty(options.Directory))
             {
-                Console.WriteLine(options.GetUsage());
                 Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
