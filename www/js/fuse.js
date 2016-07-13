@@ -1,6 +1,5 @@
 $(document).ready(function () {
 	$('#search').click(function () {
-	
 		$.ajax({
 			type: 'GET',
 			url: "/api/v1/requirement/",
@@ -28,6 +27,3 @@ $(document).ready(function () {
 		});
 	});
 });
-
-
-
