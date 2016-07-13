@@ -1,35 +1,33 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en-US">
 <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="stylesheet/less" type="text/css" href="styles.less" />
-	<script src="js/less.min.js" type="text/javascript"></script>
-	<script src="js/jquery-3.0.0.min.js" type="text/javascript"></script>
-	<script src="js/fuse.js" type="text/javascript"></script>
+    <meta charset="UTF-8">
 	<!-- TODO: Update title with " - %looking_for% search results" -->
-    <title>FUSE Search Engine</title>
+	<title>FUSE Search Engine</title>
+	
+	<link href="/api/v1/requirement" rel="alternate" type="application/json">
+	<link rel="stylesheet/less" type="text/css" href="styles.less">
 </head>
 <body>
 	<header class="maxWidth dropShadow">
-		<div class="headerDiv">
+		<section class="headerDiv">
 			<img class="logo tabLeft" src="images/favicon-image.png" />
-		</div>
-		<div class="headerDiv">
+		</section>
+		<section class="headerDiv">
 			<p>FUSE Search Engine</p>
-		</div>
-		<div class="headerDiv">
+		</section>
+		<section class="headerDiv">
 			
 			<input class="tabLeft search" placeholder="Search"/>
-		</div>
-		<div class="headerDiv">
+		</section>
+		<section class="headerDiv">
 			<input id="search" type="image" src="images/search-glyph.png" />
-		</div>
+		</section>
 	</header>
 	
 	<article>
-		<div id="results">
+		<section id="results">
 			<table id="searchResults">
 				<tr>
 					<th>ID</th>
@@ -38,7 +36,7 @@
 					<th>Text</th>
 				</tr>
 			</table>
-		</div>
+		</section>
 	</article>
 	
 	<footer class="maxWidth dropShadow">
@@ -51,10 +49,15 @@
 			&nbsp;
 			<a href="http://github.com/kungfux/rqs/issues">Report issue</a>
 			&nbsp;
-			<span class="tabRight floatRight">
+			<em class="tabRight floatRight">
 			2013-2016 © Alexander Fuks & contributors
-			</span>
+			</em>
 		</p>
 	</footer>
+	
+	<script src="js/less.min.js" type="text/javascript"></script>
+	<script src="js/jquery-3.0.0.min.js" type="text/javascript"></script>
+	<script src="js/fuse.js" type="text/javascript"></script>
+	<script src="js/fuse-debug.js" type="text/javascript"></script>
 </body>
 </html>
