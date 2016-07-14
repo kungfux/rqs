@@ -1,5 +1,7 @@
 ## Requirements Search Project
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4feprs5jsjfi5y02?svg=true)](https://ci.appveyor.com/project/kungfux/rqs)
+
 ### Description
 
 This repository contains several implementations of the "same" program.
