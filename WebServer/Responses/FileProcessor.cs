@@ -18,7 +18,6 @@ namespace WebServer.Responses
         private readonly string _indexFile = Config.Instance.IndexFile;
 
         private static readonly object FileReadLock = new object();
-        private static FileStream _fileStream;
 
         public void WriteFile(NetworkStream clientStream, string file, bool sendOnlyHeader = false)
         {
@@ -53,17 +52,18 @@ namespace WebServer.Responses
             {
                 lock (FileReadLock)
                 {
-                    _fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
-
-                    if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, _fileStream.Length))
-                        return;
-
-                    if (!sendOnlyHeader)
+                    using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        while (_fileStream.Position < _fileStream.Length)
+                        if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, fileStream.Length))
+                            return;
+
+                        if (!sendOnlyHeader)
                         {
-                            var responceLength = _fileStream.Read(buffer, 0, buffer.Length);
-                            clientStream.Write(buffer, 0, responceLength);
+                            while (fileStream.Position < fileStream.Length)
+                            {
+                                var responceLength = fileStream.Read(buffer, 0, buffer.Length);
+                                clientStream.Write(buffer, 0, responceLength);
+                            }
                         }
                     }
                 }
@@ -80,11 +80,6 @@ namespace WebServer.Responses
                     Log.Fatal($"Requested file was not found: {file}", e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
                 }
-            }
-            finally
-            {
-                _fileStream.Close();
-                _fileStream.Dispose();
             }
         }
 
