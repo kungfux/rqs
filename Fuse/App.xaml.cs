@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using Fuse.Models;
+﻿using System;
+using System.Threading;
+using System.Windows;
 
 namespace Fuse
 {
@@ -20,7 +21,20 @@ namespace Fuse
             log4net.Config.XmlConfigurator.Configure();
 
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
-            LanguageDictionary.Instance.FindString("Init LanguageDictionary");
+
+            InitializeResourceDictionaries();
+        }
+
+        private void InitializeResourceDictionaries()
+        {
+            var dict = new ResourceDictionary();
+            switch (Thread.CurrentThread.CurrentCulture.ToString())
+            {
+                default:
+                    dict.Source = new Uri("..\\Resources\\StringResources.en-US.xaml", UriKind.Relative);
+                    break;
+            }
+            Application.Current.Resources.MergedDictionaries.Add(dict);
         }
     }
 }
