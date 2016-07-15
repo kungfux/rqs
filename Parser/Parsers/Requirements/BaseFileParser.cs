@@ -9,6 +9,7 @@ namespace Parser.Parsers.Requirements
     internal abstract class BaseFileParser: IFileParser
     {
         protected static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected static readonly bool IsDebugEnabled = Log.IsDebugEnabled;
 
         public abstract string AcceptableFileMask { get; }
         public abstract void ParseFile(string filePath);
@@ -35,15 +36,21 @@ namespace Parser.Parsers.Requirements
                 return;
             }
 
-            Log.Debug($"Looking for files in folder {path}");
+            if (IsDebugEnabled)
+            {
+                Log.Debug($"Looking for files in folder {path}");
+            }
 
             var targetFilesInfos = targetDirectory.GetFiles(AcceptableFileMask);
             var targetFiles = targetFilesInfos.ToList();
             targetFiles.RemoveAll(x => x.Name.StartsWith(".~"));
 
-            Log.Debug(targetFiles.Count <= 0
-                ? "No files are qualified."
-                : $"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
+            if (IsDebugEnabled)
+            {
+                Log.Debug(targetFiles.Count <= 0
+                    ? "No files are qualified."
+                    : $"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
+            }
 
             foreach (var file in targetFiles)
             {
