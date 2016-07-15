@@ -8,56 +8,36 @@ namespace WebServer.Responses
 {
     internal class FileProcessor
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private static FileProcessor _instance;
-        public static FileProcessor Instance => _instance ?? (_instance = new FileProcessor());
-        private FileProcessor() { }
-
+        private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private readonly string _rootPath = Config.Instance.RootPath;
         private readonly string _indexFile = Config.Instance.IndexFile;
 
-        private static readonly object FileReadLock = new object();
-
-        public void WriteFile(NetworkStream clientStream, string file, bool sendOnlyHeader = false)
+        static FileProcessor()
         {
-            Log.Debug($"File is requested: {file}");
+        }
 
-            if (file.IndexOf("..", StringComparison.Ordinal) >= 0)
+        private FileProcessor()
+        {
+        }
+
+        public static FileProcessor Instance { get; } = new FileProcessor();
+
+        public void WriteFile(NetworkStream clientStream, string fileUri, bool sendOnlyHeader = false)
+        {
+            _log.Debug($"File is requested: {fileUri}");
+
+            if (ValidateFile(clientStream, ref fileUri))
             {
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
-                Log.Warn("Attempt to read up folder is detected.");
-                return;
-            }
-            else if (file.EndsWith("/"))
-            {
-                file += _indexFile;
-            }
+                var fileExtension = fileUri.Substring(fileUri.LastIndexOf('.'));
+                var contentType = GetContentTypeByExtension(fileExtension);
+                var buffer = new byte[1024];
 
-            file = _rootPath + "/" + file;
-
-            if (!File.Exists(file))
-            {
-                Log.Info($"Requested file was not found: {file}");
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
-                return;
-            }
-
-            string fileExtension = file.Substring(file.LastIndexOf('.'));
-            string contentType = GetContentTypeByExtension(fileExtension);
-
-            byte[] buffer = new byte[1024];
-
-            try
-            {
-                lock (FileReadLock)
+                try
                 {
-                    using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    using (var fileStream = new FileStream(fileUri, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        if (!Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, fileStream.Length))
-                            return;
-
-                        if (!sendOnlyHeader)
+                        if (Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, fileStream.Length)
+                            && !sendOnlyHeader)
                         {
                             while (fileStream.Position < fileStream.Length)
                             {
@@ -67,20 +47,49 @@ namespace WebServer.Responses
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                if (e is FileNotFoundException || e is DirectoryNotFoundException)
+                catch (FileNotFoundException e)
                 {
-                    Log.Error($"Requested file or folder was not found: {file}", e);
+                    _log.Error($"Requested file was not found: {fileUri}", e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
                 }
-                else
+                catch (DirectoryNotFoundException e)
                 {
-                    Log.Fatal($"Requested file was not found: {file}", e);
+                    _log.Error($"Requested folder was not found: {fileUri}", e);
+                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                }
+                catch (Exception e)
+                {
+                    _log.Fatal($"Unhandled exception was occurred: {fileUri}", e);
                     Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
                 }
             }
+        }
+
+        private bool ValidateFile(NetworkStream clientStream, ref string fileUri)
+        {
+            var isValid = true;
+
+            if (fileUri.IndexOf("..", StringComparison.Ordinal) >= 0)
+            {
+                isValid = false;
+                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
+                _log.Warn("Attempt to read up folder is detected.");
+            }
+            else
+            {
+                if (fileUri.EndsWith("/"))
+                    fileUri += _indexFile;
+                fileUri = _rootPath + "/" + fileUri;
+
+                if (!File.Exists(fileUri))
+                {
+                    isValid = false;
+                    _log.Info($"Requested file was not found: {fileUri}");
+                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                }
+            }
+
+            return isValid;
         }
 
         private string GetContentTypeByExtension(string extension)
