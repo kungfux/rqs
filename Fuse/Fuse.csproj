@@ -49,14 +49,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -130,10 +125,6 @@
     <ProjectReference Include="..\WebServer\WebServer.csproj">
       <Project>{bb74fbba-1c33-43e8-b900-ffca99c86fb3}</Project>
       <Name>WebServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RqsWebExtension\RqsWebExtension.csproj">
-      <Project>{5fd17156-8840-431a-baaf-2f053f0b9519}</Project>
-      <Name>RqsWebExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

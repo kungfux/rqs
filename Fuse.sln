@@ -26,6 +26,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RqsWebExtension", "RqsWebEx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storage", "Storage\Storage.csproj", "{7726554B-00A6-49DC-B909-88410942D7F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{7AE71A6E-AABE-40D4-968B-0E6018EE376D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportTool", "ImportTool\ImportTool.csproj", "{15E86B0C-B2E8-4655-907E-8905B01B492E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7AE71A6E-AABE-40D4-968B-0E6018EE376D} = {7AE71A6E-AABE-40D4-968B-0E6018EE376D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +55,14 @@ Global
 		{7726554B-00A6-49DC-B909-88410942D7F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7726554B-00A6-49DC-B909-88410942D7F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7726554B-00A6-49DC-B909-88410942D7F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE71A6E-AABE-40D4-968B-0E6018EE376D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE71A6E-AABE-40D4-968B-0E6018EE376D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE71A6E-AABE-40D4-968B-0E6018EE376D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE71A6E-AABE-40D4-968B-0E6018EE376D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
