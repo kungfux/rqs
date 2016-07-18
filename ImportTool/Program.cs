@@ -34,7 +34,7 @@ namespace ImportTool
 
             WriteGreetings();
 
-            var parser = new RequirementsFileParser();
+            var parser = new RequirementsFileParser(options.SkipHashCheck);
             parser.OnUpdateStatus += Parser_OnUpdateStatus;
 
             if (!string.IsNullOrEmpty(options.File))

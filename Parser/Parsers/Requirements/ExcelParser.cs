@@ -14,9 +14,20 @@ namespace Parser.Parsers.Requirements
         private const string BinaryExtension = ".xls";
         private const string OpenXmlExtension = ".xlsx";
 
+        public ExcelParser(bool isOverrideMode = false)
+        {
+            IsOverrideMode = isOverrideMode;
+        }
+
         public override void ParseFile(string filePath)
         {
             Log.Info($"Parsing file {filePath}");
+
+            if (IsParsedPreviously(filePath))
+            {
+                Log.Info($"File {filePath} was parsed previously");
+                return;
+            }
 
             var fileInfo = GetFileInfo(filePath);
             var fileName = fileInfo.Item1;
