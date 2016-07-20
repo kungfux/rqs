@@ -124,7 +124,7 @@ namespace WebServer
 
         private void ProcessClient(TcpClient tcpClient)
         {
-            Task.Run(() => { new Client(tcpClient).ProcessRequest(_extensions); });
+            Task.Run(() => { new ClientProcessor(tcpClient).ProcessRequest(_extensions); });
         }
 
         public event EventHandler<ServerStatus> StatusChanged;
@@ -135,8 +135,8 @@ namespace WebServer
 
         private string GetResolvedClientName(TcpClient client)
         {
-            IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
-            IPAddress ipAddress = endPoint.Address;
+            var endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            var ipAddress = endPoint.Address;
             return Dns.GetHostEntry(ipAddress).HostName;
         }
 
@@ -144,17 +144,17 @@ namespace WebServer
         {
             var dllFileNames = Directory.GetFiles(EXTENSIONS_LOCATION, "*.dll");
 
-            ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+            var assemblies = new List<Assembly>(dllFileNames.Length);
             foreach (string dllFile in dllFileNames)
             {
-                AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
-                Assembly assembly = Assembly.Load(an);
+                var an = AssemblyName.GetAssemblyName(dllFile);
+                var assembly = Assembly.Load(an);
                 assemblies.Add(assembly);
             }
 
-            Type extensionType = typeof(IExtension);
-            ICollection<Type> extensionTypes = new List<Type>();
-            foreach (Assembly assembly in assemblies)
+            var extensionType = typeof(IExtension);
+            var extensionTypes = new List<Type>();
+            foreach (var assembly in assemblies)
             {
                 if (assembly != null)
                 {
@@ -174,10 +174,10 @@ namespace WebServer
                 }
             }
 
-            ICollection<IExtension> extensions = new List<IExtension>(extensionTypes.Count);
-            foreach (Type type in extensionTypes)
+            var extensions = new List<IExtension>(extensionTypes.Count);
+            foreach (var type in extensionTypes)
             {
-                IExtension extension = (IExtension)Activator.CreateInstance(type);
+                var extension = (IExtension)Activator.CreateInstance(type);
                 extensions.Add(extension);
             }
 

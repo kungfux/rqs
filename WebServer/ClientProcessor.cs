@@ -1,15 +1,15 @@
-﻿using WebServer.Requests;
-using WebServer.Responses;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using WebServer.API;
+using WebServer.Requests;
+using WebServer.Responses;
 
 namespace WebServer
 {
-    internal class Client
+    internal class ClientProcessor
     {
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -17,7 +17,7 @@ namespace WebServer
         private readonly NetworkStream _clientStream;
         private static readonly RequestParser Parser = new RequestParser();
 
-        public Client(TcpClient client)
+        public ClientProcessor(TcpClient client)
         {
             if (client == null)
                 throw new ArgumentNullException(nameof(client));

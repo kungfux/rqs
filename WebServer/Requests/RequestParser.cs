@@ -12,17 +12,48 @@ namespace WebServer.Requests
 
         private const int BufferSize = 4096;
         private const string ExtensionUrlBeginsWith = "/api";
+        private const string RequestRegularExpression = @"^(?<type>\w+)\s+(?<uri>[^\s\?]+)[^\s]*\s+HTTP/.*|";
 
         public Request ReadAndParseRequest(NetworkStream clientStream)
         {
             if (clientStream == null)
                 throw new ArgumentNullException(nameof(clientStream));
 
-            string request = string.Empty;
-            byte[] buffer = new byte[BufferSize];
+            var request = ReadRequest(clientStream);
 
+            var requestMatch = Regex.Match(request, RequestRegularExpression);
+
+            if (requestMatch == Match.Empty)
+            {
+                return new Request();
+            }
+
+            var url = requestMatch.Groups["uri"].Value;
+            url = Uri.UnescapeDataString(url);
+
+            var method = Method.CONNECT;
+            var methodValue = requestMatch.Groups["type"].Value.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(methodValue))
+                method = ParseEnum<Method>(methodValue);
+
+            var target = Target.File;
+            if (!string.IsNullOrEmpty(url) && url.StartsWith(ExtensionUrlBeginsWith))
+            {
+                target = Target.Api;
+            }
+
+            Log.Info($"Request received: length={request.Length}, url='{url}', method={method}, target={target}");
+
+            return new Request(request.Length, url, method, target);
+        }
+
+        private string ReadRequest(NetworkStream clientStream)
+        {
+            var request = string.Empty;
             int requestLength;
-            while (clientStream.DataAvailable && 
+            var buffer = new byte[BufferSize];
+
+            while (clientStream.DataAvailable &&
                 (requestLength = clientStream.Read(buffer, 0, buffer.Length)) > 0)
             {
                 request += Encoding.UTF8.GetString(buffer, 0, requestLength);
@@ -32,31 +63,7 @@ namespace WebServer.Requests
                     break;
                 }
             }
-
-            Match requestMatch = Regex.Match(request, @"^(?<type>\w+)\s+(?<uri>[^\s\?]+)[^\s]*\s+HTTP/.*|");
-
-            if (requestMatch == Match.Empty)
-            {
-                return new Request();
-            }
-
-            string url = requestMatch.Groups["uri"].Value;
-            url = Uri.UnescapeDataString(url);
-
-            Method method = Method.CONNECT;
-            string methodValue = requestMatch.Groups["type"].Value.ToUpperInvariant();
-            if (!string.IsNullOrEmpty(methodValue))
-                method = ParseEnum<Method>(methodValue);
-
-            Target target = Target.File;
-            if (!string.IsNullOrEmpty(url) && url.StartsWith(ExtensionUrlBeginsWith))
-            {
-                target = Target.Api;
-            }
-
-            Log.Info($"Request received: length={request.Length}, url='{url}', method={method}, target={target}");
-
-            return new Request(request.Length, url, method, target);
+            return request;
         }
 
         private T ParseEnum<T>(string value)
