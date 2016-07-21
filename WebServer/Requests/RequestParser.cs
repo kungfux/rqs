@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using log4net;
@@ -14,7 +13,7 @@ namespace WebServer.Requests
         private const string ExtensionUrlBeginsWith = "/api";
         private const string RequestRegularExpression = @"^(?<type>\w+)\s+(?<uri>[^\s\?]+)[^\s]*\s+HTTP/.*|";
 
-        public Request ReadAndParseRequest(NetworkStream clientStream)
+        public Request ReadAndParseRequest(ClientStream clientStream)
         {
             if (clientStream == null)
                 throw new ArgumentNullException(nameof(clientStream));
@@ -47,7 +46,7 @@ namespace WebServer.Requests
             return new Request(request.Length, url, method, target);
         }
 
-        private string ReadRequest(NetworkStream clientStream)
+        private string ReadRequest(ClientStream clientStream)
         {
             var request = string.Empty;
             int requestLength;

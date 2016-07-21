@@ -66,12 +66,15 @@
   <ItemGroup>
     <Compile Include="API\IExtension.cs" />
     <Compile Include="ClientProcessor.cs" />
+    <Compile Include="ClientStream.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Requests\RequestParser.cs" />
     <Compile Include="Requests\Target.cs" />
     <Compile Include="Requests\Method.cs" />
     <Compile Include="Responses\FileProcessor.cs" />
+    <Compile Include="Responses\OptionsHeader.cs" />
+    <Compile Include="Responses\ResponseHeader.cs" />
     <Compile Include="Responses\Header.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Status.cs" />

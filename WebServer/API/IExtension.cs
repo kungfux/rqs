@@ -8,6 +8,6 @@ namespace WebServer.API
         string Name { get; }
         string AcceptedUrlStartsWith { get; }
 
-        void ProcessRequest(NetworkStream clientStream, Request request);
+        void ProcessRequest(ClientStream clientStream, Request request);
     }
 }

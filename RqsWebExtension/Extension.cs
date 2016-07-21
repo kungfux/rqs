@@ -8,6 +8,7 @@ using Storage.Requirements.Model.Entity;
 using WebServer.API;
 using WebServer.Requests;
 using WebServer.Responses;
+using WebServer;
 
 namespace RqsWebExtension
 {
@@ -38,7 +39,7 @@ namespace RqsWebExtension
         private readonly Requirements _requirementsStorage = new Requirements();
 
         // TODO: Isolate extensions from accessing web server objects
-        public void ProcessRequest(NetworkStream clientStream, Request request)
+        public void ProcessRequest(ClientStream clientStream, Request request)
         {
             Log.Debug("Request for Api is received.");
 
@@ -48,7 +49,7 @@ namespace RqsWebExtension
 
             byte[] response = Encoding.UTF8.GetBytes(json);
 
-            Header.Instance.WriteHeader(clientStream, System.Net.HttpStatusCode.OK, "application/json", response.Length);
+            clientStream.WriteHeader(new ResponseHeader(System.Net.HttpStatusCode.OK, "application/json", response.Length));
             clientStream.Write(response, 0, response.Length);
         }
 

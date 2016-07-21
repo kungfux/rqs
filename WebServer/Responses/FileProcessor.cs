@@ -22,7 +22,7 @@ namespace WebServer.Responses
 
         public static FileProcessor Instance { get; } = new FileProcessor();
 
-        public void WriteFile(NetworkStream clientStream, string fileUri, bool sendOnlyHeader = false)
+        public void WriteFile(ClientStream clientStream, string fileUri, bool sendOnlyHeader = false)
         {
             _log.Debug($"File is requested: {fileUri}");
 
@@ -36,7 +36,7 @@ namespace WebServer.Responses
                 {
                     using (var fileStream = new FileStream(fileUri, FileMode.Open, FileAccess.Read, FileShare.Read))
                     {
-                        if (Header.Instance.WriteHeader(clientStream, HttpStatusCode.OK, contentType, fileStream.Length)
+                        if (clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.OK, contentType, fileStream.Length))
                             && !sendOnlyHeader)
                         {
                             while (fileStream.Position < fileStream.Length)
@@ -50,29 +50,29 @@ namespace WebServer.Responses
                 catch (FileNotFoundException e)
                 {
                     _log.Error($"Requested file was not found: {fileUri}", e);
-                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                    clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.NotFound));
                 }
                 catch (DirectoryNotFoundException e)
                 {
                     _log.Error($"Requested folder was not found: {fileUri}", e);
-                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                    clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.NotFound));
                 }
                 catch (Exception e)
                 {
                     _log.Fatal($"Unhandled exception was occurred: {fileUri}", e);
-                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.InternalServerError);
+                    clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
                 }
             }
         }
 
-        private bool ValidateFile(NetworkStream clientStream, ref string fileUri)
+        private bool ValidateFile(ClientStream clientStream, ref string fileUri)
         {
             var isValid = true;
 
             if (fileUri.IndexOf("..", StringComparison.Ordinal) >= 0)
             {
                 isValid = false;
-                Header.Instance.WriteHeader(clientStream, HttpStatusCode.Forbidden);
+                clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.Forbidden));
                 _log.Warn("Attempt to read up folder is detected.");
             }
             else
@@ -85,7 +85,7 @@ namespace WebServer.Responses
                 {
                     isValid = false;
                     _log.Info($"Requested file was not found: {fileUri}");
-                    Header.Instance.WriteHeader(clientStream, HttpStatusCode.NotFound);
+                    clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.NotFound));
                 }
             }
 

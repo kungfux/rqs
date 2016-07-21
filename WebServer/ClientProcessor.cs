@@ -11,23 +11,23 @@ namespace WebServer
 {
     internal class ClientProcessor
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly TcpClient _client;
-        private readonly NetworkStream _clientStream;
-        private static readonly RequestParser Parser = new RequestParser();
+        private readonly ClientStream _clientStream;
+        private readonly RequestParser _parser = new RequestParser();
 
         public ClientProcessor(TcpClient client)
         {
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
             _client = client;
-            _clientStream = _client.GetStream();
+            _clientStream = new ClientStream(_client.GetStream());
         }
 
         public void ProcessRequest(ICollection<IExtension> extensions)
         {
-            Request request = Parser.ReadAndParseRequest(_clientStream);
+            Request request = _parser.ReadAndParseRequest(_clientStream);
 
             if (request != null)
             {
@@ -35,7 +35,7 @@ namespace WebServer
             }
             else
             {
-                Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
             }
 
             _client.Close();
@@ -53,7 +53,7 @@ namespace WebServer
                     break;
                 default:
                     // TODO: Has no any sense since enum has no another values
-                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+                    _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
                     break;
             }
         }
@@ -69,10 +69,10 @@ namespace WebServer
                     FileProcessor.Instance.WriteFile(_clientStream, request.Url);
                     break;
                 case Method.OPTIONS:
-                    Header.Instance.SendOptionsHeader(_clientStream, HttpStatusCode.OK);
+                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.OK));
                     break;
                 default:
-                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+                    _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
                     break;
             }
         }
@@ -92,7 +92,7 @@ namespace WebServer
                         catch (Exception e)
                         {
                             // TODO: Send header???
-                            Log.Error("Exception occurs in extension.", e);
+                            _log.Error("Exception occurs in extension.", e);
                         }
                         return;
                     }
@@ -100,7 +100,7 @@ namespace WebServer
             }
 
             // If nobody can process the api request
-            Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
         }
     }
 }
