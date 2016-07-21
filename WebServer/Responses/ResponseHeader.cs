@@ -6,7 +6,7 @@ namespace WebServer.Responses
 {
     public class ResponseHeader : Header
     {
-        private const string HEADER_CONTENT_FORMAT = "Content-Language: en\nContent-Type: {0}; charset=utf-8\nContent-Length: {1}";
+        private const string HEADER_CONTENT_FORMAT = "Content-Language: en\r\nContent-Type: {0}; charset=utf-8\r\nContent-Length: {1}";
 
         private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
