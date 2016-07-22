@@ -9,8 +9,8 @@ namespace WebServer.Responses
     internal class FileProcessor
     {
         private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly string _rootPath = Config.Instance.RootPath;
-        private readonly string _indexFile = Config.Instance.IndexFile;
+        private readonly string _rootPath = Configuration.Instance.RootPath;
+        private readonly string _indexFile = Configuration.Instance.IndexFile;
 
         static FileProcessor()
         {

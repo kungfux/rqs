@@ -29,9 +29,9 @@ namespace Fuse.Models
 
         public void ReadConfig()
         {
-            Config.Instance.Port = Properties.Settings.Default.PORT;
-            Config.Instance.RootPath = Properties.Settings.Default.ROOT_PATH;
-            Config.Instance.IndexFile = Properties.Settings.Default.INDEX_FILE;
+            Configuration.Instance.Port = Properties.Settings.Default.PORT;
+            Configuration.Instance.RootPath = Properties.Settings.Default.ROOT_PATH;
+            Configuration.Instance.IndexFile = Properties.Settings.Default.INDEX_FILE;
         }
     }
 }

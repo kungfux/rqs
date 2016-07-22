@@ -17,7 +17,7 @@ namespace WebServer
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly IPAddress IpAddress = IPAddress.Any;
-        private readonly int _port = Config.Instance.Port;
+        private readonly int _port = Configuration.Instance.Port;
 
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;

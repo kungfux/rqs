@@ -67,7 +67,7 @@
     <Compile Include="API\IExtension.cs" />
     <Compile Include="ClientProcessor.cs" />
     <Compile Include="ClientStream.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Requests\RequestParser.cs" />
     <Compile Include="Requests\Target.cs" />
