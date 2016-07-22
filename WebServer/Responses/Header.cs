@@ -4,7 +4,7 @@ namespace WebServer.Responses
 {
     public abstract class Header
     {
-        protected readonly string HEADER_GENERAL_FORMAT = 
+        protected string HeaderGeneralFormat => 
             "HTTP/1.1 {0}\r\n" + 
             $"Date: {DateTime.UtcNow.ToString("R")}\r\n" +  
             "Server: Fuse\r\n" +

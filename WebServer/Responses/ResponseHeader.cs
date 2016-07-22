@@ -19,7 +19,7 @@ namespace WebServer.Responses
                 throw new ArgumentException(errorMessage);
             }
 
-            Value = string.Format(HEADER_GENERAL_FORMAT,
+            Value = string.Format(HeaderGeneralFormat,
                         (int)httpStatusCode + " " + httpStatusCode.ToString(),
                         string.Format(HEADER_CONTENT_FORMAT,
                             contentType,
