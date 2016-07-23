@@ -2,22 +2,19 @@
 {
     public class Request
     {
-        public int? Length { get; private set; }
-        public string Url { get; private set; }
-        public Method Method { get; private set; }
-        public Target Target { get; private set; }
+        public int? Length { get; internal set; }
+        public string Url { get; internal set; }
+        public Method? Method { get; internal set; }
+        public Target? Target { get; internal set; }
 
-        public Request()
+        internal Request()
         {
 
         }
 
-        internal Request(int? length, string url, Method method, Target target)
+        public override string ToString()
         {
-            Length = length;
-            Url = url;
-            Method = method;
-            Target = target;
+            return $"Url: {Url} Method: {Method} Length: {Length} Target: {Target}";
         }
     }
 }

@@ -18,32 +18,42 @@ namespace WebServer.Requests
             if (clientStream == null)
                 throw new ArgumentNullException(nameof(clientStream));
 
-            var request = ReadRequest(clientStream);
-
-            var requestMatch = Regex.Match(request, RequestRegularExpression);
+            var rawRequest = ReadRequest(clientStream);
+            var requestMatch = Regex.Match(rawRequest, RequestRegularExpression);
 
             if (requestMatch == Match.Empty)
             {
                 return new Request();
             }
 
+            var request = new Request {Length = rawRequest.Length};
+
             var url = requestMatch.Groups["uri"].Value;
             url = Uri.UnescapeDataString(url);
+            request.Url = url;
 
-            var method = Method.CONNECT;
             var methodValue = requestMatch.Groups["type"].Value.ToUpperInvariant();
             if (!string.IsNullOrEmpty(methodValue))
-                method = ParseEnum<Method>(methodValue);
-
-            var target = Target.File;
-            if (!string.IsNullOrEmpty(url) && url.StartsWith(ExtensionUrlBeginsWith))
             {
-                target = Target.Api;
+                try
+                {
+                    request.Method = ParseEnum<Method>(methodValue);
+                }
+                catch (Exception e)
+                {
+                    Log.Debug($"Cannot convert {methodValue} to Request Method", e);
+                }
             }
 
-            Log.Info($"Request received: length={request.Length}, url='{url}', method={method}, target={target}");
+            request.Target = Target.File;
+            if (!string.IsNullOrEmpty(url) && url.StartsWith(ExtensionUrlBeginsWith))
+            {
+                request.Target = Target.Api;
+            }
 
-            return new Request(request.Length, url, method, target);
+            Log.Info($"Request received: {request}");
+
+            return request;
         }
 
         private string ReadRequest(ClientStream clientStream)

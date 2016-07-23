@@ -27,9 +27,20 @@ namespace WebServer
 
         public void ProcessRequest(ICollection<IExtension> extensions)
         {
-            Request request = _parser.ReadAndParseRequest(_clientStream);
+            Request request;
 
-            if (request != null)
+            try
+            {
+                request = _parser.ReadAndParseRequest(_clientStream);
+            }
+            catch (Exception e)
+            {
+                _log.Fatal("Unable to parse request", e);
+                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
+                throw;
+            }
+
+            if (request?.Url != null && request.Method != null && request.Target != null)
             {
                 ProcessByTarget(request, extensions);
             }
@@ -51,10 +62,6 @@ namespace WebServer
                 case Target.Api:
                     ProcessTargetApi(request, extensions);
                     break;
-                default:
-                    // TODO: Has no any sense since enum has no another values
-                    _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
-                    break;
             }
         }
 
@@ -72,7 +79,7 @@ namespace WebServer
                     _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.OK));
                     break;
                 default:
-                    _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
+                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.NotImplemented));
                     break;
             }
         }
@@ -81,7 +88,7 @@ namespace WebServer
         {
             if (extensions != null)
             {
-                foreach(IExtension extension in extensions)
+                foreach(var extension in extensions)
                 {
                     if (request.Url.StartsWith(extension.AcceptedUrlStartsWith))
                     {
@@ -91,7 +98,7 @@ namespace WebServer
                         }
                         catch (Exception e)
                         {
-                            // TODO: Send header???
+                            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
                             _log.Error("Exception occurs in extension.", e);
                         }
                         return;
@@ -99,7 +106,6 @@ namespace WebServer
                 }
             }
 
-            // If nobody can process the api request
             _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
         }
     }

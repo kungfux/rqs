@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using WebServer.Requests;
+﻿using WebServer.Requests;
 
 namespace WebServer.API
 {

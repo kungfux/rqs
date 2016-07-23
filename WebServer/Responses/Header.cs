@@ -10,7 +10,7 @@ namespace WebServer.Responses
             "Server: Fuse\r\n" +
             "X-Powered-By: Alexander Fuks and contributors\r\n" +
             "{1}" + 
-            "\r\n\r\n";
+            "\r\n";
 
         public abstract string Value { get; }
     }

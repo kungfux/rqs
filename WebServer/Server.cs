@@ -22,7 +22,7 @@ namespace WebServer
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
 
-        private readonly string EXTENSIONS_LOCATION = ".";
+        private const string ExtensionsLocation = ".";
         private readonly ICollection<IExtension> _extensions;
 
         public Server()
@@ -142,7 +142,7 @@ namespace WebServer
 
         private ICollection<IExtension> LoadExtensions()
         {
-            var dllFileNames = Directory.GetFiles(EXTENSIONS_LOCATION, "*.dll");
+            var dllFileNames = Directory.GetFiles(ExtensionsLocation, "*.dll");
 
             var assemblies = new List<Assembly>(dllFileNames.Length);
             foreach (string dllFile in dllFileNames)

@@ -6,7 +6,7 @@ namespace WebServer.Responses
 {
     public class OptionsHeader : Header
     {
-        private const string HEADER_ALLOW = "Allow: Get, Head, Options";
+        private const string HeaderAllow = "Allow: Get, Head, Options\r\n";
 
         private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -23,7 +23,7 @@ namespace WebServer.Responses
 
             Value = string.Format(HeaderGeneralFormat,
                     (int)httpStatusCode + " " + httpStatusCode.ToString(),
-                    HEADER_ALLOW);
+                    HeaderAllow);
         }
 
         public override string Value { get; }

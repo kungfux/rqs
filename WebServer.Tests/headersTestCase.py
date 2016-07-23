@@ -10,72 +10,95 @@
 """
 Codes list:
 	200 - OK
-	404 - NOT_FOUND
-	500 - INTERNAL_SERVER_ERROR
+	301 - Moved Permanently
+	400 - Bad Request
+	403 - Forbidden
+	404 - Not found
+	500 - Internal Server Error
+	501 - Not Implemented
 """
 
 import unittest
 import httplib
 import socket
 
-# server location
+# Server location
 fuseHostName = socket.gethostname()
 fuseIpAddress = socket.gethostbyname(fuseHostName)
 
-# Headers
+# Request method types
 GET = 'GET'
 HEAD = 'HEAD'
 OPTIONS = 'OPTIONS'
 TRACE = 'TRACE'
+SEARCH = 'SEARCH'
 
-def doTest(method, uri):
+def getRequestStatus(method, uri):
 	conn = httplib.HTTPConnection(fuseIpAddress)
 	conn.request(method, uri)
 	return conn.getresponse().status
-	
+
 class ResponceHeadersTestCase(unittest.TestCase):
-	# Incorrect request
-	def testIncorrectRequest(self):
-		self.assertEqual(doTest('', '/index.html'), 404)
-		
-	# GET request
-	def testGetEmptyRequest(self):
-		self.assertEqual(doTest(GET, ''), 200)
-	def testGetRootRequest(self):
-		self.assertEqual(doTest(GET, '/'), 200)
-	def testGetIndexFileRequest(self):
-		self.assertEqual(doTest(GET, '/index.html'), 200)
-	def testGetFolderUpLevelRequest(self):
-		self.assertEqual(doTest(GET, '/../'), 403)
-	def testGetSystemDriveRequest(self):
-		self.assertEqual(doTest(GET, 'C:\\'), 404)
-	def testGetCmdCommandRequest(self):
-		self.assertEqual(doTest(GET, 'echo "Hi"'), 404)
-	
+
+	# GET requests
+	#def testGET_EmptyUrlRequestReturns301(self):
+	#	self.assertEqual(getRequestStatus(GET, ''), 301)
+	def testGET_RootRequestReturns200(self):
+		self.assertEqual(getRequestStatus(GET, '/'), 200)
+	def testGET_IndexFileRequestReturns200(self):
+		self.assertEqual(getRequestStatus(GET, '/index.html'), 200)
+	# GET requests Directory Traversal Vulnerability
+	def testGET_DTV_Request1Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/..%2f'), 403)
+	def testGET_DTV_Request2Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/..%5c'), 403)
+	def testGET_DTV_Request3Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/..\\'), 403)
+	def testGET_DTV_Request4Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/..\\\\'), 403)
+	def testGET_DTV_Request5Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/..\\/'), 403)
+	def testGET_DTV_Request6Returns403(self):
+		self.assertEqual(getRequestStatus(GET, '/.\..\\'), 403)
+	# GET requests Handling Characters
+	#def testGET_RequestWithCharacters1Returns301(self):
+	#	self.assertEqual(getRequestStatus(GET, '/?.'), 301)
+	#def testGET_RequestWithCharacters2Returns301(self):
+	#	self.assertEqual(getRequestStatus(GET, '/<.'), 301)
+	#def testGET_RequestWithCharacters3Returns301(self):
+	#	self.assertEqual(getRequestStatus(GET, '/$.'), 301)
+	#def testGET_RequestWithCharacters4Returns301(self):
+	#	self.assertEqual(getRequestStatus(GET, '/cc.'), 301)
+	# GET requests Commands
+	def testGET_SystemDriveRequestReturns404(self):
+		self.assertEqual(getRequestStatus(GET, 'C:\\'), 404)
+	def testGET_CmdCommandRequestReturns404(self):
+		self.assertEqual(getRequestStatus(GET, 'echo%20"Hi"'), 404)
+
 	# HEAD requests
-	def testHeadEmptyRequest(self):
-		self.assertEqual(doTest('HEAD', ''), 200)
-	def testHeadRootRequest(self):
-		self.assertEqual(doTest('HEAD', '/'), 200)
-	def testHeadIndexFileRequest(self):
-		self.assertEqual(doTest('HEAD', '/index.html'), 200)
-	def testHeadIndexWithParameterRequest(self):
-		self.assertEqual(doTest('HEAD', '/index.html?param=value'), 200)
-	def testHeadIndexWithTwoParametersRequest(self):
-		self.assertEqual(doTest('HEAD', '/index.html?param1=&param2='), 200)
-	def testHeadReadFolderUpRequest(self):
-		self.assertEqual(doTest('HEAD', '/../'), 403)
-	def testHeadReadSystemDriveRequest(self):
-		self.assertEqual(doTest('HEAD', 'C:\\'), 404)
-	def testHeadReadFileFromSystemDriveRequest(self):
-		self.assertEqual(doTest('HEAD', 'C:\\pagefile.sys'), 404)
-	def testHeadReadFileFromWindowsDirectoryRequest(self):
-		self.assertEqual(doTest('HEAD', '%WINDIR%\\notepad.exe'), 404)
-		
+	#def testHEAD_EmptyRequestReturns301(self):
+	#	self.assertEqual(getRequestStatus('HEAD', ''), 301)
+	def testHEAD_RootRequestReturns200(self):
+		self.assertEqual(getRequestStatus('HEAD', '/'), 200)
+	def testHEAD_IndexFileRequestReturns200(self):
+		self.assertEqual(getRequestStatus('HEAD', '/index.html'), 200)
+	def testHEAD_IndexFileWithParameterRequestReturns200(self):
+		self.assertEqual(getRequestStatus('HEAD', '/index.html?param=value'), 200)
+
 	# OPTIONS request
-	def testOptionsMethod(self):
-		self.assertEqual(doTest(OPTIONS, ''), 200)
-		
-	# TRACE request (not suitable for now)
-	#def testTraceMethod(self):
-	#	self.assertEqual(doTest(TRACE, '/index.html'), 405)
+	#def testOPTIONS_EmptyRequestReturns301(self):
+	#	self.assertEqual(getRequestStatus(OPTIONS, ''), 301)
+	def testOPTIONS_RootRequestReturns200(self):
+		self.assertEqual(getRequestStatus(OPTIONS, '/'), 200)
+
+	# TRACE request (not implemented)
+	def testTRACE_RequestReturns501(self):
+		self.assertEqual(getRequestStatus(TRACE, '/index.html'), 501)
+
+	# SEARCH request (not implemented, not known)
+	def testSEARCH_RequestReturns400(self):
+		self.assertEqual(getRequestStatus(SEARCH, '/index.html'), 400)
+
+	# Incorrect request
+	def testEMPTY_RequestReturns400(self):
+		self.assertEqual(getRequestStatus('', '/index.html'), 400)

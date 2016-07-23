@@ -6,7 +6,7 @@ namespace WebServer.Responses
 {
     public class ResponseHeader : Header
     {
-        private const string HEADER_CONTENT_FORMAT = "Content-Language: en\r\nContent-Type: {0}; charset=utf-8\r\nContent-Length: {1}";
+        private const string HeaderContentFormat = "Content-Language: en\r\nContent-Type: {0}; charset=utf-8\r\nContent-Length: {1}\r\n";
 
         private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -19,13 +19,11 @@ namespace WebServer.Responses
                 throw new ArgumentException(errorMessage);
             }
 
-            Value = string.Format(HeaderGeneralFormat,
-                        (int)httpStatusCode + " " + httpStatusCode.ToString(),
-                        string.Format(HEADER_CONTENT_FORMAT,
-                            contentType,
-                            contentLength
-                            )
-                        );
+            Value = string.Format(
+                HeaderGeneralFormat,
+                (int) httpStatusCode + " " + httpStatusCode.ToString(),
+                contentType != null ? string.Format(HeaderContentFormat, contentType, contentLength) : ""
+                );
         }
 
         public override string Value { get; }
