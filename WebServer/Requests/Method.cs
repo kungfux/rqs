@@ -2,8 +2,14 @@
 {
     public enum Method
     {
+        CONNECT,
+        DELETE,
         GET,
         HEAD,
-        OPTIONS
+        OPTIONS,
+        PATCH,
+        POST,
+        PUT,
+        TRACE
     }
 }

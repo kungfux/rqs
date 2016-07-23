@@ -60,6 +60,8 @@ class ResponceHeadersTestCase(unittest.TestCase):
 		self.assertEqual(getRequestStatus(GET, '/..\\/'), 403)
 	def testGET_DTV_Request6Returns403(self):
 		self.assertEqual(getRequestStatus(GET, '/.\..\\'), 403)
+	def testGET_DTV_Request7Returns404(self):
+		self.assertEqual(getRequestStatus(GET, '/\\127.0.0.1\\'), 404)
 	# GET requests Handling Characters
 	#def testGET_RequestWithCharacters1Returns301(self):
 	#	self.assertEqual(getRequestStatus(GET, '/?.'), 301)
