@@ -8,11 +8,11 @@ namespace Parser
     {
         private readonly ICollection<IFileParser> _fileParsers;
 
-        public RequirementsFileParser()
+        public RequirementsFileParser(bool isOverrideMode = false)
         {
             _fileParsers = new List<IFileParser>()
             {
-                new ExcelParser()
+                new ExcelParser(isOverrideMode)
             };
         }
 
