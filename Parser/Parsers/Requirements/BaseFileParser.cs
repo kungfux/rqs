@@ -10,7 +10,6 @@ namespace Parser.Parsers.Requirements
     internal abstract class BaseFileParser: IFileParser
     {
         protected static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        protected static readonly bool IsDebugEnabled = Log.IsDebugEnabled;
 
         public bool IsOverrideMode { get; set; }
 
@@ -39,21 +38,15 @@ namespace Parser.Parsers.Requirements
                 return;
             }
 
-            if (IsDebugEnabled)
-            {
-                Log.Debug($"Looking for files in folder {path}");
-            }
+            Log.Debug($"Looking for files in folder {path}");
 
             var targetFilesInfos = targetDirectory.GetFiles(AcceptableFileMask);
             var targetFiles = targetFilesInfos.ToList();
             targetFiles.RemoveAll(x => x.Name.StartsWith(".~"));
 
-            if (IsDebugEnabled)
-            {
-                Log.Debug(targetFiles.Count <= 0
+            Log.Debug(targetFiles.Count <= 0
                     ? "No files are qualified."
                     : $"Following {targetFiles.Count} files are qualified: {string.Join(Environment.NewLine, targetFiles)}");
-            }
 
             foreach (var file in targetFiles)
             {
@@ -88,17 +81,14 @@ namespace Parser.Parsers.Requirements
                     var checksum = sha.ComputeHash(fileStream);
                     var hash = BitConverter.ToString(checksum).Replace("-", string.Empty);
 
-                    if (IsDebugEnabled)
-                    {
-                        Log.Debug($"Hash of file {filePath} is {hash}");
-                    }
+                    Log.Debug($"File: {filePath}, Computed hash = {hash}");
 
                     return hash;
                 }
             }
             catch (Exception ex)
             {
-                Log.Error($"Unable to compute hash of file {filePath}", ex);
+                Log.Error($"Unable to compute hash for file {filePath}", ex);
                 return string.Empty;
             }
         }

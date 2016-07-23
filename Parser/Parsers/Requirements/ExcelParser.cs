@@ -62,10 +62,7 @@ namespace Parser.Parsers.Requirements
 
                         foreach (DataRow row in table.Rows)
                         {
-                            if (IsDebugEnabled)
-                            {
-                                Log.Debug($"Row {rowBeingProcessed} values: {string.Join(", ", row.ItemArray)}");
-                            }
+                            Log.Debug($"Row {rowBeingProcessed} values: {string.Join(", ", row.ItemArray)}");
 
                             if (rowBeingProcessed == 0)
                             {
@@ -93,10 +90,7 @@ namespace Parser.Parsers.Requirements
                             {
                                 if (req.Number != null)
                                 {
-                                    if (IsDebugEnabled)
-                                    {
-                                        Log.Debug($"Requirement parsed: Number:  {req.Number}");
-                                    }
+                                    Log.Debug($"Requirement parsed: Number:  {req.Number}");
 
                                     AddRequirementToStorage(new Requirement());
                                 }
@@ -152,10 +146,7 @@ namespace Parser.Parsers.Requirements
                 totalRows += table.Rows.Count;
             }
 
-            if (IsDebugEnabled)
-            {
-                Log.Debug($"Total rows: {totalRows}");
-            }
+            Log.Debug($"Total rows: {totalRows}");
 
             return totalRows;
         }
