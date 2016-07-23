@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using WebServer.Requests;
+﻿using WebServer.Requests;
 
 namespace WebServer.API
 {
@@ -8,6 +7,6 @@ namespace WebServer.API
         string Name { get; }
         string AcceptedUrlStartsWith { get; }
 
-        void ProcessRequest(NetworkStream clientStream, Request request);
+        void ProcessRequest(ClientStream clientStream, Request request);
     }
 }

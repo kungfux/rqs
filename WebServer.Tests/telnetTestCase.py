@@ -19,14 +19,14 @@ fusePort = 80
 
 # telnet config
 telnetTimeOut = 5
-  
+
 def doTest(x):
 	telnet = telnetlib.Telnet(fuseIpAddress, fusePort, telnetTimeOut)
 	telnet.write(x)
 	telnet.read_all()
 	telnet.close
 	return True
-		
+
 class TelnetConnectionTestCase(unittest.TestCase):	
 	def testNoDataSentByClient(self):
 		self.assertTrue(doTest(''))

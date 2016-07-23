@@ -1,41 +1,52 @@
-﻿using WebServer.Requests;
-using WebServer.Responses;
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using WebServer.API;
+using WebServer.Requests;
+using WebServer.Responses;
 
 namespace WebServer
 {
-    internal class Client
+    internal class ClientProcessor
     {
-        private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly TcpClient _client;
-        private readonly NetworkStream _clientStream;
-        private static readonly RequestParser Parser = new RequestParser();
+        private readonly ClientStream _clientStream;
+        private readonly RequestParser _parser = new RequestParser();
 
-        public Client(TcpClient client)
+        public ClientProcessor(TcpClient client)
         {
             if (client == null)
                 throw new ArgumentNullException(nameof(client));
             _client = client;
-            _clientStream = _client.GetStream();
+            _clientStream = new ClientStream(_client.GetStream());
         }
 
         public void ProcessRequest(ICollection<IExtension> extensions)
         {
-            Request request = Parser.ReadAndParseRequest(_clientStream);
+            Request request;
 
-            if (request != null)
+            try
+            {
+                request = _parser.ReadAndParseRequest(_clientStream);
+            }
+            catch (Exception e)
+            {
+                _log.Fatal("Unable to parse request", e);
+                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
+                throw;
+            }
+
+            if (request?.Url != null && request.Method != null && request.Target != null)
             {
                 ProcessByTarget(request, extensions);
             }
             else
             {
-                Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
             }
 
             _client.Close();
@@ -51,10 +62,6 @@ namespace WebServer
                 case Target.Api:
                     ProcessTargetApi(request, extensions);
                     break;
-                default:
-                    // TODO: Has no any sense since enum has no another values
-                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
-                    break;
             }
         }
 
@@ -69,10 +76,10 @@ namespace WebServer
                     FileProcessor.Instance.WriteFile(_clientStream, request.Url);
                     break;
                 case Method.OPTIONS:
-                    Header.Instance.SendOptionsHeader(_clientStream, HttpStatusCode.OK);
+                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.OK));
                     break;
                 default:
-                    Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.NotImplemented));
                     break;
             }
         }
@@ -81,7 +88,7 @@ namespace WebServer
         {
             if (extensions != null)
             {
-                foreach(IExtension extension in extensions)
+                foreach(var extension in extensions)
                 {
                     if (request.Url.StartsWith(extension.AcceptedUrlStartsWith))
                     {
@@ -91,16 +98,15 @@ namespace WebServer
                         }
                         catch (Exception e)
                         {
-                            // TODO: Send header???
-                            Log.Error("Exception occurs in extension.", e);
+                            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
+                            _log.Error("Exception occurs in extension.", e);
                         }
                         return;
                     }
                 }
             }
 
-            // If nobody can process the api request
-            Header.Instance.WriteHeader(_clientStream, HttpStatusCode.BadRequest);
+            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
         }
     }
 }
