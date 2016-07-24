@@ -1,6 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
+using Castle.INPC;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Fuse.ViewModels;
+using Fuse.Views;
 
 namespace Fuse
 {
@@ -9,9 +16,10 @@ namespace Fuse
     /// </summary>
     public partial class App
     {
-
-        public App()
+        protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+
             // Log levels:
             //  Debug - to log info useful for debugging
             //  Error - to log not critical exceptions
@@ -23,6 +31,11 @@ namespace Fuse
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             InitializeResourceDictionaries();
+
+            var container = new WindsorContainer();
+            ConfigureDependencies(container);
+
+            container.Resolve<IViewFactory>().BuildView<MainWindowView>().Show();
         }
 
         private void InitializeResourceDictionaries()
@@ -35,6 +48,24 @@ namespace Fuse
                     break;
             }
             Application.Current.Resources.MergedDictionaries.Add(dict);
+        }
+
+        private void ConfigureDependencies(IWindsorContainer container)
+        {
+            ConfigureViewModels(container);
+            container.Register(Component.For<IViewFactory>().Instance(new ViewFactory(container)));
+        }
+
+        private static void ConfigureViewModels(IWindsorContainer container)
+        {
+            var viewModels = Classes.FromThisAssembly().IncludeNonPublicTypes().BasedOn(typeof(IViewModel<>));
+            viewModels.Configure(c =>
+            {
+                var abstraction = c.Implementation.GetInterfaces()
+                    .Single(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(IViewModel<>));
+                container.Register(Component.For(abstraction).UsingFactoryMethod(() => container.Resolve(c.Implementation)));
+            });
+            container.Install(new INPCInstaller(viewModels));
         }
     }
 }
