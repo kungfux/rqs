@@ -68,6 +68,7 @@
     <Compile Include="ClientProcessor.cs" />
     <Compile Include="ClientStream.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="IServer.cs" />
     <Compile Include="Requests\Request.cs" />
     <Compile Include="Requests\RequestParser.cs" />
     <Compile Include="Requests\Target.cs" />

@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using Castle.INPC;
 
 namespace Fuse.ViewModels
 {
-    internal interface IViewModel<T> : INotifyPropertyChanged where T : ContentControl
+    internal interface IViewModel<T> : INPCInvoker where T : ContentControl
     {
+        void RegisterCommands();
     }
 }

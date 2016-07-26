@@ -12,12 +12,11 @@ using static WebServer.Status;
 
 namespace WebServer
 {
-    public class Server : IDisposable
+    public class Server : IServer
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private static readonly IPAddress IpAddress = IPAddress.Any;
-        private readonly int _port = Configuration.Instance.Port;
 
         private readonly TcpListener _listener;
         private CancellationTokenSource _cts;
@@ -25,14 +24,14 @@ namespace WebServer
         private const string ExtensionsLocation = ".";
         private readonly ICollection<IExtension> _extensions;
 
-        public Server()
+        public Server(IConfiguration configuration)
         {
             _extensions = LoadExtensions();
 
             try
             {
-                _listener = new TcpListener(IpAddress, _port);
-                Log.Debug($"Listener initialized on {IpAddress}:{_port}.");
+                _listener = new TcpListener(IpAddress, configuration.Port);
+                Log.Debug($"Listener initialized on {IpAddress}:{configuration.Port}.");
             }
             catch (Exception ex)
             {

@@ -2,11 +2,17 @@
 
 namespace WebServer
 {
-    public class Configuration
+    public interface IConfiguration
+    {
+        int Port { get; set; }
+        string RootPath { get; set; }
+        string IndexFile { get; set; }
+    }
+
+    public class Configuration : IConfiguration
     {
         private static Configuration _instance;
         public static Configuration Instance => _instance ?? (_instance = new Configuration());
-        private Configuration() { }
 
         private int _port = 80;
         private string _rootPath = "www";

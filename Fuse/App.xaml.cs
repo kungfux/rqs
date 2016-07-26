@@ -8,6 +8,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Fuse.ViewModels;
 using Fuse.Views;
+using WebServer;
 
 namespace Fuse
 {
@@ -54,11 +55,13 @@ namespace Fuse
         {
             ConfigureViewModels(container);
             container.Register(Component.For<IViewFactory>().Instance(new ViewFactory(container)));
+            container.Register(Component.For<IConfiguration>().ImplementedBy<Configuration>().LifestyleSingleton());
+            container.Register(Component.For<IServer>().ImplementedBy<Server>());
         }
 
         private static void ConfigureViewModels(IWindsorContainer container)
         {
-            var viewModels = Classes.FromThisAssembly().IncludeNonPublicTypes().BasedOn(typeof(IViewModel<>));
+            var viewModels = Classes.FromThisAssembly().IncludeNonPublicTypes().BasedOn(typeof(IViewModel<>)).LifestyleTransient();
             viewModels.Configure(c =>
             {
                 var abstraction = c.Implementation.GetInterfaces()

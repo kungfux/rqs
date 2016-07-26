@@ -49,7 +49,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.INPC, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.INPC.1.0.0.4\lib\Castle.INPC.dll</HintPath>
+      <HintPath>..\packages\Castle.INPC.1.0.1.1\lib\Castle.INPC.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Castle.Windsor, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -76,7 +76,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
+    <Compile Include="ViewModels\LambdaCommand.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\ViewFactory.cs" />
     <Compile Include="Views\MainWindowView.xaml.cs">
@@ -98,8 +100,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\LanguageDictionary.cs" />
-    <Compile Include="Models\WebServerModel.cs" />
+    <Compile Include="LanguageDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -144,6 +145,7 @@
       <Name>WebServer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

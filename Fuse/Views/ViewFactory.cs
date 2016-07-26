@@ -24,7 +24,9 @@ namespace Fuse.Views
         public T BuildView<T>() where T : Window, new()
         {
             var view = new T();
-            view.DataContext = _container.Resolve<IViewModel<T>>();
+            var viewModel = _container.Resolve<IViewModel<T>>();
+            viewModel.RegisterCommands();
+            view.DataContext = viewModel;
             return view;
         }
     }

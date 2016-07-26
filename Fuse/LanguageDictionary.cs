@@ -2,7 +2,7 @@
 using System.Windows;
 using log4net;
 
-namespace Fuse.Models
+namespace Fuse
 {
     internal class LanguageDictionary
     {
