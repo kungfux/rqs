@@ -23,10 +23,12 @@ namespace WebServer
 
         private const string ExtensionsLocation = ".";
         private readonly ICollection<IExtension> _extensions;
+        private readonly AutoResetEvent _serverSyncObject;
 
         public Server(IConfiguration configuration)
         {
             _extensions = LoadExtensions();
+            _serverSyncObject = new AutoResetEvent(true);
 
             try
             {
@@ -40,19 +42,26 @@ namespace WebServer
             }
         }
 
-        public async void Start()
+        public void Start()
         {
             if (_cts != null && !_cts.IsCancellationRequested)
             {
                 Log.Warn("The code tried to start already started listener.");
                 throw new InvalidOperationException("Server is already started.");
             }
-            await Task.Run(() => { StartClientsAwaiting(); });
+            Task.Run(() => { StartClientsAwaiting(); });
         }
 
         public void Stop()
         {
             _cts?.Cancel();
+            if (!_serverSyncObject.WaitOne(TimeSpan.FromSeconds(10)))
+            {
+                const string error = "Exception occurs while stopping the server.";
+                var exception = new TimeoutException(error);
+                Log.Fatal(error, exception);
+                throw exception;
+            }
         }
 
         public void Dispose()
@@ -63,6 +72,7 @@ namespace WebServer
 
         private async void StartClientsAwaiting()
         {
+            _serverSyncObject.Reset();
             _cts = new CancellationTokenSource();
 
             try
@@ -119,6 +129,7 @@ namespace WebServer
             Log.Debug("Listener is stopped.");
 
             NotifyStatusChanged(ServerStatus.Stopped);
+            _serverSyncObject.Set();
         }
 
         private void ProcessClient(TcpClient tcpClient)

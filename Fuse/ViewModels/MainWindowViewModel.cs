@@ -80,10 +80,7 @@ namespace Fuse.ViewModels
                     MessageBoxButton.YesNo, MessageBoxImage.Asterisk, MessageBoxResult.No);
                 if (exitDialogResult == MessageBoxResult.Yes)
                 {
-                    //TODO: Aadd ability to await
                     _server.Stop();
-                    //because the server stops after some time and then updates the status
-                    IsServerRunning = false;
                     Application.Current.Shutdown();
                 }
                 else
