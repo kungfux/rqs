@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace ImportTool
+namespace Import
 {
     internal class Options
     {

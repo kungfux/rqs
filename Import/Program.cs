@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using Parser.Parsers.Requirements;
 
-namespace ImportTool
+namespace Import
 {
     internal static class Program
     {
