@@ -27,26 +27,25 @@ namespace Import
 
             CommandLine.Parser.Default.ParseArguments(args, options);
 
-            if (string.IsNullOrEmpty(options.File) && string.IsNullOrEmpty(options.Directory))
+            if (string.IsNullOrEmpty(options.InputFile) && string.IsNullOrEmpty(options.InputDirectory))
             {
                 Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
             WriteGreetings();
 
-            var parser = new RequirementsFileParser(options.SkipHashCheck);
+            var parser = new RequirementsFileParser(options.SkipFileCheck);
             parser.OnUpdateStatus += Parser_OnUpdateStatus;
 
-            if (!string.IsNullOrEmpty(options.File))
+            if (!string.IsNullOrEmpty(options.InputFile))
             {
-                parser.ParseFile(options.File);
+                parser.ParseFile(options.InputFile);
             }
 
-            if (!string.IsNullOrEmpty(options.Directory))
+            if (!string.IsNullOrEmpty(options.InputDirectory))
             {
-                parser.ParseDirectory(options.Directory);
+                parser.ParseDirectory(options.InputDirectory);
             }
-
 
             WriteGoodBye();
         }
