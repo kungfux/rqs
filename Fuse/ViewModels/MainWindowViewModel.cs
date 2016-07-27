@@ -39,27 +39,24 @@ namespace Fuse.ViewModels
 
         public override void RegisterCommands()
         {
-            StartServerCommand = LambdaCommand.From(param =>
-            {
-                _server.Start();
-            })
-            .CanExecuteIf(param => !IsServerRunning);
+            StartServerCommand = LambdaCommand.From(() => _server.Start())
+                .CanExecuteIf(param => !IsServerRunning);
 
-            StopServerCommand = LambdaCommand.From(param => _server.Stop())
+            StopServerCommand = LambdaCommand.From(() => _server.Stop())
                 .CanExecuteIf(param => IsServerRunning);
 
-            RestartServerCommand = LambdaCommand.From(param => { throw new NotImplementedException(); })
+            RestartServerCommand = LambdaCommand.From(() => { throw new NotImplementedException(); })
                 .CanExecuteIf(param => false);
 
-            ExitCommand = LambdaCommand.From(param => TryExit());
+            ExitCommand = LambdaCommand.From(() => TryExit());
 
-            ViewLogsCommand = LambdaCommand.From(param => { throw new NotImplementedException(); })
+            ViewLogsCommand = LambdaCommand.From(() => { throw new NotImplementedException(); })
                 .CanExecuteIf(param => false);
 
-            PreferencesCommand = LambdaCommand.From(param => { throw new NotImplementedException(); })
+            PreferencesCommand = LambdaCommand.From(() => { throw new NotImplementedException(); })
                 .CanExecuteIf(param => false);
 
-            GitHubCommand = LambdaCommand.From(param => Process.Start("https://github.com/kungfux/rqs"));
+            GitHubCommand = LambdaCommand.From(() => Process.Start("https://github.com/kungfux/rqs"));
 
             base.RegisterCommands();
         }

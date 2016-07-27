@@ -3,65 +3,70 @@ using System.Windows.Input;
 
 namespace Fuse.ViewModels
 {
-    internal class LambdaCommand : ICommand
+    internal interface ILambdaCommand : ICommand
     {
-        private Action<object> _commandAction;
+        void RaiseCanExecuteChanged();
+    }
 
-        private LambdaCommand()
+    internal class LambdaCommand : ILambdaCommand
+    {
+        private readonly Action<object> _executeAction;
+        private readonly Func<object, bool> _canExecuteAction;
+
+        private LambdaCommand(Action<object> executeAction, Func<object, bool> canExecuteAction)
         {
+            if (executeAction == null)
+                throw new ArgumentNullException(nameof(executeAction));
+            if (canExecuteAction == null)
+                throw new ArgumentNullException(nameof(canExecuteAction));
+
+            _executeAction = executeAction;
+            _canExecuteAction = canExecuteAction;
         }
 
-        public static LambdaCommand From(Action<object> commandAction)
-        {
-            var cmd = new LambdaCommand { _commandAction = commandAction };
-            return cmd;
-        }
+        public static EnabledLambdaCommand From(Action commandAction)
+            => new EnabledLambdaCommand(parameter => commandAction());
 
-        public static LambdaCommand From(Action<ICommand, object> commandAction)
-        {
-            var cmd = new LambdaCommand();
-            cmd._commandAction = obj => commandAction(cmd, obj);
-            return cmd;
-        }
+        public static EnabledLambdaCommand From(Action<object> commandAction)
+            => new EnabledLambdaCommand(commandAction);
 
-        public FullLambdaCommand CanExecuteIf(Func<object, bool> canExecuteAction)
-            => new FullLambdaCommand(this, (cmd, obj) => canExecuteAction(obj));
+        public void Execute(object parameter) => _executeAction(parameter);
 
-        public FullLambdaCommand CanExecuteIf(Func<ICommand, object, bool> canExecuteAction)
-            => new FullLambdaCommand(this, canExecuteAction);
+        public bool CanExecute(object parameter) => _canExecuteAction(parameter);
 
-        public bool CanExecute(object parameter) => true;
-
-        public void Execute(object parameter) => _commandAction(parameter);
+        public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
 
         public event EventHandler CanExecuteChanged
         {
-            add { }
-            remove { }
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
 
-        internal class FullLambdaCommand : ICommand
+        internal class EnabledLambdaCommand : ILambdaCommand
         {
-            private readonly Action<object> _commandAction;
-            private readonly Func<object, bool> _canExecuteAction;
+            private readonly Action<object> _executeAction;
 
-            public FullLambdaCommand(LambdaCommand command, Func<ICommand, object, bool> canExecuteAction)
+            protected internal EnabledLambdaCommand(Action<object> executeAction)
             {
-                _commandAction = command._commandAction;
-                _canExecuteAction = obj => canExecuteAction(this, obj);
+                _executeAction = executeAction;
             }
 
-            public bool CanExecute(object parameter) => _canExecuteAction(parameter);
+            public LambdaCommand CanExecuteIf(Func<bool> canExecuteAction)
+                => new LambdaCommand(_executeAction, parameter => canExecuteAction());
 
-            public void Execute(object parameter)
-            {
-                _commandAction(parameter);
-            }
+            public LambdaCommand CanExecuteIf(Func<object, bool> canExecuteAction)
+                => new LambdaCommand(_executeAction, canExecuteAction);
+
+            public void Execute(object parameter) => _executeAction(parameter);
+
+            public bool CanExecute(object parameter) => true;
+
+            public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
 
             public event EventHandler CanExecuteChanged
             {
-                add { CommandManager.RequerySuggested += value; }
-                remove { CommandManager.RequerySuggested -= value; }
+                add { }
+                remove { }
             }
         }
     }
