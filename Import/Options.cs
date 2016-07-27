@@ -15,6 +15,9 @@ namespace Import
         [ValueList(typeof(List<string>))]
         public List<string> OtherInputFiles { get; set; }
 
+        [Option('a', "auto-accept", HelpText = "Accept processing automatically without prompt")]
+        public bool AutoAccept { get; set; }
+
         [Option('s', "skip-check", HelpText = "Skip checking of repeated file import")]
         public bool SkipFileCheck { get; set; }
 

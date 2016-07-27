@@ -1,6 +1,6 @@
 ﻿using Parser;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using Parser.Parsers.Requirements;
 
@@ -8,55 +8,99 @@ namespace Import
 {
     internal static class Program
     {
-        private const string MessageFilesCanBeSkipped = "Note: Not qualified file(s) by extension will be skipped from import.";
         private const string MessageFilesImported = "file(s) have been processed.";
 
         private static int _filesProcessed;
         private static string _lastProcessedFile;
+        private static TargetSource _targetSource;
+
+        private static readonly Options Options = new Options();
 
         private static void Main(string[] args)
         {
             log4net.Config.XmlConfigurator.Configure();
 
-            var options = new Options();
-
-            if (args.Length == 0)
-            {
-                Console.WriteLine(options.GetUsage());
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
-            }
-
-            CommandLine.Parser.Default.ParseArguments(args, options);
+            ParseArguments(args);
 
             WriteGreetings();
 
-            var parser = new RequirementsFileParser(options.SkipFileCheck);
+            var parser = new RequirementsFileParser(Options.SkipFileCheck);
             parser.OnUpdateStatus += Parser_OnUpdateStatus;
 
-            if (!string.IsNullOrEmpty(options.InputFile))
+            // Determinate specified arguments: files or directories?
+            if (!string.IsNullOrEmpty(Options.InputFile))
             {
-                parser.ParseFile(options.InputFile);
+                _targetSource = TargetSource.File;
+            }
+            else if (!string.IsNullOrEmpty(Options.InputDirectory))
+            {
+                _targetSource = TargetSource.Directory;
+            }
 
-                if (options.OtherInputFiles.Count > 0)
+            // Combine all arguments
+            var allFilesDirectories = CombineFileDirectoryArguments(Options);
+            
+            if (!Options.AutoAccept)
+            {
+                // Get comfirmation from user
+                var preProcessor = new PreProcessor(parser);
+                var confirmed = preProcessor.ConfirmProcessFiles(allFilesDirectories, _targetSource);
+
+                if (!confirmed)
                 {
-                    options.OtherInputFiles.ForEach(parser.ParseFile);
+                    return;
                 }
             }
-            else if (!string.IsNullOrEmpty(options.InputDirectory))
-            {
-                parser.ParseFile(options.InputDirectory);
 
-                if (options.OtherInputFiles.Count > 0)
-                {
-                    options.OtherInputFiles.ForEach(parser.ParseDirectory);
-                }
-            }
-            else
+            switch (_targetSource)
             {
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                case TargetSource.File:
+                    allFilesDirectories.ForEach(parser.ParseFile);
+                    break;
+                case TargetSource.Directory:
+                    allFilesDirectories.ForEach(parser.ParseDirectory);
+                    break;
+                default:
+                    Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                    break;
             }
 
             WriteGoodBye();
+        }
+
+        private static void ParseArguments(string[] args)
+        {
+            if (args.Length == 0)
+            {
+                Console.WriteLine(Options.GetUsage());
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+            }
+
+            CommandLine.Parser.Default.ParseArguments(args, Options);
+        }
+
+        private static List<string> CombineFileDirectoryArguments(Options options)
+        {
+            var combinedList = new List<string>();
+
+            switch (_targetSource)
+            {
+                case TargetSource.File:
+                    combinedList.Add(options.InputFile);
+                    break;
+                case TargetSource.Directory:
+                    combinedList.Add(options.InputDirectory);
+                    break;
+                default:
+                    return combinedList;
+            }
+
+            if (options.OtherInputFiles.Count > 0)
+            {
+                options.OtherInputFiles.ForEach(combinedList.Add);
+            }
+
+            return combinedList;
         }
 
         private static void WriteGreetings()
@@ -65,8 +109,6 @@ namespace Import
                 $"{GetAssemblyAttribute<AssemblyTitleAttribute>(a => a.Title)} {Assembly.GetExecutingAssembly().GetName().Version} {Environment.NewLine}" +
                 $"{GetAssemblyAttribute<AssemblyCopyrightAttribute>(a => a.Copyright)}");
             Console.WriteLine();
-
-            Console.WriteLine(MessageFilesCanBeSkipped);
         }
 
         private static void WriteGoodBye()
