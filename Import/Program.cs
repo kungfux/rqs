@@ -1,5 +1,6 @@
 ﻿using Parser;
 using System;
+using System.Linq;
 using System.Reflection;
 using Parser.Parsers.Requirements;
 
@@ -27,11 +28,6 @@ namespace Import
 
             CommandLine.Parser.Default.ParseArguments(args, options);
 
-            if (string.IsNullOrEmpty(options.InputFile) && string.IsNullOrEmpty(options.InputDirectory))
-            {
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
-            }
-
             WriteGreetings();
 
             var parser = new RequirementsFileParser(options.SkipFileCheck);
@@ -40,11 +36,24 @@ namespace Import
             if (!string.IsNullOrEmpty(options.InputFile))
             {
                 parser.ParseFile(options.InputFile);
-            }
 
-            if (!string.IsNullOrEmpty(options.InputDirectory))
+                if (options.OtherInputFiles.Count > 0)
+                {
+                    options.OtherInputFiles.ForEach(parser.ParseFile);
+                }
+            }
+            else if (!string.IsNullOrEmpty(options.InputDirectory))
             {
-                parser.ParseDirectory(options.InputDirectory);
+                parser.ParseFile(options.InputDirectory);
+
+                if (options.OtherInputFiles.Count > 0)
+                {
+                    options.OtherInputFiles.ForEach(parser.ParseDirectory);
+                }
+            }
+            else
+            {
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
             }
 
             WriteGoodBye();

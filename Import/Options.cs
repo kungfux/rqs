@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Collections.Generic;
+using CommandLine;
 using CommandLine.Text;
 
 namespace Import
@@ -10,6 +11,9 @@ namespace Import
 
         [Option('d', "directory", HelpText = "Directory with files to be imported")]
         public string InputDirectory { get; set; }
+
+        [ValueList(typeof(List<string>))]
+        public List<string> OtherInputFiles { get; set; }
 
         [Option('s', "skip-check", HelpText = "Skip checking of repeated file import")]
         public bool SkipFileCheck { get; set; }
