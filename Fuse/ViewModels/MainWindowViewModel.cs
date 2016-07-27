@@ -10,13 +10,15 @@ namespace Fuse.ViewModels
 {
     internal class MainWindowViewModel : BaseViewModel, IViewModel<MainWindowView>
     {
-        private readonly IConfiguration _configuration;
         private readonly IServer _server;
+        private readonly IViewFactory _viewFactory;
+        private readonly ILanguageDictionary _languageDictionary;
 
-        public MainWindowViewModel(IConfiguration configuration, IServer server)
+        public MainWindowViewModel(IServer server, IViewFactory viewFactory, ILanguageDictionary languageDictionary)
         {
-            _configuration = configuration;
             _server = server;
+            _viewFactory = viewFactory;
+            _languageDictionary = languageDictionary;
 
             _server.StatusChanged += (sender, status) =>
             {
@@ -40,10 +42,6 @@ namespace Fuse.ViewModels
             StartServerCommand = LambdaCommand.From(param =>
             {
                 _server.Start();
-
-                _configuration.Port = Properties.Settings.Default.PORT;
-                _configuration.RootPath = Properties.Settings.Default.ROOT_PATH;
-                _configuration.IndexFile = Properties.Settings.Default.INDEX_FILE;
             })
             .CanExecuteIf(param => !IsServerRunning);
 
@@ -66,22 +64,23 @@ namespace Fuse.ViewModels
             base.RegisterCommands();
         }
 
+        protected virtual void Shutdown() => Application.Current.Shutdown();
+
         public bool TryExit()
         {
             var result = true;
             if (!IsServerRunning)
             {
-                Application.Current.Shutdown();
+                Shutdown();
             }
             else
             {
-                MessageBoxResult exitDialogResult =
-                    MessageBox.Show(LanguageDictionary.Instance.FindString("MessageWantToStopAndExit"), "Fuse",
+                var exitDialogResult = _viewFactory.ShowDialog(_languageDictionary.FindString("MessageWantToStopAndExit"), "Fuse",
                     MessageBoxButton.YesNo, MessageBoxImage.Asterisk, MessageBoxResult.No);
                 if (exitDialogResult == MessageBoxResult.Yes)
                 {
                     _server.Stop();
-                    Application.Current.Shutdown();
+                    Shutdown();
                 }
                 else
                 {

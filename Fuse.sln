@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuse", "Fuse\Fuse.csproj", "{A4280289-4092-4573-873D-6952A9C95EEE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportTool", "ImportTool\Im
 		{7AE71A6E-AABE-40D4-968B-0E6018EE376D} = {7AE71A6E-AABE-40D4-968B-0E6018EE376D}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{0FF5B082-3AB4-4F0D-B0E8-E4FA8993EA94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15E86B0C-B2E8-4655-907E-8905B01B492E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF5B082-3AB4-4F0D-B0E8-E4FA8993EA94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF5B082-3AB4-4F0D-B0E8-E4FA8993EA94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF5B082-3AB4-4F0D-B0E8-E4FA8993EA94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF5B082-3AB4-4F0D-B0E8-E4FA8993EA94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

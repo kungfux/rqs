@@ -8,6 +8,11 @@ namespace Fuse.Views
     internal interface IViewFactory
     {
         T BuildView<T>() where T : Window, new();
+
+        MessageBoxResult ShowDialog(string messageBoxText, string caption = "",
+            MessageBoxButton button = MessageBoxButton.OK,
+            MessageBoxImage icon = MessageBoxImage.None, MessageBoxResult defaultResult = MessageBoxResult.None,
+            MessageBoxOptions options = MessageBoxOptions.None);
     }
 
     internal class ViewFactory : IViewFactory
@@ -29,5 +34,11 @@ namespace Fuse.Views
             view.DataContext = viewModel;
             return view;
         }
+
+        public MessageBoxResult ShowDialog(string messageBoxText, string caption = "",
+            MessageBoxButton button = MessageBoxButton.OK,
+            MessageBoxImage icon = MessageBoxImage.None, MessageBoxResult defaultResult = MessageBoxResult.None,
+            MessageBoxOptions options = MessageBoxOptions.None)
+            => MessageBox.Show(messageBoxText, caption, button, icon, defaultResult, options);
     }
 }

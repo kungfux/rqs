@@ -54,12 +54,14 @@ namespace Fuse
         private void ConfigureDependencies(IWindsorContainer container)
         {
             ConfigureViewModels(container);
+            InitializeConfiguration(container);
+
+            container.Register(Component.For<ILanguageDictionary>().ImplementedBy<LanguageDictionary>().LifestyleSingleton());
             container.Register(Component.For<IViewFactory>().Instance(new ViewFactory(container)));
-            container.Register(Component.For<IConfiguration>().ImplementedBy<Configuration>().LifestyleSingleton());
             container.Register(Component.For<IServer>().ImplementedBy<Server>());
         }
 
-        private static void ConfigureViewModels(IWindsorContainer container)
+        private void ConfigureViewModels(IWindsorContainer container)
         {
             var viewModels = Classes.FromThisAssembly().IncludeNonPublicTypes().BasedOn(typeof(IViewModel<>)).LifestyleTransient();
             viewModels.Configure(c =>
@@ -69,6 +71,15 @@ namespace Fuse
                 container.Register(Component.For(abstraction).UsingFactoryMethod(() => container.Resolve(c.Implementation)));
             });
             container.Install(new INPCInstaller(viewModels));
+        }
+
+        private void InitializeConfiguration(IWindsorContainer container)
+        {
+            var configuration = new Configuration();
+            configuration.Port = Fuse.Properties.Settings.Default.PORT;
+            configuration.RootPath = Fuse.Properties.Settings.Default.ROOT_PATH;
+            configuration.IndexFile = Fuse.Properties.Settings.Default.INDEX_FILE;
+            container.Register(Component.For<IConfiguration>().Instance(configuration).LifestyleSingleton());
         }
     }
 }
