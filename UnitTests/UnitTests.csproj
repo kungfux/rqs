@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerTests.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="ViewModels\LambdaCommandTests.cs" />
     <Compile Include="ViewModels\MainWindowViewModelTests.cs" />
@@ -103,6 +104,9 @@
       <Project>{bb74fbba-1c33-43e8-b900-ffca99c86fb3}</Project>
       <Name>WebServer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WebServer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

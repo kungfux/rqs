@@ -58,7 +58,7 @@ namespace Fuse
 
             container.Register(Component.For<ILanguageDictionary>().ImplementedBy<LanguageDictionary>().LifestyleSingleton());
             container.Register(Component.For<IViewFactory>().Instance(new ViewFactory(container)));
-            container.Register(Component.For<IServer>().ImplementedBy<Server>());
+            container.Install(new WebServerInstaller());
         }
 
         private void ConfigureViewModels(IWindsorContainer container)
