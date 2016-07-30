@@ -15,7 +15,7 @@ namespace Import
         [ValueList(typeof(List<string>))]
         public List<string> OtherInputFiles { get; set; }
 
-        [Option('a', "auto-accept", HelpText = "Accept processing automatically without prompt")]
+        [Option('a', "auto-accept", HelpText = "Accept processing without prompt")]
         public bool AutoAccept { get; set; }
 
         [Option('s', "skip-check", HelpText = "Skip checking of repeated file import")]
@@ -26,6 +26,18 @@ namespace Import
 
         [Option('t', "template", HelpText = "Template file")]
         public string TemplateFile { get; set; }
+
+        [Option('k', "keep", HelpText = "Keep stored data for the project being updated")]
+        public bool KeepRequirements { get; set; }
+
+        [Option('o', "overall-removing", HelpText = "Clear database before importing")]
+        public bool OverallRemovingBeforeImporting { get; set; }
+
+        [Option('i', "ignore-errors", HelpText = "Do not fail import process in case of errors")]
+        public bool IgnoreErrors { get; set; }
+
+        [Option('l', "log", HelpText = "Save summary report to file specified")]
+        public string LogFile { get; set; }
 
         [HelpOption]
         public string GetUsage()
