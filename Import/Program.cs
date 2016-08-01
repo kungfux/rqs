@@ -72,11 +72,42 @@ namespace Import
         {
             if (args.Length == 0)
             {
-                Console.WriteLine(Options.GetUsage());
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                FailAndExit(true);
             }
 
             CommandLine.Parser.Default.ParseArguments(args, Options);
+
+            if (string.IsNullOrEmpty(Options.InputFile) && string.IsNullOrEmpty(Options.InputDirectory))
+            {
+                FailAndExit("Cannot proceed without both -f and -d options specified.");
+            }
+
+            if (!string.IsNullOrEmpty(Options.InputFile) && !string.IsNullOrEmpty(Options.InputDirectory))
+            {
+                FailAndExit("Cannot proceed with both -f and -d options not specified.");
+            }
+        }
+
+        private static void FailAndExit(string message)
+        {
+            FailAndExit(false, message);
+        }
+
+        private static void FailAndExit(bool displayUsage, string message = null)
+        {
+            if (displayUsage)
+            {
+                Console.WriteLine(Options.GetUsage());
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Console.WriteLine(message);
+                }
+            }
+
+            Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
         }
 
         private static List<string> CombineFileDirectoryArguments(Options options)
