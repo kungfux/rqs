@@ -1,0 +1,106 @@
+@debug: false;
+
+@themeDarkColor: #333333;
+@themeLightColor: #eee;
+@themeNoColor: #fff;
+@themeLinkColor: #2ba6cb;
+
+@fixedWidth: 1050px;
+
+@fontFamily: Slab,Georgia,serif;
+
+body {
+	background-color: @themeNoColor;
+	font-family: @fontFamily;
+	font-size: 14px;
+	margin: 0;
+}
+
+p {
+	color: @themeDarkColor;
+}
+
+a {
+ 	text-decoration: none;
+	color: @themeLinkColor;
+}
+
+
+
+header {
+	background-color: @themeDarkColor;
+	position: fixed;
+	width: 100%;
+	height: 52px;
+
+	p {
+		color: @themeLightColor;
+	}
+
+	>div.container {
+		max-width: @fixedWidth;
+		margin: auto;
+	}
+}
+
+
+
+footer {
+	background-color: @themeDarkColor;
+	height: 50px;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	vertical-align: middle;
+
+	p {
+		color: @themeLightColor;
+	}
+
+	>div.footer {
+		max-width: @fixedWidth;
+		margin: auto;
+
+		>div.stickLeft {
+			float: left;
+
+			>ul {
+				left: -40px; // TODO: Why is it so?
+			}
+		}
+		>div.stickRight {
+			float: right;
+			text-align: right;
+		}
+
+		ul {
+			list-style: none;
+			position: relative;
+
+			li {
+				display: inline;
+				color: @themeLightColor;
+			}
+
+			li + li:before {
+				content: ' | ';
+				padding: 0 10px;
+			}
+		}
+	}
+}
+
+
+
+body {
+	& when (@debug = true) {
+		div:nth-of-type(even) {
+			border-color: red;
+			border-style: dashed;
+		}
+		div:nth-of-type(odd) {
+			border-color: yellow;
+			border-style: dashed;
+		}
+	}
+}

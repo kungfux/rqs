@@ -1,12 +1,14 @@
 $(document).ready(function (){
-	if (getUrlParameter('refresh')) {
+	var refreshValue = getUrlParameter('refresh');
+	if (refreshValue === 'true') {
 		startRefresh();
+		updateTitle('asd');
 	}
 });
 
 function startRefresh(){
-    setTimeout(refresh, 5000); 
-	
+    setTimeout(refresh, 5000);
+
     function refresh(){
         window.location = location.href;
     }
@@ -22,7 +24,7 @@ function getUrlParameter(sParam) {
         sParameterName = sURLVariables[i].split('=');
 
         if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
+            return sParameterName[1];
         }
     }
 };
