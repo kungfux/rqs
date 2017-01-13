@@ -47,19 +47,22 @@ header {
 
 footer {
 	background-color: @themeDarkColor;
-	height: 50px;
+	padding:25px;
 	width: 100%;
 	position: absolute;
 	bottom: 0;
-	vertical-align: middle;
-
+	
 	p {
 		color: @themeLightColor;
 	}
 
 	>div.footer {
 		max-width: @fixedWidth;
-		margin: auto;
+		position:relative;
+   		top: 50%;
+    	left: 50%;
+	   	-webkit-transform: translate(-50%, -50%);  
+    	transform: translate(-50%, -50%);   
 
 		>div.stickLeft {
 			float: left;
@@ -74,9 +77,6 @@ footer {
 		}
 
 		ul {
-			list-style: none;
-			position: relative;
-
 			li {
 				display: inline;
 				color: @themeLightColor;
