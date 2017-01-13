@@ -1,0 +1,68 @@
+body {
+  background-color: #fff;
+  font-family: Slab, Georgia, serif;
+  font-size: 14px;
+  margin: 0;
+}
+p {
+  color: #333333;
+}
+a {
+  text-decoration: none;
+  color: #2ba6cb;
+}
+header {
+  background-color: #333333;
+  position: fixed;
+  width: 100%;
+  height: 52px;
+}
+header p {
+  color: #eee;
+}
+header > div.container {
+  max-width: 1050px;
+  margin: auto;
+}
+footer {
+  background-color: #333333;
+  padding: 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+footer p {
+  color: #eee;
+}
+footer > div.parentFooter {
+	max-width: 1050px;
+	margin:auto;
+
+}
+
+footer > div.parentFooter > div.footer {
+
+   
+}
+
+
+footer > div.parentFooter > div.footer > div.stickLeft {
+  float: left;
+
+}
+footer > div.parentFooter > div.footer > div.stickLeft > ul {
+  left: -40px;
+}
+footer > div.parentFooter > div.footer > div.stickRight {
+  float: right;
+  text-align: right;
+ 
+}
+footer > div.parentFooter > div.footer ul li {
+  display: inline;
+  color: #eee;
+}
+footer > div.parentFooter > div.footer ul li + li:before {
+  content: ' | ';
+  padding: 0 10px;
+}
