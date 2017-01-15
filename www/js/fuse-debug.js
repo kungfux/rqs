@@ -2,7 +2,6 @@ $(document).ready(function (){
 	var refreshValue = getUrlParameter('refresh');
 	if (refreshValue === 'true') {
 		startRefresh();
-		updateTitle('asd');
 	}
 });
 
