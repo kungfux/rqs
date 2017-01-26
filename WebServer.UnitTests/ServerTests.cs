@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Common;
@@ -9,15 +10,6 @@ namespace WebServer.UnitTests
 {
     public class ServerTests : UnitTest
     {
-        private class FakeServer : Server
-        {
-            public FakeServer(ITcpListener tcpListener, IClientProcessor clientProcessor) : base(tcpListener, clientProcessor)
-            {
-            }
-
-            protected override ICollection<IExtension> LoadExtensions() => Enumerable.Empty<IExtension>().ToList();
-        }
-
         private readonly FakeServer _server;
 
         public ServerTests()
@@ -38,6 +30,13 @@ namespace WebServer.UnitTests
         }
 
         [Fact]
+        public void Start_SecondInvocation_Throws()
+        {
+            _server.Start();
+            Assert.Throws<InvalidOperationException>(() => _server.Start());
+        }
+
+        [Fact]
         public void Stop_StopsListeningAndUpdatesStatus()
         {
             var stopped = false;
@@ -50,6 +49,15 @@ namespace WebServer.UnitTests
 
             Assert.True(stopped);
             Mock.VerifyAll();
+        }
+
+        private class FakeServer : Server
+        {
+            public FakeServer(ITcpListener tcpListener, IClientProcessor clientProcessor) : base(tcpListener, clientProcessor)
+            {
+            }
+
+            protected override ICollection<IExtension> LoadExtensions() => Enumerable.Empty<IExtension>().ToList();
         }
     }
 }
