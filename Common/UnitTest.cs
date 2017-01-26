@@ -1,6 +1,6 @@
 ﻿using Moq.AutoMock;
 
-namespace UnitTests
+namespace Common
 {
     public class UnitTest
     {

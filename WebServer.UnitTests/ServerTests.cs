@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using WebServer;
+using Common;
 using WebServer.API;
 using Xunit;
 
-namespace UnitTests
+namespace WebServer.UnitTests
 {
     public class ServerTests : UnitTest
     {
-        // ReSharper disable once ClassNeverInstantiated.Local
         private class FakeServer : Server
         {
             public FakeServer(ITcpListener tcpListener, IClientProcessor clientProcessor) : base(tcpListener, clientProcessor)

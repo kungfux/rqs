@@ -1,12 +1,12 @@
 ﻿using System.Windows;
-using Fuse;
+using Common;
 using Fuse.ViewModels;
 using Fuse.Views;
 using Moq;
 using WebServer;
 using Xunit;
 
-namespace UnitTests.ViewModels
+namespace Fuse.UnitTests.ViewModels
 {
     public class MainWindowViewModelTests : UnitTest
     {

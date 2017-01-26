@@ -1,7 +1,8 @@
-﻿using Fuse.ViewModels;
+﻿using Common;
+using Fuse.ViewModels;
 using Xunit;
 
-namespace UnitTests.ViewModels
+namespace Fuse.UnitTests.ViewModels
 {
     public class LambdaCommandTests : UnitTest
     {
