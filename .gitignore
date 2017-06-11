@@ -1,8 +1,0 @@
-WebQA/bin/*
-WebQA/obj/*
-WebQA/packages/*
-WebQA/*.suo
-WebQA/*.user
-WebQA/*.sln
-WebQA/.vs/*
-WebQA.Tests/*.pyc

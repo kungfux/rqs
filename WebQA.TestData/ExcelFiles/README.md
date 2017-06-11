@@ -1,1 +1,0 @@
-This folder contains examples of Excel source files to test FR converter and search algorithms.
