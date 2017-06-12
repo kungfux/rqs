@@ -61,6 +61,7 @@
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="#">jRQS</a></li>
+                        <li><a href="#">Watcher</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="http://github.com/kungfux/rqs"><span class="glyphicon glyphicon-star"></span> Give a star</a></li>
@@ -95,7 +96,7 @@
                     No results found!
                 </div>
             </c:if>
-                    
+
             <c:if test="${not empty param.phrase && fn:length(requirementsList) gt 99}">
                 <div class="alert alert-warning col-md-5">
                     Your request has returned 100 or more results but only first 100 will be displayed!
@@ -129,7 +130,7 @@
                                 <td>${requirement.ccp}</td>
                                 <td>${requirement.created} | ${requirement.modified}</td>
                                 <td>
-                                    <label><input type="checkbox" value="" disabled ${requirement.created == requirement.modified ? "checked" : ""}></label>
+                                    <label><input type="checkbox" value="" disabled ${requirement.created == requirement.modified ? "" : "checked"}></label>
                                 </td>
                                 <td>${requirement.status}</td>
                                 <td>${requirement.source}</td>
