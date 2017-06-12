@@ -78,7 +78,7 @@ public class RequirementsServlet extends HttpServlet {
             throws ServletException, IOException {
         String nextJSP = "/index.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("requirementList", requirementList);
+        request.setAttribute("requirementsList", requirementList);
         dispatcher.forward(request, response);
     }
 }

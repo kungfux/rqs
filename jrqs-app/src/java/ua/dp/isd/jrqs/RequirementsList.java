@@ -35,10 +35,6 @@ public class RequirementsList {
 
     private static final String SQL = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
     
-//    public List<Requirement> getAllRequirements() {
-//        return getRequirements(String.format(SQL, ""));
-//    }
-    
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         return getRequirements(String.format(SQL, "where fr_id = ?"), new String[] {RequirementNumbers});
     }
@@ -50,13 +46,9 @@ public class RequirementsList {
     public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
         return getRequirements(String.format(SQL, "where lower(fr_text) like lower(?)"), new String[] {("%" + TextPhrases + "%")});
     }
-
-//    private List<Requirement> getRequirements(String sql) {
-//        return getRequirements(sql, null);
-//    }
     
     private List<Requirement> getRequirements(String sql, String[] arguments) {
-        List<Requirement> requirements = new ArrayList<>();
+        List<Requirement> requirements = null;
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -74,6 +66,9 @@ public class RequirementsList {
             }
             ResultSet set = statement.executeQuery();
 
+            if (set.isBeforeFirst() ) {
+                requirements = new ArrayList<>();
+            }
             while (set.next()) {
                 requirements.add(new Requirement(
                         set.getLong(1),

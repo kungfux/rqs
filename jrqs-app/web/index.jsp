@@ -39,95 +39,129 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!--<script src="js/jquery-3.2.1.min.js"></script>-->
         <!--<script src="js/bootstrap.min.js"></script>-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Java Requirement Searcher</title>
     </head>
     <body>
-        <div class="container">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> 
+                    </button>
+                    <p class="navbar-text">QA</p>
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">jRQS</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="http://github.com/kungfux/rqs"><span class="glyphicon glyphicon-star"></span> Give a star</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
             <h2>Search Requirements</h2>
             <!-- Search form -->
             <form action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
-                <div class="form-group col-xs-5">
+                <div class="form-group col-md-4">
                     <input type="text" name="phrase" id="phrase" value="${param.phrase}" class="form-control" required="true" placeholder="Type the search phrase"/>
                     <input type="hidden" name="by" id="by" value=""/>
                 </div>
                 <button type="submit" class="btn btn-info" onclick="beforeSubmit();">
-                    <span class="glyphicon glyphicon-search"></span>
-                    Search
+                    <span class="glyphicon glyphicon-search"></span> Search
                 </button>
+                <br/>
+                <br/>
             </form>
-            <!-- End of Search form-->
-            <c:choose>
-                <c:when test="${not empty requirementList}">
-                    <table class="table table-striped">
-                        <!--<thread>-->
+
+            <!-- Welcome message -->
+            <c:if test="${empty param.phrase}">
+                <div class="alert alert-info col-md-5">
+                    Type in the search phrase or exact requirement number and click Search.
+                    Check <a href="help.html">help</a> for details.
+                </div>
+            </c:if>
+            
+            <!-- No results found message -->
+            <c:if test="${not empty param.phrase && empty requirementsList}">
+                <div class="alert alert-danger col-md-5">
+                    No results found!
+                </div>
+            </c:if>
+
+            <!-- Search results -->
+            <c:if test="${not empty requirementsList}">
+                <table class="table table-striped">
+                    <thread>
                         <tr>
-                            <td>FR ID</td>
-                            <td>TMS Task</td>
-                            <td>Object Number</td>
-                            <td>Text</td>
-                            <td>CCP</td>
-                            <td>Created</td>
-                            <td>Modified</td>
-                            <td>Is modified?</td>
-                            <td>Status</td>
-                            <td>Source</td>
+                            <td title="Requirement Number">FR ID</td>
+                            <td title="TMS Task Number">TMS Task</td>
+                            <td title="Object Number">Object Number</td>
+                            <td title="Text">Text</td>
+                            <td title="CCP">CCP</td>
+                            <td title="Created and modified dates">Created / Modified</td>
+                            <td title="Are created and modified dates equal?">Is changed?</td>
+                            <td title="Status">Status</td>
+                            <td title="Where was requirement taken?">Source</td>
                         </tr>
-                        <!--</thread>-->
-                        <c:forEach var="requirement" items="${requirementList}">
+                    </thread>
+                    <tbody>
+                        <c:forEach var="requirement" items="${requirementsList}">
                             <tr>
                                 <td>${requirement.id}</td>
-                                <td>${requirement.tmsTask}</td>
+                                <td>
+                                    <a href="search?by=tms&phrase=${requirement.tmsTask}" title="Search by TMS task">${requirement.tmsTask}</a>
+                                </td>
                                 <td>${requirement.objectNumber}</td>
                                 <td>${requirement.text}</td>
                                 <td>${requirement.ccp}</td>
-                                <td>${requirement.created}</td>
-                                <td>${requirement.modified}</td>
-                                <td>${requirement.created == requirement.modified}</td>
+                                <td>${requirement.created} | ${requirement.modified}</td>
+                                <td>
+                                    <label><input type="checkbox" value="" disabled ${requirement.created == requirement.modified ? "checked" : ""}></label>
+                                </td>
                                 <td>${requirement.status}</td>
                                 <td>${requirement.source}</td>
                             </tr>
                         </c:forEach>
-                    </table>
-                </c:when>
-                <c:otherwise>
-                    <br>
-                    <div>
-                        Type in the search phrase or exact requirement number. Check <a href="help.html">help</a> for details.
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                    </tbody>
+                </table>
+            </c:if>
         </div>
     </body>
     <script type="text/javascript">
-    function isSearchById(text) {
-        var input = text;
-        var pattern = new RegExp(/(fr|nfr)\d+/i);
-        return pattern.test(input);
-    }
-
-    function isSearchByTmsTask(text) {
-        var input = text;
-        var pattern = new RegExp(/\w{4,7}-\d+/i);
-        return pattern.test(input);
-    }
-
-    beforeSubmit = function () {
-        var searchBox = document.getElementById("searchRequirementForm");
-        var searchText = document.getElementById("phrase");
-        var searchBy = document.getElementById("by");
-
-        if (searchText.value !== "") {
-            if (isSearchById(searchText.value)) {
-                searchBy.value = "id";
-            } else if (isSearchByTmsTask(searchText.value)) {
-                searchBy.value = "tms";
-            } else {
-                searchBy.value = "text";
-            }
-            searchBox.submit();
+        function isSearchById(text) {
+            var input = text;
+            var pattern = new RegExp(/(fr|nfr)\d+/i);
+            return pattern.test(input);
         }
-    }
+
+        function isSearchByTmsTask(text) {
+            var input = text;
+            var pattern = new RegExp(/\w{4,7}-\d+/i);
+            return pattern.test(input);
+        }
+
+        beforeSubmit = function () {
+            var searchBox = document.getElementById("searchRequirementForm");
+            var searchText = document.getElementById("phrase");
+            var searchBy = document.getElementById("by");
+
+            if (searchText.value !== "") {
+                if (isSearchById(searchText.value)) {
+                    searchBy.value = "id";
+                } else if (isSearchByTmsTask(searchText.value)) {
+                    searchBy.value = "tms";
+                } else {
+                    searchBy.value = "text";
+                }
+                searchBox.submit();
+            }
+        };
     </script>
 </html>
