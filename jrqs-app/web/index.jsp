@@ -45,51 +45,48 @@
         <!--<script src="js/jquery-3.2.1.min.js"></script>-->
         <!--<script src="js/bootstrap.min.js"></script>-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>jRQS</title>
+        <title>jRQS - search in exported requirements</title>
     </head>
     <body>
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span> 
-                    </button>
-                    <p class="navbar-text">QA</p>
+                    <img src="favicon.png" class="glyphicon">
                 </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">jRQS</a></li>
-                        <li><a href="#">Watcher</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="http://github.com/kungfux/rqs"><span class="glyphicon glyphicon-star"></span> Give a star</a></li>
-                    </ul>
-                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Requirements</a></li>
+                    <li><a href="#">Watcher</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://github.com/kungfux/rqs"><span class="glyphicon glyphicon-star"></span> Give a star</a></li>
+                </ul>
+                <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
+                    <div class="input-group">
+                        <input type="text" name="phrase" id="phrase" value="${param.phrase}" class="form-control" required="true" placeholder="Type the search phrase"/>
+                        <input type="hidden" name="by" id="by" value=""/>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </nav>
+
         <div class="container-fluid">
-            <h2>Search Requirements</h2>
-
-            <form action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
-                <div class="form-group col-md-4">
-                    <input type="text" name="phrase" id="phrase" value="${param.phrase}" class="form-control" required="true" placeholder="Type the search phrase"/>
-                    <input type="hidden" name="by" id="by" value=""/>
-                </div>
-                <button type="submit" class="btn btn-info" onclick="beforeSubmit();">
-                    <span class="glyphicon glyphicon-search"></span> Search
-                </button>
-                <br/>
-                <br/>
-            </form>
-
-            <c:if test="${empty param.phrase}">
-                <div class="alert alert-info col-md-5">
-                    Type in the search phrase or exact requirement number and click Search.
-                    Check <a href="help.html">help</a> for details.
-                </div>
-            </c:if>
+            <c:choose>
+                <c:when test="${empty param.phrase}">
+                    <div class="alert alert-info col-md-5">
+                        Type in the search phrase or exact requirement number and click Search.
+                        Check <a href="help.html">help</a> for details.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <h2>Search results:</h2>
+                </c:otherwise>
+            </c:choose>
+            
 
             <c:if test="${not empty param.phrase && empty requirementsList}">
                 <div class="alert alert-danger col-md-5">
@@ -142,9 +139,7 @@
         </div>
         <nav class="navbar navbar-inverse navbar-fixed-bottom">
             <p class="text-center">The page is generated at 
-                <%= 
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS")) 
-                %>
+                <%=LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS"))%>
             </p>
         </nav>
     </body>
