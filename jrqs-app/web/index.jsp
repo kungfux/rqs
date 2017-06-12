@@ -42,10 +42,8 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <!--<script src="js/jquery-3.2.1.min.js"></script>-->
-        <!--<script src="js/bootstrap.min.js"></script>-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>jRQS - search in exported requirements</title>
+        <title>jRQS</title>
     </head>
     <body>
         <nav class="navbar navbar-inverse">
@@ -54,11 +52,12 @@
                     <img src="favicon.png" class="glyphicon">
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Requirements</a></li>
+                    <li class="active"><a href="#">jRQS</a></li>
                     <li><a href="#">Watcher</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://github.com/kungfux/rqs"><span class="glyphicon glyphicon-star"></span> Give a star</a></li>
+                    <li><a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you enjoyed this app :)">
+                            <span class="glyphicon glyphicon-star"></span> Give a star</a></li>
                 </ul>
                 <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
                     <div class="input-group">
@@ -77,25 +76,25 @@
         <div class="container-fluid">
             <c:choose>
                 <c:when test="${empty param.phrase}">
-                    <div class="alert alert-info col-md-5">
+                    <div class="alert alert-info col-md-12">
                         Type in the search phrase or exact requirement number and click Search.
-                        Check <a href="help.html">help</a> for details.
+                        Check <a href="help.html" type="button" class="btn btn-info">help</a> for details.
                     </div>
                 </c:when>
                 <c:otherwise>
                     <h2>Search results:</h2>
                 </c:otherwise>
             </c:choose>
-            
+
 
             <c:if test="${not empty param.phrase && empty requirementsList}">
-                <div class="alert alert-danger col-md-5">
+                <div class="alert alert-danger col-md-12">
                     No results found!
                 </div>
             </c:if>
 
             <c:if test="${not empty param.phrase && fn:length(requirementsList) gt 99}">
-                <div class="alert alert-warning col-md-5">
+                <div class="alert alert-warning col-md-12">
                     Your request has returned 100 or more results but only first 100 will be displayed!
                 </div>
             </c:if>
@@ -137,11 +136,6 @@
                 </table>
             </c:if>
         </div>
-        <nav class="navbar navbar-inverse navbar-fixed-bottom">
-            <p class="text-center">The page is generated at 
-                <%=LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS"))%>
-            </p>
-        </nav>
     </body>
     <script>
         function isSearchById(text) {
@@ -174,3 +168,6 @@
         };
     </script>
 </html>
+<!--
+The page is generated at <%=LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS"))%>
+-->
