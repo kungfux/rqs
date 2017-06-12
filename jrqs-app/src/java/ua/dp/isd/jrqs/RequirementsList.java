@@ -33,7 +33,8 @@ import javax.sql.DataSource;
 
 public class RequirementsList {
 
-    private static final String SQL = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
+    private static final String SQL = 
+            "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
     
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         return getRequirements(String.format(SQL, "where fr_id = ?"), new String[] {RequirementNumbers});

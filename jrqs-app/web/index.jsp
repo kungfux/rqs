@@ -26,6 +26,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page isELIgnored="false" %>
 
 <%@page import="javax.naming.Context"%>
@@ -33,16 +34,18 @@
 <%@page import="javax.sql.*"%>
 <%@page import="javax.naming.InitialContext"%>
 <%@page import="java.util.Date"%>
+<%@page import="java.time.format.DateTimeFormatter"%>
+<%@page import="java.time.LocalDateTime"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <!--<script src="js/jquery-3.2.1.min.js"></script>-->
         <!--<script src="js/bootstrap.min.js"></script>-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Java Requirement Searcher</title>
+        <title>jRQS</title>
     </head>
     <body>
         <nav class="navbar navbar-inverse">
@@ -67,7 +70,7 @@
         </nav>
         <div class="container-fluid">
             <h2>Search Requirements</h2>
-            <!-- Search form -->
+
             <form action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
                 <div class="form-group col-md-4">
                     <input type="text" name="phrase" id="phrase" value="${param.phrase}" class="form-control" required="true" placeholder="Type the search phrase"/>
@@ -80,22 +83,25 @@
                 <br/>
             </form>
 
-            <!-- Welcome message -->
             <c:if test="${empty param.phrase}">
                 <div class="alert alert-info col-md-5">
                     Type in the search phrase or exact requirement number and click Search.
                     Check <a href="help.html">help</a> for details.
                 </div>
             </c:if>
-            
-            <!-- No results found message -->
+
             <c:if test="${not empty param.phrase && empty requirementsList}">
                 <div class="alert alert-danger col-md-5">
                     No results found!
                 </div>
             </c:if>
+                    
+            <c:if test="${not empty param.phrase && fn:length(requirementsList) gt 99}">
+                <div class="alert alert-warning col-md-5">
+                    Your request has returned 100 or more results but only first 100 will be displayed!
+                </div>
+            </c:if>
 
-            <!-- Search results -->
             <c:if test="${not empty requirementsList}">
                 <table class="table table-striped">
                     <thread>
@@ -133,8 +139,15 @@
                 </table>
             </c:if>
         </div>
+        <nav class="navbar navbar-inverse navbar-fixed-bottom">
+            <p class="text-center">The page is generated at 
+                <%= 
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS")) 
+                %>
+            </p>
+        </nav>
     </body>
-    <script type="text/javascript">
+    <script>
         function isSearchById(text) {
             var input = text;
             var pattern = new RegExp(/(fr|nfr)\d+/i);
