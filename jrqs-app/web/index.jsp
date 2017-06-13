@@ -155,6 +155,8 @@
             var searchText = document.getElementById("phrase");
             var searchBy = document.getElementById("by");
 
+            searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g,",");
+            
             if (searchText.value !== "") {
                 if (isSearchById(searchText.value)) {
                     searchBy.value = "id";

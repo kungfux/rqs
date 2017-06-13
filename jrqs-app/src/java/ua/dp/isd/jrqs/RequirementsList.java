@@ -37,18 +37,32 @@ public class RequirementsList {
             = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
 
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
-        return getRequirements(String.format(SQL, "where fr_id = ?"), new String[]{RequirementNumbers});
+        RequirementNumbers = RequirementNumbers.toLowerCase();
+        String[] exposedRequirementNumbers = RequirementNumbers.split(",");
+        return getRequirements(String.format(SQL, "where lower(fr_id) in (?)"), exposedRequirementNumbers);
     }
 
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
-        return getRequirements(String.format(SQL, "where fr_tms_task = ?"), new String[]{TmsTaskNumbers});
+        TmsTaskNumbers = TmsTaskNumbers.toLowerCase();
+        String[] exposedTmsTaskNumbers = TmsTaskNumbers.split(",");
+        return getRequirements(String.format(SQL, "where lower(fr_tms_task) in (?)"), exposedTmsTaskNumbers);
     }
 
     public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
-        return getRequirements(String.format(SQL, "where lower(fr_text) like lower(?)"), new String[]{("%" + TextPhrases + "%")});
+        TextPhrases = TextPhrases.toLowerCase();
+        return getRequirements(String.format(SQL, "where lower(fr_text) like (?)"), new String[]{("%" + TextPhrases + "%")});
     }
 
     private List<Requirement> getRequirements(String sql, String[] arguments) {
+        StringBuilder argsBuilder = new StringBuilder();
+        argsBuilder.append("?");
+
+        if (arguments != null && arguments.length > 1) {
+            for (int i = 0; i <= arguments.length; i++) {
+                argsBuilder.append(",?");
+            }
+        }
+
         List<Requirement> requirements = null;
 
         Connection connection = null;
@@ -61,7 +75,7 @@ public class RequirementsList {
             DataSource dataSource = (DataSource) context.lookup("jdbc/sqlite");
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(sql.replace("?", argsBuilder.toString()));
 
             if (arguments != null) {
                 for (int i = 0; i < arguments.length; i++) {
