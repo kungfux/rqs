@@ -46,6 +46,13 @@
         <title>jRQS</title>
     </head>
     <body>
+        <noscript>
+        <div class="container-fluid" style="background-color:#F44336;color:#fff;height:100px;">
+            <h3><span class="glyphicon glyphicon-alert"></span> JavaScript is required</h3>
+            <p>Please enable JavaScript in your browser before using jRQS.</p>
+        </div>
+        </noscript>
+
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
