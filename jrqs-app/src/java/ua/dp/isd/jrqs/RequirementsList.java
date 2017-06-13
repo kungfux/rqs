@@ -33,41 +33,45 @@ import javax.sql.DataSource;
 
 public class RequirementsList {
 
-    private static final String SQL = 
-            "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
-    
+    private static final String SQL
+            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
+
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
-        return getRequirements(String.format(SQL, "where fr_id = ?"), new String[] {RequirementNumbers});
+        return getRequirements(String.format(SQL, "where fr_id = ?"), new String[]{RequirementNumbers});
     }
-    
+
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
-        return getRequirements(String.format(SQL, "where fr_tms_task = ?"), new String[] {TmsTaskNumbers});
+        return getRequirements(String.format(SQL, "where fr_tms_task = ?"), new String[]{TmsTaskNumbers});
     }
-    
+
     public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
-        return getRequirements(String.format(SQL, "where lower(fr_text) like lower(?)"), new String[] {("%" + TextPhrases + "%")});
+        return getRequirements(String.format(SQL, "where lower(fr_text) like lower(?)"), new String[]{("%" + TextPhrases + "%")});
     }
-    
+
     private List<Requirement> getRequirements(String sql, String[] arguments) {
         List<Requirement> requirements = null;
 
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet set = null;
 
         try {
             Context initContext = new InitialContext();
             Context context = (Context) initContext.lookup("java:/comp/env");
             DataSource dataSource = (DataSource) context.lookup("jdbc/sqlite");
+
             connection = dataSource.getConnection();
             statement = connection.prepareStatement(sql);
+
             if (arguments != null) {
-                for (int i=0; i<arguments.length; i++) {
-                    statement.setString(i+1, arguments[i]);
+                for (int i = 0; i < arguments.length; i++) {
+                    statement.setString(i + 1, arguments[i]);
                 }
             }
-            ResultSet set = statement.executeQuery();
 
-            if (set.isBeforeFirst() ) {
+            set = statement.executeQuery();
+
+            if (set.isBeforeFirst()) {
                 requirements = new ArrayList<>();
             }
             while (set.next()) {
@@ -84,30 +88,38 @@ public class RequirementsList {
                         set.getString(10)
                 ));
             }
-            statement.close();
-            connection.close();
         } catch (NamingException | SQLException e) {
-            System.out.println(e.getMessage());
+            logError(e);
+        } finally {
+            if (set != null) {
+                try {
+                    set.close();
+                } catch (SQLException e) {
+                    logError(e);
+                }
+                set = null;
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    logError(e);
+                }
+                statement = null;
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    logError(e);
+                }
+                connection = null;
+            }
         }
         return requirements;
     }
 
-//    private void printResultSet(ResultSet results) {
-//        try {
-//            ResultSetMetaData rsmd = results.getMetaData();
-//            int columnsNumber = rsmd.getColumnCount();
-//            for (int i = 1; i <= columnsNumber; i++) {
-//                System.out.print(rsmd.getColumnName(i) + " ");
-//            }
-//            System.out.println();
-//            while (results.next()) {
-//                for (int i = 1; i <= columnsNumber; i++) {
-//                    System.out.print(results.getString(i) + "\" ");
-//                }
-//            }
-//            System.out.println();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
+    private void logError(Exception e) {
+        System.out.println(e.getMessage());
+    }
 }

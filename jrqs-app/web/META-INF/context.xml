@@ -29,5 +29,9 @@
   <Resource driverClassName="org.sqlite.JDBC" 
             name="jdbc/sqlite"
             type="javax.sql.DataSource"
-            url="jdbc:sqlite:../data/webqa.sqlite"/>
+            url="jdbc:sqlite:../data/webqa.sqlite"
+            maxTotal="8"
+            maxIdle="8"
+            maxWaitMillis="60000"
+            logAbandoned="true"/>
 </Context>
