@@ -58,6 +58,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you enjoyed this app :)">
                             <span class="glyphicon glyphicon-star"></span> Give a star</a></li>
+                    <li><a href="help.html" title="Open help">
+                            <span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
                 </ul>
                 <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
                     <div class="input-group">
@@ -77,8 +79,9 @@
             <c:choose>
                 <c:when test="${empty param.phrase}">
                     <div class="alert alert-info col-md-12">
-                        Type in the search phrase or exact requirement number and click Search.
-                        Check <a href="help.html" type="button" class="btn btn-info">help</a> for details.
+                        <p><span class="glyphicon glyphicon-info-sign"></span>
+                            Hint: Type in the search phrase or exact requirement number and push <kbd>ENTER</kbd> to search.
+                            Click <a href="help.html">here</a> for details.</p>
                     </div>
                 </c:when>
                 <c:otherwise>
@@ -86,16 +89,17 @@
                 </c:otherwise>
             </c:choose>
 
-
             <c:if test="${not empty param.phrase && empty requirementsList}">
                 <div class="alert alert-danger col-md-12">
-                    No results found!
+                    <p><span class="glyphicon glyphicon-exclamation-sign"></span>
+                        No results found!</p>
                 </div>
             </c:if>
 
             <c:if test="${not empty param.phrase && fn:length(requirementsList) gt 99}">
                 <div class="alert alert-warning col-md-12">
-                    Your request has returned 100 or more results but only first 100 will be displayed!
+                    <p><p><span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Your request returned 100 or more search results but only first 100 are displayed!</p>
                 </div>
             </c:if>
 
@@ -155,8 +159,8 @@
             var searchText = document.getElementById("phrase");
             var searchBy = document.getElementById("by");
 
-            searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g,",");
-            
+            searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g, ",");
+
             if (searchText.value !== "") {
                 if (isSearchById(searchText.value)) {
                     searchBy.value = "id";
