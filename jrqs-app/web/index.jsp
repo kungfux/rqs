@@ -63,7 +63,8 @@
                 </ul>
                 <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
                     <div class="input-group">
-                        <input type="text" name="phrase" id="phrase" value="${param.phrase}" class="form-control" required="true" placeholder="Type the search phrase"/>
+                        <input type="text" name="phrase" id="phrase" value="${param.phrase}" autofocus 
+                               class="form-control" required="true" placeholder="Type the search phrase"/>
                         <input type="hidden" name="by" id="by" value=""/>
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
