@@ -102,6 +102,13 @@ public class RequirementsList {
                         set.getString(10)
                 ));
             }
+            
+            set.close();
+            set = null;
+            statement.close();
+            statement = null;
+            connection.close();
+            connection = null;
         } catch (NamingException | SQLException e) {
             logError(e);
         } finally {
