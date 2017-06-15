@@ -120,8 +120,9 @@
                         <th title="Object Number">Object Number</td>
                         <th title="Text">Text</td>
                         <th title="CCP">CCP</td>
-                        <th title="Created and modified dates">Created / Modified</td>
-                        <th title="Are created and modified dates equal?">Is changed?</td>
+                        <th title="Creation date">Created</td>
+                        <th title="Last modified date">Modified</td>
+                        <th title="Are created and modified dates equal?"></td>
                         <th title="Status">Status</td>
                         <th title="Boundary">Boundary</td>
                         <th title="Where was requirement taken?">Source</td>
@@ -136,14 +137,20 @@
                                 </td>
                                 <td>${requirement.id}</td>
                                 <td>
-                                    <a href="search?by=tms&value=${requirement.tmsTask}" title="Search by TMS task">${requirement.tmsTask}</a>
+                                    <a href="search?by=tms&value=${requirement.tmsTask}" title="Search by the ${requirement.tmsTask} TMS task">
+                                        ${requirement.tmsTask}
+                                    </a>
                                 </td>
                                 <td>${requirement.objectNumber}</td>
                                 <td>${requirement.text}</td>
                                 <td>${requirement.ccp}</td>
-                                <td>${requirement.created} | ${requirement.modified}</td>
+                                <td>${requirement.created != null && !requirement.created.isEmpty() ?
+                                      requirement.created : ""}</td>
+                                <td>${requirement.modified != null && !requirement.modified.isEmpty() ?
+                                      requirement.modified : ""}</td>
                                 <td>
-                                    <label><input type="checkbox" value="" disabled ${requirement.created == requirement.modified ? "" : "checked"}></label>
+                                    <label>${requirement.created == requirement.modified ? "" : 
+                                             "<span class=\"glyphicon glyphicon-pencil\" title=\"The requirement was changed\"></span>"}</label>
                                 </td>
                                 <td>${requirement.status}</td>
                                 <td>${requirement.boundary}</td>
