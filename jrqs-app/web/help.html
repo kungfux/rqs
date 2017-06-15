@@ -1,177 +1,176 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 	<head>
-		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-		<title>WebQA :: Online manual</title>
-		<style type="text/css">
-			body, p, table  { font: 14px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
-			h1  { font: bold 18px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
-			h2  { font: bold 16px "atrament-web-1", "atrament-web-2", Georgia, Serif; }
-			table { border-collapse: collapse; }
-			table, th, td { border: 1px solid black; }
-			th, td { padding: 5px; }
-		</style>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>jRQS - Help</title>
 	</head>
 	<body>
-    <h1>WebQA online manual</h1>
-    <br><br>
-    
-		<h1>Contents</h1>
-		<a href='#gi'>1. General information</a><br>
-		<a href='#in'>2. Introduction</a><br>
-		<a href='#sr'>3. Search requirements</a><br>
-		<a href='#ds'>4. Columns description</a><br>
-    <a href='#l'>5. Licence and disclaimer</a><br>
+		<nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li><a href="/jrqs" title="Go back to search">
+                            <span class="glyphicon glyphicon-circle-arrow-left"></span> Return Back
+						</a>
+					</li>
+                </ul>
+            </div>
+        </nav>
 		
-		<br><br><br>
-
-		<h2 id='gi'>General information</h2>
-		<p>This manual describes general information and internal logic of the program WebQA.</p>
-		<i>This program is still being developed so some moments can be differ from described in this manual.</i>
-		<p><u>Note for draft edition:</u><br> The content of this draft manual are incomplete and are subject to change by the author. This manual should be used as an introductory resource to the features and functionality of WebQA program.</p>
+		<blockquote class="blockquote-reverse small">
+			<p>"Regression testing"? What's that? If it compiles, it is good; if it boots up, it is perfect.</p>
+			<footer>Linus Torvalds, 1998</footer>
+		</blockquote>
 		
-		<br><br><br>
-
-		<h2 id='in'>Introduction</h2>
-		<p>WebQA is a web based program that allows to search the requirements converted from MS Excel (.xls) files which are created in special format.</p>
-		
-		<br><br><br>
-
-		<h2 id='f'>Features</h2>
-		<p>There are short list of features of the WebQA:</p>
-		<ul>
-			<li>Search requirement(s) by FR ID, FR TMS Task or FR text;</li>
-      <li>Searching by FR ID diapason;</li>
-      <li>Multi-word, -id, -tms task searching;</li>
-			<li>Share search results with colleagues;</li>
-      <li>Filtering by FR source.</li>
-		</ul>
-		
-		<br><br><br>
-
-		<h2 id='sr'>Search requirements</h2>
-		<p>Search criteria section contain following options:</p>
-		<ul>
-			<li>"Search by" drop down list</li><br>
-			Select an option to specify what data will be used for qualifying requirements.
-			<li>"Value to search" field</li><br>
-			Define the search keyword or keywords into this field which will be used for requirements searching. This can be requirement number(s), tms task number(s) or some word(s).
-			<li>"Search" button</li><br>
-			Press "Search" button to perform searching.
-		</ul>
-		
-		<p>WebQA allows to search requirements by FR ID, FR TMS Task and FR text. You should specify search criteria by selecting appropriate option from the "Search by" list and then define search keyword(s). <u>All searching is case-insensitive.</u></p>
-		
-		<p>Search keywords can be separated by comma or semicolon. In this case found requirements will contain all specified keywords (AND logic). There is one more option available and can be used for searching groups of requirements by FR ID only. For this purpose specify two numbers separated by dash. This lind of search is called as "FR ID diapason" and has limitation by 5000 numbers.</p>
-		
-		<b>There are examples of search keywords:</b>
-		
-		<table border=1 style=' text-align: left; '>
-			<tr>
-				<th>Search by</th>
-				<th>Value to search</th>
-				<th>Description</th>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>FR1</td>
-				<td>search for requirement with number 'FR1'</td>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>FR1;fr3</td>
-				<td>search for requirements with numbers 'FR1' or 'FR3'</td>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>FR1,fr3</td>
-				<td>search for requirements with numbers 'FR1' or 'FR3'</td>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>FR1-FR3</td>
-				<td>search for requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>FR1-3</td>
-				<td>search for requirements with numbers 'FR1' or 'FR2' or 'FR3'</td>
-			</tr>
-			<tr>
-				<td>FR ID</td>
-				<td>NFR1-3</td>
-				<td>search for requirements with numbers 'NFR1' or 'NFR2' or 'NFR3'</td>
-			</tr>
-			<tr>
-				<td>FR TMS Task</td>
-				<td>PCC-43345</td>
-				<td>search for requirements which contain in FR TMS Task 'PCC-43345'</td>
-			</tr>
-			<tr>
-				<td>FR TMS Task</td>
-				<td>PCC;mar5</td>
-				<td>search for requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
-			</tr>
-			<tr>
-				<td>FR TMS Task</td>
-				<td>PCC,mar5</td>
-				<td>search for requirements which contain in FR TMS Task 'PCC' and 'MAR5'</td>
-			</tr>
-			<tr>
-				<td>FR Text</td>
-				<td>OE_param_micro</td>
-				<td>search for requirements which contain in text specified keyword</td>
-			</tr>
-			<tr>
-				<td>FR Text</td>
-				<td>oe;specimen;collect;receive</td>
-				<td>search for requirements which contain in text all the keywords specified</td>
-			</tr>
-			<tr>
-				<td>FR Text</td>
-				<td>oe,specimen,collect,receive</td>
-				<td>search for requirements which contain in text all the keywords specified</td>
-			</tr>
-		</table>
-		
-		<p>When keyword is specified you need to press Enter or click "Search" to perform searching.</p>
-		<P><u>Note</u> that you can use up and down arrows on the keyboard to switch between "Search by" options when the focus is in "Value to search" field.</p>
-		<p>There is one more thing you should know. All searches are limited by search results by default. This means that WebQA will break searching in case more than 100 requirements are found. If you see <font color='red'>Only first 100 results are displayed!</font> message then specify more clear search keywords and repeat searching.</p>
-
-		<br><br><br>
-
-		<h2 id='ds'>Columns description</h2>
-		<ul>
-			<li><b>FR ID</b> - requirement identifier;</li>
-			<li><b>TMS Task</b> - TMS task number associated with requirement;</li>
-      <li><b>Object #</b> - "Object number", interaction level of the requirement;</li>
-			<li><b>Text</b> - Text of the requirement;</li>
-			<li><b>CCP</b> - Level of the failure:
-				<ul>
-					<li><b>5</b> - Critical, leading to serious permanent injury or death;</li>
-					<li><b>4</b> - Critical, could cause serious delay or misinformation;</li>
-					<li><b>3</b> - Failure that could cause to extended delay in patient care;</li>
-					<li><b>2</b> - Failure that could cause to delay in treatment of patient;</li>
-					<li><b>1</b> - Minor nuisance to users.</li>
-				</ul>
-			</li>
-			<li><b>Created / Modified</b> - Dates when requirement was created and last modified;</li>
-			<li><b>Is changed?</b> - Are created/modified dates are equals or not?</li>
-			<li><b>Status</b> - Status of the requirement</li>
-			<li><b>Found in file</b> - Source name where from requirement was imported to WebQA system.</li>
-		</ul>
-
-
-    <br><br><br>
-
-    <h2 id='l'>Licence and disclaimer</h2>
-      <p>WebQA is published under GNU GPL license. This means that WebQA is free software; you can redistribute it and/or modify it 
-      under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, 
-      or (at your option) any later version.<br>WebQA is designed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
-      even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the <a href='http://www.gnu.org/licenses/gpl-2.0.html'>GNU General Public Licence</a> for more details.</p>
-      <p><b><u>Disclaimer:</b></u> Use WebQA on your own risk; nobody respond in case search results are wrong.<br>Author, hereby disclaims all copyright interest in the program WebQA (which makes passed at compilers).</p>
-	  
-	  <p>View project on <a href='http://github.com/kungfux/rqs'>GitHub</a></p>
-	  
+		<div class="container-fluid">
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading text-uppercase">Introduction</div>
+				<div class="panel-body">
+					<p>
+						<abbr title="Java Requirement Searcher - is a 3rd generation of RQS">jRQS</abbr> is a free open-source program that allows you to search for the requirements parsed from Excel spreadsheets.
+					</p>
+					<div class="alert alert-warning">
+						<p>
+							<span class="glyphicon glyphicon-exclamation-sign"></span>
+							This software allows you to make the preliminary search for the requirements only. 
+							You should always keep in mind that search results might be outdated.
+						</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading text-uppercase">How to search</div>
+				<div class="panel-body">
+					<p>
+						It is possible to search for the requirements by <mark>FR ID</mark>, <mark>TMS Task</mark>, or <mark>text</mark>. You may specify a single FR ID, TMS Task or keyword to search as well as several values separated by a comma. There are a few examples indicated below to help get you involved:
+					</p>
+					<table class="table table-striped">
+						<thread>
+							<th title="">Example</td>
+							<th title="">Description</td>
+						</thread>
+						<tbody>
+							<tr>
+								<td><kbd>FR1</kbd></td>
+								<td>Search for a concrete requirement by FR ID</td>
+							</tr>
+							<tr>
+								<td><kbd>FR1,FR2,FR3</kbd></td>
+								<td>Search for a bunch of requirements by FR ID</td>
+							</tr>
+							<tr>
+								<td><kbd>PCC-12345</kbd></td>
+								<td>Search for requirements by TMS task number</td>
+							</tr>
+							<tr>
+								<td><kbd>PCC-11111,PCC-22222</kbd></td>
+								<td>Search for requirements by several TMS task numbers</td>
+							</tr>
+							<tr>
+								<td><kbd>keyword</kbd></td>
+								<td>Search for requirements by keyword</td>
+							</tr>
+							<tr>
+								<td><kbd>keyword1,keyword2</kbd></td>
+								<td>Search for requirements by several keywords. <mark>AND</mark> logic is being applied to the search, so all the requirements containing both keywords will be found.</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="alert alert-info">
+						<p>
+							<span class="glyphicon glyphicon-info-sign"></span>
+							All the search is case-insensitive.
+						</p>
+					</div>
+					<div class="alert alert-info">
+						<p>
+							<span class="glyphicon glyphicon-info-sign"></span>
+							Search results are limited to 100. If your search returned 100 or more results, then you will be notified by an appropriate message.
+						</p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading text-uppercase">Column descriptions</div>
+				<div class="panel-body">
+					<table class="table table-striped">
+						<thread>
+							<th title="">Column name</td>
+							<th title="">Description</td>
+						</thread>
+						<tbody>
+							<tr>
+								<td>FR ID</td>
+								<td>Requirement's unique identifier per project</td>
+							</tr>
+							<tr>
+								<td>TMS Task</td>
+								<td>TMS task number associated with the requirement</td>
+							</tr>
+							<tr>
+								<td>Object Number</td>
+								<td>Interaction level of the requirement</td>
+							</tr>
+							<tr>
+								<td>Text</td>
+								<td>Requirement's text itself</td>
+							</tr>
+							<tr>
+								<td>CCP</td>
+								<td>
+									Level of the failure, where:
+									<br>&emsp;<b>5</b> is a critical, leading to serious permanent injury or death,
+									<br>&emsp;<b>4</b> is critical, could cause serious delay or misinformation,
+									<br>&emsp;<b>3</b> is a failure that could cause to extended delay in patient care,
+									<br>&emsp;<b>2</b> is a failure that could cause to delay in treatment of patient,
+									<br>&emsp;<b>1</b> is a minor nuisance to users
+								</td>
+							</tr>
+							<tr>
+								<td>Created / Modified</td>
+								<td>The dates when requirement was created and modified last time</td>
+							</tr>
+							<tr>
+								<td>Is changed?</td>
+								<td>The indicator that shows are created and last modified dates equal or not</td>
+							</tr>
+							<tr>
+								<td>Status</td>
+								<td>Requirement's creation/review status</td>
+							</tr>
+							<tr>
+								<td>Boundary</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Source</td>
+								<td>The source name (file name) where from the requirement was imported into the jRQS database</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading text-uppercase">Licence and disclaimer</div>
+				<div class="panel-body">
+					<p>
+						<abbr title="Java Requirement Searcher - is a 3rd generation of RQS">jRQS</abbr>
+						is licensed under the <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License v2.0</a>, 
+						so you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; 
+						either version 2 of the License, or (at your option) any later version.
+					</p>
+					<p>
+						jRQS is designed in the hope that it will be helpful, but WITHOUT ANY WARRANTY; 
+						without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+					</p>
+					<p>
+						The source code and support may be found on <a href="http://github.com/kungfux/rqs">GitHub</a>.
+					</p>
+				</div>
+			</div>
 	</body>
 </html>
