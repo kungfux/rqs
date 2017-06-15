@@ -106,7 +106,7 @@
 
             <c:if test="${not empty param.value && fn:length(requirementsList) gt 99}">
                 <div class="alert alert-warning col-md-12">
-                    <p><p><span class="glyphicon glyphicon-exclamation-sign"></span>
+                    <p><span class="glyphicon glyphicon-exclamation-sign"></span>
                         Your request returned 100 or more search results but only first 100 are displayed!</p>
                 </div>
             </c:if>
@@ -114,19 +114,17 @@
             <c:if test="${not empty requirementsList}">
                 <table class="table table-striped">
                     <thread>
-                        <tr>
-                            <td title="Action"/>
-                            <td title="Requirement Number">FR ID</td>
-                            <td title="TMS Task Number">TMS Task</td>
-                            <td title="Object Number">Object Number</td>
-                            <td title="Text">Text</td>
-                            <td title="CCP">CCP</td>
-                            <td title="Created and modified dates">Created / Modified</td>
-                            <td title="Are created and modified dates equal?">Is changed?</td>
-                            <td title="Status">Status</td>
-                            <td title="Boundary">Boundary</td>
-                            <td title="Where was requirement taken?">Source</td>
-                        </tr>
+                        <th title="Action"/>
+                        <th title="Requirement Number">FR ID</td>
+                        <th title="TMS Task Number">TMS Task</td>
+                        <th title="Object Number">Object Number</td>
+                        <th title="Text">Text</td>
+                        <th title="CCP">CCP</td>
+                        <th title="Created and modified dates">Created / Modified</td>
+                        <th title="Are created and modified dates equal?">Is changed?</td>
+                        <th title="Status">Status</td>
+                        <th title="Boundary">Boundary</td>
+                        <th title="Where was requirement taken?">Source</td>
                     </thread>
                     <tbody>
                         <c:forEach var="requirement" items="${requirementsList}">
