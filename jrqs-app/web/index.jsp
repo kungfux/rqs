@@ -123,6 +123,7 @@
                             <td title="Created and modified dates">Created / Modified</td>
                             <td title="Are created and modified dates equal?">Is changed?</td>
                             <td title="Status">Status</td>
+                            <td title="Boundary">Boundary</td>
                             <td title="Where was requirement taken?">Source</td>
                         </tr>
                     </thread>
@@ -141,6 +142,7 @@
                                     <label><input type="checkbox" value="" disabled ${requirement.created == requirement.modified ? "" : "checked"}></label>
                                 </td>
                                 <td>${requirement.status}</td>
+                                <td>${requirement.boundary}</td>
                                 <td>${requirement.source}</td>
                             </tr>
                         </c:forEach>

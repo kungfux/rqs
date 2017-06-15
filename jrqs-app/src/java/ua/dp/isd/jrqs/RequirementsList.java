@@ -34,7 +34,7 @@ import javax.sql.DataSource;
 public class RequirementsList {
 
     private static final String SQL
-            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, source from requirements %s limit 100;";
+            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
 
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         RequirementNumbers = RequirementNumbers.toLowerCase();
@@ -99,7 +99,8 @@ public class RequirementsList {
                         set.getString(7),
                         set.getString(8),
                         set.getString(9),
-                        set.getString(10)
+                        set.getString(10),
+                        set.getString(11)
                 ));
             }
             

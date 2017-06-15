@@ -36,11 +36,12 @@ public class Requirement {
     private String created;
     private String modified;
     private String status;
+    private String boundary;
     private String source;
        
     public Requirement(long rowid, String id, String tmsTask, String objectNumber, 
             String text, String ccp, String created, String modified, String status,
-            String source) {
+            String boundary, String source) {
         this.rowid = rowid;
         this.id = id;
         this.tmsTask = tmsTask;
@@ -50,6 +51,7 @@ public class Requirement {
         this.created = created;
         this.modified = modified;
         this.status = status;
+        this.boundary = boundary;
         this.source = source;
     }
     
@@ -87,6 +89,10 @@ public class Requirement {
     
     public String getStatus() {
         return status;
+    }
+    
+    public String getBoundary() {
+        return boundary;
     }
     
     public String getSource() {
