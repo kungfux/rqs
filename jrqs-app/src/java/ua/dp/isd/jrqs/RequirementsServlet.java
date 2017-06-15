@@ -60,6 +60,9 @@ public class RequirementsServlet extends HttpServlet {
         String searchBy = request.getParameter("by");
         if (searchBy != null) {
             switch (searchBy) {
+                case "rowid":
+                    result = requirementService.getRequirementsByRowId(searchText);
+                    break;
                 case "id":
                     result = requirementService.getRequirementsByRequirementNumbers(searchText);
                     break;

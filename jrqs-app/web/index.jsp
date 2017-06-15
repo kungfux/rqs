@@ -115,6 +115,7 @@
                 <table class="table table-striped">
                     <thread>
                         <tr>
+                            <td title="Action"/>
                             <td title="Requirement Number">FR ID</td>
                             <td title="TMS Task Number">TMS Task</td>
                             <td title="Object Number">Object Number</td>
@@ -130,6 +131,11 @@
                     <tbody>
                         <c:forEach var="requirement" items="${requirementsList}">
                             <tr>
+                                <td>
+                                    <a href="search?by=rowid&phrase=${requirement.rowid}" title="Share">
+                                        <span class="glyphicon glyphicon-share"></span>
+                                    </a>
+                                </td>
                                 <td>${requirement.id}</td>
                                 <td>
                                     <a href="search?by=tms&phrase=${requirement.tmsTask}" title="Search by TMS task">${requirement.tmsTask}</a>

@@ -36,6 +36,11 @@ public class RequirementsList {
     private static final String SQL
             = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
 
+    public List<Requirement> getRequirementsByRowIds(String RowIds) {
+        String[] exposedRowIds = RowIds.split(",");
+        return getRequirements(String.format(SQL, "where id in (?)"), exposedRowIds);
+    }
+    
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         RequirementNumbers = RequirementNumbers.toLowerCase();
         String[] exposedRequirementNumbers = RequirementNumbers.split(",");

@@ -30,9 +30,9 @@ import java.util.List;
 
 public class RequirementsService {
     
-//    public List<Requirement> getAllRequirements() {
-//        return new RequirementsList().getAllRequirements();
-//    }
+    public List<Requirement> getRequirementsByRowId(String RequirementRowIds) {
+        return new RequirementsList().getRequirementsByRowIds(RequirementRowIds);
+    }
     
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         return new RequirementsList().getRequirementsByRequirementNumbers(RequirementNumbers);
