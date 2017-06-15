@@ -70,9 +70,9 @@
                 </ul>
                 <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
                     <div class="input-group">
-                        <input type="text" name="phrase" id="phrase" value="${param.phrase}" autofocus 
-                               class="form-control" required="true" placeholder="Type the search phrase"/>
                         <input type="hidden" name="by" id="by" value=""/>
+                        <input type="text" name="value" id="value" value="${param.value}" autofocus 
+                               class="form-control" required="true" placeholder="Type the search phrase"/>
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
                                 <i class="glyphicon glyphicon-search"></i>
@@ -85,7 +85,7 @@
 
         <div class="container-fluid">
             <c:choose>
-                <c:when test="${empty param.phrase}">
+                <c:when test="${empty param.value}">
                     <div class="alert alert-info col-md-12">
                         <p><span class="glyphicon glyphicon-info-sign"></span>
                             Hint: Type in the search phrase or exact requirement number and push <kbd>ENTER</kbd> to search.
@@ -97,14 +97,14 @@
                 </c:otherwise>
             </c:choose>
 
-            <c:if test="${not empty param.phrase && empty requirementsList}">
+            <c:if test="${not empty param.value && empty requirementsList}">
                 <div class="alert alert-danger col-md-12">
                     <p><span class="glyphicon glyphicon-exclamation-sign"></span>
                         No results found!</p>
                 </div>
             </c:if>
 
-            <c:if test="${not empty param.phrase && fn:length(requirementsList) gt 99}">
+            <c:if test="${not empty param.value && fn:length(requirementsList) gt 99}">
                 <div class="alert alert-warning col-md-12">
                     <p><p><span class="glyphicon glyphicon-exclamation-sign"></span>
                         Your request returned 100 or more search results but only first 100 are displayed!</p>
@@ -132,13 +132,13 @@
                         <c:forEach var="requirement" items="${requirementsList}">
                             <tr>
                                 <td>
-                                    <a href="search?by=rowid&phrase=${requirement.rowid}" title="Share">
+                                    <a href="search?by=rowid&value=${requirement.rowid}" title="Share">
                                         <span class="glyphicon glyphicon-share"></span>
                                     </a>
                                 </td>
                                 <td>${requirement.id}</td>
                                 <td>
-                                    <a href="search?by=tms&phrase=${requirement.tmsTask}" title="Search by TMS task">${requirement.tmsTask}</a>
+                                    <a href="search?by=tms&value=${requirement.tmsTask}" title="Search by TMS task">${requirement.tmsTask}</a>
                                 </td>
                                 <td>${requirement.objectNumber}</td>
                                 <td>${requirement.text}</td>
@@ -172,7 +172,7 @@
 
         beforeSubmit = function () {
             var searchBox = document.getElementById("searchRequirementForm");
-            var searchText = document.getElementById("phrase");
+            var searchText = document.getElementById("value");
             var searchBy = document.getElementById("by");
 
             searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g, ",");

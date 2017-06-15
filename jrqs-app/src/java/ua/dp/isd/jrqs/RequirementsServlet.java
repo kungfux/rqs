@@ -56,7 +56,7 @@ public class RequirementsServlet extends HttpServlet {
 
     private void searchRequirements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Requirement> result = null;
-        String searchText = request.getParameter("phrase");
+        String searchText = request.getParameter("value");
         String searchBy = request.getParameter("by");
         if (searchBy != null) {
             switch (searchBy) {
