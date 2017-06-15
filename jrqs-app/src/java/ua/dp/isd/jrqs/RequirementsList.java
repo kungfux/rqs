@@ -38,36 +38,50 @@ public class RequirementsList {
 
     public List<Requirement> getRequirementsByRowIds(String RowIds) {
         String[] exposedRowIds = RowIds.split(",");
-        return getRequirements(String.format(SQL, "where id in (?)"), exposedRowIds);
+        String parameters = generateSqlParameters("?", ",", exposedRowIds.length);
+        String whereClause = String.format("where id in (%s)", parameters);
+        return getRequirements(String.format(SQL, whereClause), exposedRowIds);
     }
-    
+
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
         RequirementNumbers = RequirementNumbers.toLowerCase();
         String[] exposedRequirementNumbers = RequirementNumbers.split(",");
-        return getRequirements(String.format(SQL, "where lower(fr_id) in (?)"), exposedRequirementNumbers);
+        String parameters = generateSqlParameters("?", ",", exposedRequirementNumbers.length);
+        String whereClause = String.format("where lower(fr_id) in (%s)", parameters);
+        return getRequirements(String.format(SQL, whereClause), exposedRequirementNumbers);
     }
 
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
         TmsTaskNumbers = TmsTaskNumbers.toLowerCase();
         String[] exposedTmsTaskNumbers = TmsTaskNumbers.split(",");
-        return getRequirements(String.format(SQL, "where lower(fr_tms_task) in (?)"), exposedTmsTaskNumbers);
+        String parameters = generateSqlParameters("?", ",", exposedTmsTaskNumbers.length);
+        String whereClause = String.format("where lower(fr_tms_task) in (%s)", parameters);
+        return getRequirements(String.format(SQL, whereClause), exposedTmsTaskNumbers);
     }
 
     public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
         TextPhrases = TextPhrases.toLowerCase();
-        return getRequirements(String.format(SQL, "where lower(fr_text) like (?)"), new String[]{("%" + TextPhrases + "%")});
+        String[] exposedTextPhrases = TextPhrases.split(",");
+        for (int i = 0; i < exposedTextPhrases.length; i++) {
+            exposedTextPhrases[i] = "%" + exposedTextPhrases[i] + "%";
+        }
+        String parameters = generateSqlParameters("lower(fr_text) like ?", " and ", exposedTextPhrases.length);
+        String whereClause = String.format("where %s", parameters);
+        return getRequirements(String.format(SQL, whereClause), exposedTextPhrases);
+    }
+
+    private String generateSqlParameters(String SqlCondition, String Separator, int Times) {
+        StringBuilder argsBuilder = new StringBuilder();
+        argsBuilder.append(SqlCondition);
+
+        for (int i = 1; i < Times; i++) {
+            argsBuilder.append(Separator);
+            argsBuilder.append(SqlCondition);
+        }
+        return argsBuilder.toString();
     }
 
     private List<Requirement> getRequirements(String sql, String[] arguments) {
-        StringBuilder argsBuilder = new StringBuilder();
-        argsBuilder.append("?");
-
-        if (arguments != null && arguments.length > 1) {
-            for (int i = 0; i <= arguments.length; i++) {
-                argsBuilder.append(",?");
-            }
-        }
-
         List<Requirement> requirements = null;
 
         Connection connection = null;
@@ -80,7 +94,7 @@ public class RequirementsList {
             DataSource dataSource = (DataSource) context.lookup("jdbc/sqlite");
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement(sql.replace("?", argsBuilder.toString()));
+            statement = connection.prepareStatement(sql);
 
             if (arguments != null) {
                 for (int i = 0; i < arguments.length; i++) {
@@ -108,7 +122,7 @@ public class RequirementsList {
                         set.getString(11)
                 ));
             }
-            
+
             set.close();
             set = null;
             statement.close();
