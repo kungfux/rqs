@@ -28,6 +28,7 @@ package ua.dp.isd.jrqs;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Logger;
 import javax.naming.*;
 import javax.sql.DataSource;
 
@@ -161,6 +162,6 @@ public class RequirementsList {
     }
 
     private void logError(Exception e) {
-        System.out.println(e.getMessage());
+        Logger.getGlobal().severe(e.toString());
     }
 }
