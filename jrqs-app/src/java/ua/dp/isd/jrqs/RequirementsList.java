@@ -33,54 +33,26 @@ import javax.naming.*;
 import javax.sql.DataSource;
 
 public class RequirementsList {
-
-    private static final String SQL
-            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
-
+   
     public List<Requirement> getRequirementsByRowIds(String RowIds) {
-        String[] exposedRowIds = RowIds.split(",");
-        String parameters = generateSqlParameters("?", ",", exposedRowIds.length);
-        String whereClause = String.format("where id in (%s)", parameters);
-        return getRequirements(String.format(SQL, whereClause), exposedRowIds);
+        SelectStatement sql = new SelectStatement("id", Boolean.TRUE, RowIds);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
     }
 
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
-        RequirementNumbers = RequirementNumbers.toLowerCase();
-        String[] exposedRequirementNumbers = RequirementNumbers.split(",");
-        String parameters = generateSqlParameters("?", ",", exposedRequirementNumbers.length);
-        String whereClause = String.format("where lower(fr_id) in (%s)", parameters);
-        return getRequirements(String.format(SQL, whereClause), exposedRequirementNumbers);
+        SelectStatement sql = new SelectStatement("fr_id", Boolean.TRUE, RequirementNumbers);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
     }
 
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
-        TmsTaskNumbers = TmsTaskNumbers.toLowerCase();
-        String[] exposedTmsTaskNumbers = TmsTaskNumbers.split(",");
-        String parameters = generateSqlParameters("?", ",", exposedTmsTaskNumbers.length);
-        String whereClause = String.format("where lower(fr_tms_task) in (%s)", parameters);
-        return getRequirements(String.format(SQL, whereClause), exposedTmsTaskNumbers);
+        SelectStatement sql = new SelectStatement("fr_tms_task", Boolean.FALSE, TmsTaskNumbers);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
     }
 
-    public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
-        TextPhrases = TextPhrases.toLowerCase();
-        String[] exposedTextPhrases = TextPhrases.split(",");
-        for (int i = 0; i < exposedTextPhrases.length; i++) {
-            exposedTextPhrases[i] = "%" + exposedTextPhrases[i] + "%";
-        }
-        String parameters = generateSqlParameters("lower(fr_text) like ?", " and ", exposedTextPhrases.length);
-        String whereClause = String.format("where %s", parameters);
-        return getRequirements(String.format(SQL, whereClause), exposedTextPhrases);
-    }
-
-    private String generateSqlParameters(String SqlCondition, String Separator, int Times) {
-        StringBuilder argsBuilder = new StringBuilder();
-        argsBuilder.append(SqlCondition);
-
-        for (int i = 1; i < Times; i++) {
-            argsBuilder.append(Separator);
-            argsBuilder.append(SqlCondition);
-        }
-        return argsBuilder.toString();
-    }
+    public List<Requirement> getRequirementsByTextPhrases(String Keywords) {
+        SelectStatement sql = new SelectStatement("fr_text", Boolean.FALSE, Keywords);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
+    }    
 
     private List<Requirement> getRequirements(String sql, String[] arguments) {
         List<Requirement> requirements = null;
