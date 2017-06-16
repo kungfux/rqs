@@ -75,7 +75,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.value}" 
+                            <input type="text" name="value" id="value" value="${param.value}" style="width: 644px !important;" 
                                    class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
