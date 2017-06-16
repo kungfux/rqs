@@ -41,11 +41,21 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <c:choose>
+            <c:when test="${empty param.value}">
+                <title>jRQS - Home</title>
+            </c:when>            
+            <c:otherwise>
+                <title>jRQS - Search results for "${param.value}"</title>
+            </c:otherwise>
+        </c:choose>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>jRQS</title>
     </head>
-    <body>
+
+    <body style="padding-top: 70px;">
+
         <noscript>
         <div class="container-fluid" style="background-color:#F44336;color:#fff;height:100px;">
             <h3><span class="glyphicon glyphicon-alert"></span> JavaScript is required</h3>
@@ -53,33 +63,40 @@
         </div>
         </noscript>
 
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">  
                 <div class="navbar-header">
-                    <img src="favicon.png" class="glyphicon">
+                    <a class="navbar-brand" href="${pageContext.request.contextPath}/">
+                        <span class="glyphicon glyphicon-home"></span> Home</a>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">jRQS</a></li>
-                    <li><a href="#">Watcher</a></li>
+
+                <ul class="nav navbar-nav">                    
+                    <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
+                        <div class="input-group">
+                            <span class="input-group-addon">Search</span>
+                            <input type="hidden" name="by" id="by" value=""/>
+                            <input type="text" name="value" id="value" value="${param.value}" 
+                                   class="form-control" required="true" placeholder="Type the search phrase"/>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you enjoyed this app :)">
-                            <span class="glyphicon glyphicon-star"></span> Give a star</a></li>
+                    <li>
+                        <button class="btn btn-danger navbar-btn" onclick="alert('The Watcher is coming soon!');">
+                            <span class="glyphicon glyphicon-eye-open"></span> Watcher
+                        </button>
+                    </li>
+                    <li><a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you are enjoying this app :)">
+                            <span class="glyphicon glyphicon-star"></span> Star</a></li>
                     <li><a href="help.html" title="Open help">
                             <span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
                 </ul>
-                <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
-                    <div class="input-group">
-                        <input type="hidden" name="by" id="by" value=""/>
-                        <input type="text" name="value" id="value" value="${param.value}" autofocus 
-                               class="form-control" required="true" placeholder="Type the search phrase"/>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </nav>
 
@@ -93,7 +110,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <h2>Search results:</h2>
+                    <h2>Search results for "${param.value}":</h2>
                 </c:otherwise>
             </c:choose>
 
