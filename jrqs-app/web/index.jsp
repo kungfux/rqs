@@ -52,12 +52,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/jrqs.css">
+        <script src="js/mark.min.js" charset="utf-8"></script>
     </head>
 
-    <body style="padding-top: 70px;">
+    <body>
 
         <noscript>
-        <div class="container-fluid" style="background-color:#F44336;color:#fff;height:100px;">
+        <div class="container-fluid" id="no-javascript-alert">
             <h3><span class="glyphicon glyphicon-alert"></span> JavaScript is required</h3>
             <p>Please enable JavaScript in your browser before using jRQS.</p>
         </div>
@@ -75,10 +77,9 @@
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.value}" style="width: 644px !important;" 
-                                   class="form-control" required="true" placeholder="Type the search phrase"/>
+                            <input type="text" name="value" id="value" value="${param.value}" class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit" onclick="beforeSubmit();">
+                                <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
                                     <i class="glyphicon glyphicon-search"></i>
                                 </button>
                             </div>
@@ -179,38 +180,7 @@
             </c:if>
         </div>
     </body>
-    <script>
-        function isSearchById(text) {
-            var input = text;
-            var pattern = new RegExp(/(fr|nfr)\d+/i);
-            return pattern.test(input);
-        }
-
-        function isSearchByTmsTask(text) {
-            var input = text;
-            var pattern = new RegExp(/\w{4,7}-\d+/i);
-            return pattern.test(input);
-        }
-
-        beforeSubmit = function () {
-            var searchBox = document.getElementById("searchRequirementForm");
-            var searchText = document.getElementById("value");
-            var searchBy = document.getElementById("by");
-
-            searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g, ",");
-
-            if (searchText.value !== "") {
-                if (isSearchById(searchText.value)) {
-                    searchBy.value = "id";
-                } else if (isSearchByTmsTask(searchText.value)) {
-                    searchBy.value = "tms";
-                } else {
-                    searchBy.value = "text";
-                }
-                searchBox.submit();
-            }
-        };
-    </script>
+    <script src="js/jrqs.js"></script>
 </html>
 <!--
 The page is generated at <%=LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss.SSS"))%>

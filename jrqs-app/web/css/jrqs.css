@@ -1,0 +1,17 @@
+body {
+    padding-top: 70px;
+}
+
+#no-javascript-alert {
+    background-color:#F44336;
+    color:#fff;
+    height:100px;
+}
+
+#value {
+    width: 644px !important;
+}
+
+mark {
+    background-color: yellow;
+}
