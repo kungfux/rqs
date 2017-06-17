@@ -33,7 +33,7 @@ function isSearchById(text) {
 
 function isSearchByTmsTask(text) {
     var input = text;
-    var pattern = new RegExp(/\w{4,7}-\d+/i);
+    var pattern = new RegExp(/\w{3,7}-\d+/i);
     return pattern.test(input);
 }
 
