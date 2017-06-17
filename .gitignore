@@ -1,3 +1,4 @@
 private/
 /jrqs-app/build/
 /jrqs-app/dist/
+/jrqs-tests/target/
