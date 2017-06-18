@@ -15,3 +15,7 @@ body {
 mark {
     background-color: yellow;
 }
+
+a.none {
+    text-decoration: none !important;
+}

@@ -34,15 +34,15 @@ public class RequirementsService {
         return new RequirementsList().getRequirementsByRowIds(RequirementRowIds);
     }
     
-    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
-        return new RequirementsList().getRequirementsByRequirementNumbers(RequirementNumbers);
+    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
+        return new RequirementsList().getRequirementsByRequirementNumbers(RequirementNumbers, LimitBySource);
     }
     
-    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
-        return new RequirementsList().getRequirementsByTmsTaskNumbers(TmsTaskNumbers);
+    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
+        return new RequirementsList().getRequirementsByTmsTaskNumbers(TmsTaskNumbers, LimitBySource);
     }
     
-    public List<Requirement> getRequirementsByTextPhrases(String TextPhrases) {
-        return new RequirementsList().getRequirementsByTextPhrases(TextPhrases);
+    public List<Requirement> getRequirementsByTextPhrases(String TextPhrases, String LimitBySource) {
+        return new RequirementsList().getRequirementsByTextPhrases(TextPhrases, LimitBySource);
     }
 }

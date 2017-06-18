@@ -34,9 +34,25 @@
 <%@page import="javax.sql.*"%>
 <%@page import="javax.naming.InitialContext"%>
 <%@page import="java.util.Date"%>
+<%@page import="java.util.Enumeration"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    String URL = "";
+
+    Enumeration in = request.getParameterNames();
+    while (in.hasMoreElements()) {
+        String paramName = in.nextElement().toString();
+        URL += String.format("%s=%s", paramName, request.getParameter(paramName));
+        if (in.hasMoreElements()) {
+            URL += "&";
+        }
+    }
+    
+    pageContext.setAttribute("URL", URL);
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,11 +89,13 @@
                 </div>
 
                 <ul class="nav navbar-nav">                    
-                    <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" method="get" id="searchRequirementForm" role="form">
+                    <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" 
+                          method="get" id="searchRequirementForm" role="form">
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.value}" class="form-control" required="true" placeholder="Type the search phrase"/>
+                            <input type="text" name="value" id="value" value="${param.value}" class="form-control" required="true" 
+                                   placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -133,23 +151,23 @@
                 <table class="table table-striped">
                     <thread>
                         <th title="Action"/>
-                        <th title="Requirement Number">FR ID</td>
-                        <th title="TMS Task Number">TMS Task</td>
-                        <th title="Object Number">Object Number</td>
-                        <th title="Text">Text</td>
-                        <th title="CCP">CCP</td>
-                        <th title="Creation date">Created</td>
-                        <th title="Last modified date">Modified</td>
-                        <th title="Are created and modified dates equal?"></td>
-                        <th title="Status">Status</td>
-                        <th title="Boundary">Boundary</td>
-                        <th title="Where was requirement taken?">Source</td>
+                        <th title="Requirement Number">FR ID</th>
+                        <th title="TMS Task Number">TMS Task</th>
+                        <th title="Object Number">Object Number</th>
+                        <th title="Text">Text</th>
+                        <th title="CCP">CCP</th>
+                        <th title="Creation date">Created</th>
+                        <th title="Last modified date">Modified</th>
+                        <th title="Are created and modified dates equal"</th>
+                        <th title="Status">Status</th>
+                        <th title="Boundary">Boundary</th>
+                        <th title="Where was requirement taken?">Source</th>
                     </thread>
                     <tbody>
                         <c:forEach var="requirement" items="${requirementsList}">
                             <tr>
-                                <td>
-                                    <a href="search?by=rowid&value=${requirement.rowid}" title="Share">
+                                <td class="text-nowrap">
+                                    <a class="none" href="search?by=rowid&value=${requirement.rowid}" title="Share">
                                         <span class="glyphicon glyphicon-share"></span>
                                     </a>
                                 </td>
@@ -172,7 +190,19 @@
                                 </td>
                                 <td>${requirement.status}</td>
                                 <td>${requirement.boundary}</td>
-                                <td>${requirement.source}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${fn:contains(URL, 'only')}">
+                                            ${requirement.source}
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="search?<%= URL%>&only=${requirement.source}" 
+                                               title="Repeat search in the ${requirement.source} only">
+                                                ${requirement.source}
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>

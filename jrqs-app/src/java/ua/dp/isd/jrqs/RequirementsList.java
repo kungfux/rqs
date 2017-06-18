@@ -35,28 +35,31 @@ import javax.sql.DataSource;
 public class RequirementsList {
    
     public List<Requirement> getRequirementsByRowIds(String RowIds) {
-        SelectStatement sql = new SelectStatement("id", Boolean.TRUE, RowIds);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
+        SelectStatement sql = new SelectStatement("id", Boolean.TRUE, RowIds, null);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), null);
     }
 
-    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers) {
-        SelectStatement sql = new SelectStatement("fr_id", Boolean.TRUE, RequirementNumbers);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
+    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
+        SelectStatement sql = new SelectStatement("fr_id", Boolean.TRUE, RequirementNumbers, LimitBySource);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
     }
 
-    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers) {
-        SelectStatement sql = new SelectStatement("fr_tms_task", Boolean.FALSE, TmsTaskNumbers);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
+    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
+        SelectStatement sql = new SelectStatement("fr_tms_task", Boolean.FALSE, TmsTaskNumbers, LimitBySource);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
     }
 
-    public List<Requirement> getRequirementsByTextPhrases(String Keywords) {
-        SelectStatement sql = new SelectStatement("fr_text", Boolean.FALSE, Keywords);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getParameters());
+    public List<Requirement> getRequirementsByTextPhrases(String Keywords, String LimitBySource) {
+        SelectStatement sql = new SelectStatement("fr_text", Boolean.FALSE, Keywords, LimitBySource);
+        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
     }    
 
-    private List<Requirement> getRequirements(String sql, String[] arguments) {
+    private List<Requirement> getRequirements(String sql, String[] arguments, String[] limitBySource) {
         List<Requirement> requirements = null;
 
+        if (sql == null)
+            return requirements;
+        
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet set = null;
@@ -69,10 +72,19 @@ public class RequirementsList {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement(sql);
 
+            int i = 1;
             if (arguments != null) {
-                for (int i = 0; i < arguments.length; i++) {
-                    statement.setString(i + 1, arguments[i]);
+                for (String argValue : arguments) {
+                    statement.setString(i++, argValue);
                 }
+                if (limitBySource != null) {
+                    for (String argSource: limitBySource) {
+                        statement.setString(i++, argSource);
+                    }
+                }
+//                for (int i = 0; i < arguments.length; i++) {
+//                    statement.setString(i + 1, arguments[i]);
+//                }
             }
 
             set = statement.executeQuery();

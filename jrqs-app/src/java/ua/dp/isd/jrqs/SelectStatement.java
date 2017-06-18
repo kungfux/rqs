@@ -31,32 +31,47 @@ public class SelectStatement {
     private final String SQL_SELECT_TEMPLATE
             = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
 
-    private final String[] Parameters;
+    private final String[] Values;
+    private final String[] Sources;
     private final String SqlSelectStatement;
 
-    public String[] getParameters() {
-        return Parameters;
+    public String[] getValues() {
+        return Values;
+    }
+
+    public String[] getSources() {
+        return Sources;
     }
 
     public String getSqlSelectStatement() {
         return SqlSelectStatement;
     }
 
-    public SelectStatement(String SearchByField, Boolean ExactMatches, String RawValues) {
-        Parameters = splitParameters(RawValues);
-        
-        String escapedParameters;
+    public SelectStatement(String SearchByField, Boolean ExactMatches, String RawValues, String LimitBySource) {
+        Values = RawValues != null ? splitParameters(RawValues) : null;
+        Sources = LimitBySource != null ? splitParameters(LimitBySource) : null;
+
+        String escapedValues;
         String whereClause;
-        
-        if (ExactMatches) {
-            escapedParameters = generateSqlParameters("?", ",", Parameters.length);
-            whereClause = String.format("where lower(%s) in (%s)", SearchByField, escapedParameters);
+
+        if (Values != null) {
+            if (ExactMatches) {
+                escapedValues = generateSqlParameters("?", ",", Values.length);
+                whereClause = String.format("where lower(%s) in (%s)", SearchByField, escapedValues);
+            } else {
+                wrapUpByPercentages();
+                escapedValues = generateSqlParameters(String.format("lower(%s) like ?", SearchByField), " and ", Values.length);
+                whereClause = String.format("where %s", escapedValues);
+            }
+
+            if (LimitBySource != null && !LimitBySource.equals("")) {
+                String escapedSources = generateSqlParameters("?", ",", Sources.length);
+                whereClause = String.format(whereClause + " and lower(source) in (%s)", escapedSources);
+            }
+            SqlSelectStatement = String.format(SQL_SELECT_TEMPLATE, whereClause);
         } else {
-            wrapUpByPercentages();
-            escapedParameters = generateSqlParameters(String.format("lower(%s) like ?", SearchByField), " and ", Parameters.length);
-            whereClause = String.format("where %s", escapedParameters);
+            SqlSelectStatement = null;
         }
-        SqlSelectStatement = String.format(SQL_SELECT_TEMPLATE, whereClause);
     }
 
     private String[] splitParameters(String RawValues) {
@@ -75,8 +90,8 @@ public class SelectStatement {
     }
 
     private void wrapUpByPercentages() {
-        for (int i = 0; i < Parameters.length; i++) {
-            Parameters[i] = "%" + Parameters[i] + "%";
+        for (int i = 0; i < Values.length; i++) {
+            Values[i] = "%" + Values[i] + "%";
         }
     }
 }

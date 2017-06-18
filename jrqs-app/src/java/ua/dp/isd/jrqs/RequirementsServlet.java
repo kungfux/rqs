@@ -35,10 +35,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@WebServlet(
-//        name = "RequirementServlet",
-//        urlPatterns = {"/requirement"}
-//)
 @WebServlet("/search")
 public class RequirementsServlet extends HttpServlet {
 
@@ -56,21 +52,22 @@ public class RequirementsServlet extends HttpServlet {
 
     private void searchRequirements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Requirement> result = null;
-        String searchText = request.getParameter("value");
         String searchBy = request.getParameter("by");
-        if (searchBy != null) {
+        String searchText = request.getParameter("value");
+        String limitBySource = request.getParameter("only");
+        if (searchBy != null && !searchBy.equals("")) {
             switch (searchBy) {
                 case "rowid":
                     result = requirementService.getRequirementsByRowId(searchText);
                     break;
                 case "id":
-                    result = requirementService.getRequirementsByRequirementNumbers(searchText);
+                    result = requirementService.getRequirementsByRequirementNumbers(searchText, limitBySource);
                     break;
                 case "tms":
-                    result = requirementService.getRequirementsByTmsTaskNumbers(searchText);
+                    result = requirementService.getRequirementsByTmsTaskNumbers(searchText, limitBySource);
                     break;
                 case "text":
-                    result = requirementService.getRequirementsByTextPhrases(searchText);
+                    result = requirementService.getRequirementsByTextPhrases(searchText, limitBySource);
                     break;
             }
         }
