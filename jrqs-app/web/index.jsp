@@ -192,7 +192,7 @@
                                 <td>${requirement.boundary}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${fn:contains(URL, 'only')}">
+                                        <c:when test="${fn:contains(URL, '&only')}">
                                             ${requirement.source}
                                         </c:when>
                                         <c:otherwise>
