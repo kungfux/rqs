@@ -9,7 +9,12 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({SearchByRowIdTests.class,SearchByFRIDTests.class,SearchByTmsTaskTests.class,SearchByTextTests.class})
+@SuiteClasses({
+    SearchByRowIdTests.class,
+    SearchByFRIDTests.class,
+    SearchByTmsTaskTests.class,
+    SearchByTextTests.class,
+    SearchBySourceTests.class})
 public class RunTestSuite extends TestCase {
 
     private static WebHelper wh;
