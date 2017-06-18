@@ -50,7 +50,7 @@
             URL += "&";
         }
     }
-    
+
     pageContext.setAttribute("URL", URL);
 %>
 
@@ -85,7 +85,8 @@
             <div class="container-fluid">  
                 <div class="navbar-header">
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-                        <span class="glyphicon glyphicon-home"></span> Home</a>
+                        <span class="glyphicon glyphicon-home"></span> Home
+                    </a>
                 </div>
 
                 <ul class="nav navbar-nav">                    
@@ -94,8 +95,8 @@
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.value}" class="form-control" required="true" 
-                                   placeholder="Type the search phrase"/>
+                            <input type="text" name="value" id="value" value="${param.value}" 
+                                   class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
                                     <i class="glyphicon glyphicon-search"></i>
@@ -111,10 +112,16 @@
                             <span class="glyphicon glyphicon-eye-open"></span> Watcher
                         </button>
                     </li>
-                    <li><a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you are enjoying this app :)">
-                            <span class="glyphicon glyphicon-star"></span> Star</a></li>
-                    <li><a href="help.html" title="Open help">
-                            <span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
+                    <li>
+                        <a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you are enjoying this app :)">
+                            <span class="glyphicon glyphicon-star"></span> Star
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help.html" title="Open help">
+                            <span class="glyphicon glyphicon-question-sign"></span> Help
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -123,9 +130,11 @@
             <c:choose>
                 <c:when test="${empty param.value}">
                     <div class="alert alert-info col-md-12">
-                        <p><span class="glyphicon glyphicon-info-sign"></span>
+                        <p>
+                            <span class="glyphicon glyphicon-info-sign"></span>
                             Hint: Type in the search phrase or exact requirement number and push <kbd>ENTER</kbd> to search.
-                            Click <a href="help.html">here</a> for details.</p>
+                            Click <a href="help.html">here</a> for details.
+                        </p>
                     </div>
                 </c:when>
                 <c:otherwise>
@@ -135,15 +144,18 @@
 
             <c:if test="${not empty param.value && empty requirementsList}">
                 <div class="alert alert-danger col-md-12">
-                    <p><span class="glyphicon glyphicon-exclamation-sign"></span>
-                        No results found!</p>
+                    <p>
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> No results found!
+                    </p>
                 </div>
             </c:if>
 
             <c:if test="${not empty param.value && fn:length(requirementsList) gt 99}">
                 <div class="alert alert-warning col-md-12">
-                    <p><span class="glyphicon glyphicon-exclamation-sign"></span>
-                        Your request returned 100 or more search results but only first 100 are displayed!</p>
+                    <p>
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Your request returned 100 or more search results but only first 100 are displayed!
+                    </p>
                 </div>
             </c:if>
 
@@ -173,20 +185,28 @@
                                 </td>
                                 <td>${requirement.id}</td>
                                 <td>
-                                    <a href="search?by=tms&value=${requirement.tmsTask}" title="Search by the ${requirement.tmsTask} TMS task">
-                                        ${requirement.tmsTask}
+                                    <a href="search?by=tms&value=${requirement.tmsTask}" 
+                                       title="Search by the ${requirement.tmsTask} TMS task"> ${requirement.tmsTask}
                                     </a>
                                 </td>
                                 <td>${requirement.objectNumber}</td>
                                 <td>${requirement.text}</td>
                                 <td>${requirement.ccp}</td>
-                                <td>${requirement.created != null && !requirement.created.isEmpty() ?
-                                      requirement.created : ""}</td>
-                                <td>${requirement.modified != null && !requirement.modified.isEmpty() ?
-                                      requirement.modified : ""}</td>
                                 <td>
-                                    <label>${requirement.created == requirement.modified ? "" : 
-                                             "<span class=\"glyphicon glyphicon-pencil\" title=\"The requirement was changed\"></span>"}</label>
+                                    <c:if test="${requirement.created != null && !requirement.created.isEmpty()}">
+                                        ${requirement.created}
+                                    </c:if>
+                                </td>
+                                <td>
+                                    <c:if test="${requirement.modified != null && !requirement.modified.isEmpty()}">
+                                        ${requirement.modified}
+                                    </c:if>
+                                <td>
+                                    <c:if test="${requirement.created != requirement.modified}">
+                                        <label>
+                                            <span class="glyphicon glyphicon-pencil" title="The requirement was changed"></span>
+                                        </label>
+                                    </c:if>
                                 </td>
                                 <td>${requirement.status}</td>
                                 <td>${requirement.boundary}</td>
