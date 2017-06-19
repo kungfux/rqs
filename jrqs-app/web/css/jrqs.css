@@ -19,3 +19,10 @@ mark {
 a.none {
     text-decoration: none !important;
 }
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -30px;
+    visibility: hidden;
+}
