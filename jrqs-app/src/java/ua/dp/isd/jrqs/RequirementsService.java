@@ -31,18 +31,18 @@ import java.util.List;
 public class RequirementsService {
     
     public List<Requirement> getRequirementsByRowId(String RequirementRowIds) {
-        return new RequirementsList().getRequirementsByRowIds(RequirementRowIds);
+        return new RequirementsDAO().getRequirementsByRowIds(RequirementRowIds);
     }
     
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        return new RequirementsList().getRequirementsByRequirementNumbers(RequirementNumbers, LimitBySource);
+        return new RequirementsDAO().getRequirementsByRequirementNumbers(RequirementNumbers, LimitBySource);
     }
     
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        return new RequirementsList().getRequirementsByTmsTaskNumbers(TmsTaskNumbers, LimitBySource);
+        return new RequirementsDAO().getRequirementsByTmsTaskNumbers(TmsTaskNumbers, LimitBySource);
     }
     
     public List<Requirement> getRequirementsByTextPhrases(String TextPhrases, String LimitBySource) {
-        return new RequirementsList().getRequirementsByTextPhrases(TextPhrases, LimitBySource);
+        return new RequirementsDAO().getRequirementsByTextPhrases(TextPhrases, LimitBySource);
     }
 }

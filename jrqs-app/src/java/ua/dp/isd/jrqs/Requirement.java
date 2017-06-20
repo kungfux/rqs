@@ -27,17 +27,17 @@
 package ua.dp.isd.jrqs;
 
 public class Requirement {
-    private long rowid;
-    private String id;
-    private String tmsTask;
-    private String objectNumber;
-    private String text;
-    private String ccp;
-    private String created;
-    private String modified;
-    private String status;
-    private String boundary;
-    private String source;
+    private final long rowid;
+    private final String id;
+    private final String tmsTask;
+    private final String objectNumber;
+    private final String text;
+    private final String ccp;
+    private final String created;
+    private final String modified;
+    private final String status;
+    private final String boundary;
+    private final String source;
        
     public Requirement(long rowid, String id, String tmsTask, String objectNumber, 
             String text, String ccp, String created, String modified, String status,

@@ -74,11 +74,11 @@ public class RequirementsServlet extends HttpServlet {
         forwardListRequirements(request, response, result);
     }
 
-    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response, List requirementList)
+    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response, List requirementsList)
             throws ServletException, IOException {
         String nextJSP = "/index.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("requirementsList", requirementList);
+        request.setAttribute("requirementsList", requirementsList);
         dispatcher.forward(request, response);
     }
 }

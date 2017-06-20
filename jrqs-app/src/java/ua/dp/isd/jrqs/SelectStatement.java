@@ -91,7 +91,7 @@ public class SelectStatement {
 
     private void wrapUpByPercentages() {
         for (int i = 0; i < Values.length; i++) {
-            Values[i] = "%" + Values[i] + "%";
+            Values[i] = String.format("%%%s%%", Values[i]);
         }
     }
 }
