@@ -202,7 +202,7 @@
                                         ${requirement.modified}
                                     </c:if>
                                 <td>
-                                    <c:if test="${requirement.created != requirement.modified}">
+                                    <c:if test="${requirement.isChanged}">
                                         <label>
                                             <span class="glyphicon glyphicon-pencil" title="The requirement was changed"></span>
                                         </label>

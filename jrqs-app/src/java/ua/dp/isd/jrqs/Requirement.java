@@ -26,6 +26,8 @@
  */
 package ua.dp.isd.jrqs;
 
+import java.util.Objects;
+
 public class Requirement {
     private final long rowid;
     private final String id;
@@ -35,6 +37,7 @@ public class Requirement {
     private final String ccp;
     private final String created;
     private final String modified;
+    private final Boolean isChanged;
     private final String status;
     private final String boundary;
     private final String source;
@@ -48,8 +51,9 @@ public class Requirement {
         this.objectNumber = objectNumber;
         this.text = text;
         this.ccp = ccp;
-        this.created = created;
-        this.modified = modified;
+        this.created = getNullIfEmpty(created);
+        this.modified = getNullIfEmpty(modified);
+        this.isChanged = isChanged(this.created, this.modified);
         this.status = status;
         this.boundary = boundary;
         this.source = source;
@@ -87,6 +91,10 @@ public class Requirement {
         return modified;
     }
     
+    public Boolean getIsChanged() {
+        return isChanged;
+    }
+    
     public String getStatus() {
         return status;
     }
@@ -97,5 +105,18 @@ public class Requirement {
     
     public String getSource() {
         return source;
+    }
+    
+    private String getNullIfEmpty (String value) {
+        if (value == null)
+            return null;
+        if ("".equals(value.trim()))
+            return null;
+        else
+            return value;
+    }
+    
+    private Boolean isChanged (String value1, String value2) {
+        return !Objects.equals(value1, value2);
     }
 }
