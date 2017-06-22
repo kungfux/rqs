@@ -12,24 +12,26 @@ public class SearchBySourceTests {
     public void TestSearchResultsMayBeLimitedBySource() {
         String searchText = "FR1,FR2";
         int firstResultsCount = searchPage.doSearchByAndGetCellResults(searchText, 2).length;
-        assertEquals(firstResultsCount, 2);
+        assertEquals(searchText.split(",").length, firstResultsCount);
         
         wh.findElement("table td:nth-child(12) a").click();
         int secondResultsCount = searchPage.getSearchResultsByColumn(2).length;
-        assertEquals(secondResultsCount, 1);
+        assertEquals(1, secondResultsCount);
     }
     
     @Test
     public void TestSearchResultsCannotBeLimitedBySourceIfAlreadyLimited() {
         String searchText = "FR1,FR2";
         int firstResultsCount = searchPage.doSearchByAndGetCellResults(searchText, 2).length;
-        assertEquals(firstResultsCount, 2);
+        assertEquals(searchText.split(",").length ,firstResultsCount);
         
         wh.findElement("table td:nth-child(12) a").click();
         int secondResultsCount = searchPage.getSearchResultsByColumn(2).length;
-        assertEquals(secondResultsCount, 1);
+        assertEquals(1, secondResultsCount);
         
+        wh.removeTimeout();
         int linksCount = wh.findElements("table td:nth-child(12) a").size();
-        assertEquals(linksCount, 0);
+        wh.setDefaultTimeout();
+        assertEquals(0, linksCount);
     }
 }

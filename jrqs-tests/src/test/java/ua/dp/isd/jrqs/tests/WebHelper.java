@@ -10,12 +10,13 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 public class WebHelper {
 
     private static WebDriver driverInstance;
-
+    private final int timeout = 10;
+    
     public WebHelper() {
         if (driverInstance != null)
             return;
         driverInstance = new InternetExplorerDriver();
-        driverInstance.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        setDefaultTimeout();
     }
 
     public WebDriver getDriverInstance() {
@@ -28,5 +29,13 @@ public class WebHelper {
 
     public List<WebElement> findElements(String cssSelector) {
         return driverInstance.findElements(By.cssSelector(cssSelector));
+    }
+    
+    public void setDefaultTimeout() {
+        driverInstance.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+    }
+    
+    public void removeTimeout() {
+        driverInstance.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
 }

@@ -37,10 +37,10 @@ public class SearchByTmsTaskTests {
     public void TestSeacrhByTmsTaskByClickOnIt() {
         String searchText = "FR200,FR1";
         int firstResultsCount = searchPage.doSearchByAndGetCellResults(searchText, 3).length;
-        assertEquals(firstResultsCount, 2);
+        assertEquals(searchText.split(",").length, firstResultsCount);
         
         wh.findElement("table tr:nth-child(2) td:nth-child(3) > a").click();
         int secondResultsCount = searchPage.getSearchResultsByColumn(3).length;
-        assertEquals(secondResultsCount, 1);
+        assertEquals(1, secondResultsCount);
     }
 }

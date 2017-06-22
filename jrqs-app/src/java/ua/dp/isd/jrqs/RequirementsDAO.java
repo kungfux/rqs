@@ -41,23 +41,30 @@ import javax.sql.DataSource;
 public class RequirementsDAO {
 
     public List<Requirement> getRequirementsByRowIds(String RowIds) {
-        SelectStatement sql = new SelectStatement("id", Boolean.TRUE, RowIds, null);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), null);
+        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.ROWID);
+        sql.addCommaSeparatedParameters(RowIds);
+        return getRequirements(sql.getSql(), sql.getParametersList(), null);
     }
 
     public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        SelectStatement sql = new SelectStatement("fr_id", Boolean.TRUE, RequirementNumbers, LimitBySource);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
+        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.FRID);
+        sql.addCommaSeparatedParameters(RequirementNumbers);
+        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
+        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
     }
 
     public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        SelectStatement sql = new SelectStatement("fr_tms_task", Boolean.FALSE, TmsTaskNumbers, LimitBySource);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
+        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.TMSTask);
+        sql.addCommaSeparatedParameters(TmsTaskNumbers);
+        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
+        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
     }
 
     public List<Requirement> getRequirementsByTextPhrases(String Keywords, String LimitBySource) {
-        SelectStatement sql = new SelectStatement("fr_text", Boolean.FALSE, Keywords, LimitBySource);
-        return getRequirements(sql.getSqlSelectStatement(), sql.getValues(), sql.getSources());
+        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.Text);
+        sql.addCommaSeparatedParameters(Keywords);
+        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
+        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
     }
 
     private List<Requirement> getRequirements(String sql, String[] arguments, String[] limitBySource) {

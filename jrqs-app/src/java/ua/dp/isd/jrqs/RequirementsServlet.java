@@ -67,6 +67,7 @@ public class RequirementsServlet extends HttpServlet {
                     result = requirementService.getRequirementsByTmsTaskNumbers(searchText, limitBySource);
                     break;
                 case "text":
+                default:
                     result = requirementService.getRequirementsByTextPhrases(searchText, limitBySource);
                     break;
             }
