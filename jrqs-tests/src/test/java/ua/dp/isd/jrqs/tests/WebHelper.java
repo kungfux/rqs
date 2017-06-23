@@ -1,5 +1,6 @@
 package ua.dp.isd.jrqs.tests;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
@@ -9,33 +10,49 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 
 public class WebHelper {
 
-    private static WebDriver driverInstance;
-    private final int timeout = 10;
+    private static WebDriver _driver;
+    private final Duration TIMEOUT = Duration.ofSeconds(10);
     
     public WebHelper() {
-        if (driverInstance != null)
+        if (_driver != null)
             return;
-        driverInstance = new InternetExplorerDriver();
-        setDefaultTimeout();
+        _driver = new InternetExplorerDriver();
+        enableTimeout();
     }
 
-    public WebDriver getDriverInstance() {
-        return driverInstance;
+    public WebDriver getDriver() {
+        return _driver;
     }
 
-    public WebElement findElement(String cssSelector) {
-        return driverInstance.findElement(By.cssSelector(cssSelector));
-    }
-
-    public List<WebElement> findElements(String cssSelector) {
-        return driverInstance.findElements(By.cssSelector(cssSelector));
+    public WebElement findElementByCss(String cssSelector) {
+        enableTimeout();
+        return _driver.findElement(By.cssSelector(cssSelector));
     }
     
-    public void setDefaultTimeout() {
-        driverInstance.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+    public WebElement findElementByCssWithoutAwaiting(String cssSelector) {
+        disableTimeout();
+        return _driver.findElement(By.cssSelector(cssSelector));
+    }
+
+    public List<WebElement> findElementsByCss(String cssSelector) {
+        enableTimeout();
+        return _driver.findElements(By.cssSelector(cssSelector));
     }
     
-    public void removeTimeout() {
-        driverInstance.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+    public List<WebElement> findElementsByCssWithoutAwaiting(String cssSelector) {
+        disableTimeout();
+        return _driver.findElements(By.cssSelector(cssSelector));
+    }
+    
+    private void enableTimeout() {
+        setTimeout(TIMEOUT.getSeconds());
+    }
+    
+    private void disableTimeout() {
+        setTimeout(Duration.ZERO.getSeconds());
+    }
+    
+    private void setTimeout(long seconds) {
+        _driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
     }
 }

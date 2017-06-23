@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
+import ua.dp.isd.jrqs.tests.searchbox.*;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -26,6 +27,6 @@ public class RunTestSuite extends TestCase {
 
     @AfterClass
     public static void stop() {
-        wh.getDriverInstance().quit();
+        wh.getDriver().quit();
     }
 }
