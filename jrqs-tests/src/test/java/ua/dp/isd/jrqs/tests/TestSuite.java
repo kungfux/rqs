@@ -16,7 +16,7 @@ import ua.dp.isd.jrqs.tests.searchbox.*;
     SearchByTmsTaskTests.class,
     SearchByTextTests.class,
     SearchBySourceTests.class})
-public class RunTestSuite extends TestCase {
+public class TestSuite extends TestCase {
 
     private static WebHelper wh;
 
