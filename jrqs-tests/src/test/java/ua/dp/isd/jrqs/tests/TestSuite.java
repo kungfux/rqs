@@ -15,7 +15,8 @@ import ua.dp.isd.jrqs.tests.searchbox.*;
     SearchByFRIDTests.class,
     SearchByTmsTaskTests.class,
     SearchByTextTests.class,
-    SearchBySourceTests.class})
+    SearchBySourceTests.class,
+    SearchByRangeOfFRIDTests.class})
 public class TestSuite extends TestCase {
 
     private static WebHelper wh;

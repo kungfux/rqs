@@ -42,7 +42,13 @@ overrideSubmit = function () {
     var searchText = document.getElementById("value");
     var searchBy = document.getElementById("by");
 
-    searchText.value = searchText.value.replace(/(^\s+|\s+$)/, "").replace(/(\s+,\s+|\s+,|,\s+)/g, ",");
+    searchText.value = searchText.value
+            .replace(/(^\s+|\s+$)/, "")
+            .replace(/(\s+,\s+|\s+,|,\s+)/g, ",")
+            .replace(/(\s+-|\s+-\s+|-\s+)/g, "-")
+            .replace(/(\s+-|\s+-\s+|-\s+)/g, "-")
+            .replace(/(-FR)/gi, "-")
+            .replace(/(-NFR)/gi, "-");
 
     if (searchText.value !== "") {
         if (isSearchById(searchText.value)) {

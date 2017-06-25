@@ -26,6 +26,11 @@
  */
 package ua.dp.isd.jrqs;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SqlBuilder {
 
     public enum SelectBy {
@@ -35,7 +40,8 @@ public class SqlBuilder {
         Text
     }
 
-    private static final String sqlSelectTemplate
+    private final int MAX_RANGE_SIZE = 5000;
+    private static final String SQL_SELECT_TEMPLATE
             = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
 
     private final SelectBy selectBy;
@@ -47,26 +53,26 @@ public class SqlBuilder {
     }
 
     public String getSql() {
-        return String.format(sqlSelectTemplate, getWhereStatement());
+        return String.format(SQL_SELECT_TEMPLATE, getWhereStatement());
     }
 
     public String[] getParametersList() {
         return sqlParameters;
     }
-    
+
     public String[] getSourceParametersList() {
         return sqlSourceParameters;
     }
-    
+
     public void addCommaSeparatedParameters(String commaSeparatedParameters) {
         if (commaSeparatedParameters == null) {
             return;
         }
 
         sqlParameters = commaSeparatedParameters.toLowerCase().split(",");
-        
+
         int i = 0;
-        for (String s: sqlParameters) {
+        for (String s : sqlParameters) {
             switch (selectBy) {
                 case ROWID:
                 case FRID:
@@ -77,6 +83,10 @@ public class SqlBuilder {
                     sqlParameters[i++] = String.format("%%%s%%", s.trim());
                     break;
             }
+        }
+
+        if (selectBy == SelectBy.FRID) {
+            expandRange();
         }
     }
 
@@ -94,35 +104,35 @@ public class SqlBuilder {
 
     private String getWhereStatement() {
         StringBuilder sqlWhere = new StringBuilder();
-        
+
         switch (selectBy) {
             case ROWID:
-                sqlWhere.append(String.format("where id in (%s)", 
+                sqlWhere.append(String.format("where id in (%s)",
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case FRID:
-                sqlWhere.append(String.format("where lower(fr_id) in (%s)", 
+                sqlWhere.append(String.format("where lower(fr_id) in (%s)",
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case TMSTask:
-                sqlWhere.append(String.format("where %s", 
+                sqlWhere.append(String.format("where %s",
                         generatePlaceholders("lower(fr_tms_task) like ?", " and ", sqlParameters.length)));
                 break;
             case Text:
             default:
-                sqlWhere.append(String.format("where %s", 
+                sqlWhere.append(String.format("where %s",
                         generatePlaceholders("lower(fr_text) like ?", " and ", sqlParameters.length)));
                 break;
         }
-        
+
         if (sqlSourceParameters != null) {
-            sqlWhere.append(String.format("and lower(source) in (%s)", 
+            sqlWhere.append(String.format("and lower(source) in (%s)",
                     generatePlaceholders("?", ",", sqlSourceParameters.length)));
         }
 
         return sqlWhere.toString();
     }
-    
+
     private String generatePlaceholders(String condition, String separator, Integer count) {
         StringBuilder sb = new StringBuilder();
         sb.append(condition);
@@ -131,7 +141,58 @@ public class SqlBuilder {
             sb.append(separator);
             sb.append(condition);
         }
-        
+
         return sb.toString();
+    }
+
+    private void expandRange() {
+        List<String> result = new ArrayList();
+        for (String s : sqlParameters) {
+            if (!s.contains("-")) {
+                result.add(s);
+                continue;
+            }
+            String prefix = getSubstringByRegex(s, "^(\\w*?)\\d+");
+            String from = getSubstringByRegex(s, "^\\w*?(\\d+)-");
+            String to = getSubstringByRegex(s, "^\\w*?\\d+-\\w*?(\\d+)");
+            if (from == null || to == null) {
+                continue;
+            }
+            Integer fromNum = parseInt(from);
+            Integer toNum = parseInt(to);
+            if (fromNum == null || toNum == null) {
+                continue;
+            }
+            if (fromNum - toNum > MAX_RANGE_SIZE || toNum - fromNum > MAX_RANGE_SIZE) {
+                continue;
+            }
+            if (fromNum > toNum) {
+                toNum = fromNum + toNum;
+                fromNum = toNum - fromNum;
+                toNum = toNum - fromNum;
+            }
+            for (int i = fromNum; i <= toNum; i++) {
+                result.add(prefix.concat(String.valueOf(i)));
+            }
+        }
+        sqlParameters = result.toArray(new String[result.size()]);
+    }
+
+    private String getSubstringByRegex(String string, String expression) {
+        Pattern pattern = Pattern.compile(expression);
+        Matcher matcher = pattern.matcher(string);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    private Integer parseInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            // ignore
+        }
+        return null;
     }
 }

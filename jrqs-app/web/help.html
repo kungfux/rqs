@@ -36,7 +36,7 @@
                         <li><a href="#license">License</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-md-9">
                     <a class="anchor" id="introduction"></a>
                     <h3 class="text-uppercase">Introduction</h3>
@@ -89,6 +89,19 @@
                                 <td>Search for a bunch of requirements by their FR IDs</td>
                             </tr>
                             <tr>
+                                <td/>
+                                <td>FR1-3</td>
+                                <td>
+                                    Search for a bunch of requirements by range of FR IDs.
+                                    <br>
+                                    In addition, search by range may be combined with standard 
+                                    search requests of the same type e.g. FR1,FR3-5,NFR6-10.
+                                    <br>
+                                    Please note that range is limited to 5000, so the search request 
+                                    like FR1000-6001 will be completely ignored by jRQS.
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>TMS task</td>
                                 <td>COBRA-12345</td>
                                 <td>
@@ -128,7 +141,7 @@
                             if your search request returned 100 or more results.
                         </p>
                     </div>
-                    
+
                     <h4 class="text-uppercase">Filter out the results</h4>
                     <p>
                         If you got big search results, you may click on the source link to repeat the 
@@ -215,7 +228,7 @@
                         are also welcome.
                     </p>
                     <br>
-                    
+
                     <a class="anchor" id="license"></a>
                     <h3 class="text-uppercase">License and disclaimer</h3>
                     <p>
