@@ -40,9 +40,12 @@ public class SqlBuilder {
         Text
     }
 
-    private final int MAX_RANGE_SIZE = 5000;
+    private static final int MAX_RESULTS = 100;
     private static final String SQL_SELECT_TEMPLATE
-            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
+            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, "
+            + "status, boundary, source from requirements %s limit "
+            + MAX_RESULTS
+            + ";";
 
     private final SelectBy selectBy;
     private String[] sqlParameters;
@@ -69,7 +72,12 @@ public class SqlBuilder {
             return;
         }
 
-        sqlParameters = commaSeparatedParameters.toLowerCase().split(",");
+        String[] splitted = commaSeparatedParameters.toLowerCase().split(",");
+        if (splitted.length > MAX_RESULTS) {
+            throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
+        } else {
+            sqlParameters = splitted;
+        }
 
         int i = 0;
         for (String s : sqlParameters) {
@@ -163,8 +171,8 @@ public class SqlBuilder {
             if (fromNum == null || toNum == null) {
                 continue;
             }
-            if (fromNum - toNum > MAX_RANGE_SIZE || toNum - fromNum > MAX_RANGE_SIZE) {
-                continue;
+            if (fromNum - toNum > MAX_RESULTS || toNum - fromNum > MAX_RESULTS) {
+                throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
             }
             if (fromNum > toNum) {
                 toNum = fromNum + toNum;
