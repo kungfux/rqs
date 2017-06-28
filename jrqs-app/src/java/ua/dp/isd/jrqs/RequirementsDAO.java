@@ -37,37 +37,21 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import ua.dp.isd.jrqs.ESearchBy.SearchBy;
 
 public class RequirementsDAO {
 
-    public List<Requirement> getRequirementsByRowIds(String RowIds) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.ROWID);
-        sql.addCommaSeparatedParameters(RowIds);
-        return getRequirements(sql.getSql(), sql.getParametersList(), null);
+    public List<Requirement> getRequirements(SearchBy selectBy, String keywords, String limitBySources) {
+        SqlBuilder sqlb = new SqlBuilder(selectBy);
+        sqlb.addCommaSeparatedParameters(keywords);
+        sqlb.addCommaSeparatedSourcesToFilter(limitBySources);
+        String sql = sqlb.getSql();
+        String[] arguments = sqlb.getParametersList();
+        String[] limitBySource = sqlb.getSourceParametersList();
+        return getRequirementsFromDB(sql, arguments, limitBySource);
     }
-
-    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.FRID);
-        sql.addCommaSeparatedParameters(RequirementNumbers);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.TMSTask);
-        sql.addCommaSeparatedParameters(TmsTaskNumbers);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    public List<Requirement> getRequirementsByTextPhrases(String Keywords, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.Text);
-        sql.addCommaSeparatedParameters(Keywords);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    private List<Requirement> getRequirements(String sql, String[] arguments, String[] limitBySource) {
+    
+    private List<Requirement> getRequirementsFromDB(String sql, String[] arguments, String[] limitBySource) {
         if (sql == null) {
             return null;
         }

@@ -27,13 +27,13 @@
 package ua.dp.isd.jrqs;
 
 import java.util.List;
+import ua.dp.isd.jrqs.ESearchBy.SearchBy;
 
 public class RequirementsService {
 
     private final String rawParamsSearchBy;
     private final String rawParamsUserInput;
     private final String rawParamsLimitBySource;
-    private String errorMessage;
 
     public RequirementsService(String by, String value, String only) {
         rawParamsSearchBy = by;
@@ -41,30 +41,26 @@ public class RequirementsService {
         rawParamsLimitBySource = only;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
     public List<Requirement> getRequirements() {
         if (rawParamsSearchBy == null || rawParamsSearchBy.equals("")) {
-            errorMessage = "Invalid request: <b>by</b> parameter is missing in the search request.";
-            return null;
+            throw new IllegalArgumentException("Invalid request: by parameter is missing in the request.");
         }
-
+        SearchBy by = detectSearchBy(rawParamsSearchBy);
         RequirementsDAO dao = new RequirementsDAO();
-        switch (rawParamsSearchBy) {
+        return dao.getRequirements(by, rawParamsUserInput, rawParamsLimitBySource);
+    }
+    
+    private SearchBy detectSearchBy(String by) {
+        switch (by) {
             case "rowid":
-                return dao.getRequirementsByRowIds(rawParamsUserInput);
+                return SearchBy.ROWID;
             case "id":
-                return dao.getRequirementsByRequirementNumbers(rawParamsUserInput, rawParamsLimitBySource);
+                return SearchBy.FRID;
             case "tms":
-                return dao.getRequirementsByTmsTaskNumbers(rawParamsUserInput, rawParamsLimitBySource);
+               return SearchBy.TMSTask;
             case "text":
-                return dao.getRequirementsByTextPhrases(rawParamsUserInput, rawParamsLimitBySource);
-            default:
-                errorMessage = "Invalid request: inappropriate value is defined for search <b>by</b> parameter.";
-                break;
+                return SearchBy.Text;
         }
-        return null;
+        throw new IllegalArgumentException("Invalid request: inappropriate value is defined for by parameter.");
     }
 }

@@ -30,28 +30,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import ua.dp.isd.jrqs.ESearchBy.SearchBy;
 
 public class SqlBuilder {
 
-    public enum SelectBy {
-        ROWID,
-        FRID,
-        TMSTask,
-        Text
-    }
-
-    private static final int MAX_RESULTS = 100;
+    private static final int MAX_PARAMETERS = 100;
+    private static final int MAX_SEARCH_RESULTS = 100;
     private static final String SQL_SELECT_TEMPLATE
             = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, "
             + "status, boundary, source from requirements %s limit "
-            + MAX_RESULTS
+            + MAX_SEARCH_RESULTS
             + ";";
 
-    private final SelectBy selectBy;
+    private final SearchBy selectBy;
     private String[] sqlParameters;
     private String[] sqlSourceParameters;
 
-    public SqlBuilder(SelectBy selectBy) {
+    public SqlBuilder(SearchBy selectBy) {
         this.selectBy = selectBy;
     }
 
@@ -73,7 +68,7 @@ public class SqlBuilder {
         }
 
         String[] splitted = commaSeparatedParameters.toLowerCase().split(",");
-        if (splitted.length > MAX_RESULTS) {
+        if (splitted.length > MAX_PARAMETERS) {
             throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
         } else {
             sqlParameters = splitted;
@@ -93,7 +88,7 @@ public class SqlBuilder {
             }
         }
 
-        if (selectBy == SelectBy.FRID) {
+        if (selectBy == SearchBy.FRID) {
             expandRange();
         }
     }
@@ -171,7 +166,7 @@ public class SqlBuilder {
             if (fromNum == null || toNum == null) {
                 continue;
             }
-            if (fromNum - toNum > MAX_RESULTS || toNum - fromNum > MAX_RESULTS) {
+            if (fromNum - toNum > MAX_PARAMETERS || toNum - fromNum > MAX_PARAMETERS) {
                 throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
             }
             if (fromNum > toNum) {

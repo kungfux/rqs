@@ -42,25 +42,35 @@ public class RequirementsServlet extends HttpServlet {
     private String errorMessage;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request);
-        forwardListRequirements(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request);
-        forwardListRequirements(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
 
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        searchRequirements(request);
+        forwardListRequirements(request, response);
+        resetState();
+    }
+    
     private void searchRequirements(HttpServletRequest request) {
         RequirementsService service = new RequirementsService(
                 request.getParameter("by"),
                 request.getParameter("value"),
                 request.getParameter("only")
         );
-        requirements = service.getRequirements();
-        errorMessage = service.getErrorMessage();
+        try {
+            requirements = service.getRequirements();
+        } catch (IllegalArgumentException e) {
+            errorMessage = e.getMessage();
+        }
     }
 
     private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response)
@@ -70,5 +80,10 @@ public class RequirementsServlet extends HttpServlet {
         request.setAttribute("requirementsList", requirements);
         request.setAttribute("errorMessage", errorMessage);
         dispatcher.forward(request, response);
+    }
+    
+    private void resetState() {
+        requirements = null;
+        errorMessage = null;
     }
 }

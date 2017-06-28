@@ -142,10 +142,18 @@
                 </c:otherwise>
             </c:choose>
 
-            <c:if test="${not empty param.value && empty requirementsList}">
+            <c:if test="${not empty param.value && empty requirementsList && empty errorMessage}">
                 <div class="alert alert-danger col-md-12">
                     <p>
                         <span class="glyphicon glyphicon-exclamation-sign"></span> No results found!
+                    </p>
+                </div>
+            </c:if>
+
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger col-md-12">
+                    <p>
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> ${errorMessage}
                     </p>
                 </div>
             </c:if>
