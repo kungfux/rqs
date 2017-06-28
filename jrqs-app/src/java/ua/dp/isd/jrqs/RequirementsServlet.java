@@ -38,48 +38,37 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/search")
 public class RequirementsServlet extends HttpServlet {
 
-    RequirementsService requirementService = new RequirementsService();
+    private List<Requirement> requirements;
+    private String errorMessage;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request, response);
+        searchRequirements(request);
+        forwardListRequirements(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request, response);
+        searchRequirements(request);
+        forwardListRequirements(request, response);
     }
 
-    private void searchRequirements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Requirement> result = null;
-        String searchBy = request.getParameter("by");
-        String searchText = request.getParameter("value");
-        String limitBySource = request.getParameter("only");
-        if (searchBy != null && !searchBy.equals("")) {
-            switch (searchBy) {
-                case "rowid":
-                    result = requirementService.getRequirementsByRowId(searchText);
-                    break;
-                case "id":
-                    result = requirementService.getRequirementsByRequirementNumbers(searchText, limitBySource);
-                    break;
-                case "tms":
-                    result = requirementService.getRequirementsByTmsTaskNumbers(searchText, limitBySource);
-                    break;
-                case "text":
-                default:
-                    result = requirementService.getRequirementsByTextPhrases(searchText, limitBySource);
-                    break;
-            }
-        }
-        forwardListRequirements(request, response, result);
+    private void searchRequirements(HttpServletRequest request) {
+        RequirementsService service = new RequirementsService(
+                request.getParameter("by"),
+                request.getParameter("value"),
+                request.getParameter("only")
+        );
+        requirements = service.getRequirements();
+        errorMessage = service.getErrorMessage();
     }
 
-    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response, List requirementsList)
+    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String nextJSP = "/index.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("requirementsList", requirementsList);
+        request.setAttribute("requirementsList", requirements);
+        request.setAttribute("errorMessage", errorMessage);
         dispatcher.forward(request, response);
     }
 }
