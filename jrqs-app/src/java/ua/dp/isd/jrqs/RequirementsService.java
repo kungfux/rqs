@@ -47,35 +47,24 @@ public class RequirementsService {
 
     public List<Requirement> getRequirements() {
         if (rawParamsSearchBy == null || rawParamsSearchBy.equals("")) {
-            errorMessage = "The request does not contain 'by' parameter and treated as invalid!";
+            errorMessage = "Invalid request: <b>by</b> parameter is missing in the search request.";
             return null;
         }
+
+        RequirementsDAO dao = new RequirementsDAO();
         switch (rawParamsSearchBy) {
             case "rowid":
-                return getRequirementsByRowId(rawParamsUserInput);
+                return dao.getRequirementsByRowIds(rawParamsUserInput);
             case "id":
-                return getRequirementsByRequirementNumbers(rawParamsUserInput, rawParamsLimitBySource);
+                return dao.getRequirementsByRequirementNumbers(rawParamsUserInput, rawParamsLimitBySource);
             case "tms":
-                return getRequirementsByTmsTaskNumbers(rawParamsUserInput, rawParamsLimitBySource);
+                return dao.getRequirementsByTmsTaskNumbers(rawParamsUserInput, rawParamsLimitBySource);
             case "text":
+                return dao.getRequirementsByTextPhrases(rawParamsUserInput, rawParamsLimitBySource);
             default:
-                return getRequirementsByTextPhrases(rawParamsUserInput, rawParamsLimitBySource);
+                errorMessage = "Invalid request: inappropriate value is defined for search <b>by</b> parameter.";
+                break;
         }
-    }
-
-    private List<Requirement> getRequirementsByRowId(String RequirementRowIds) {
-        return new RequirementsDAO().getRequirementsByRowIds(RequirementRowIds);
-    }
-
-    private List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByRequirementNumbers(RequirementNumbers, LimitBySource);
-    }
-
-    private List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByTmsTaskNumbers(TmsTaskNumbers, LimitBySource);
-    }
-
-    private List<Requirement> getRequirementsByTextPhrases(String TextPhrases, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByTextPhrases(TextPhrases, LimitBySource);
+        return null;
     }
 }
