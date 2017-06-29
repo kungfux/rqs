@@ -87,7 +87,7 @@ namespace WebQA.Logic
             Trace.Instance.Add(
                     string.Format("RQS URL: {0}", value), Trace.Color.Yellow);
 
-            string style = 
+            string style =
                 string.Concat(
                 "<style type='text/css'>",
                 "body { font-family: Tahoma, Verdana, Arial, sans-serif; }",
@@ -101,9 +101,9 @@ namespace WebQA.Logic
                 "table.results th { border: 1px solid #5f5f5f; padding: 2px 3px; }",
                 "table.results td { border: 1px solid #5f5f5f; padding: 2px 3px; }",
                 "</style>"
-		        );
+                );
 
-            string js = 
+            string js =
                 string.Concat(
                 "<script type='text/javascript'>",
                 "function SwitchBy(e) { var k = e.keyCode ? e.keyCode : e.charCode; sel = document.getElementById('by'); ",
@@ -133,11 +133,11 @@ namespace WebQA.Logic
                     "<tr>",
                     "<td>",
                     "<select id='by' name='by'>",
-                    by.Equals("id") ? 
+                    by.Equals("id") ?
                         "<option selected value='fr'>FR ID</option>" : "<option value='fr'>FR ID</option>",
-                    by.Equals("tms") ? 
+                    by.Equals("tms") ?
                         "<option selected value='tms'>TMS Task</option>" : "<option value='tms'>TMS Task</option>",
-                    by.Equals("text") ? 
+                    by.Equals("text") ?
                         "<option selected value='text'>FR Text</option>" : "<option value='text'>FR Text</option>",
                     "</select>",
                     "</td>",
@@ -152,7 +152,7 @@ namespace WebQA.Logic
                     "</tr>",
                     "</form>",
                     "</table>",
-                    !by.Equals("id") && !by.Equals("fr") && !by.Equals("tms") && !by.Equals("text") ? 
+                    !by.Equals("id") && !by.Equals("fr") && !by.Equals("tms") && !by.Equals("text") ?
                         string.Format("<p style='font-size: 80%;'><font color='green'>{0} requirements in the database</font></p>", Program.ReqsCountInDB) : "",
                     "</div><br>"
                     ));
@@ -164,7 +164,7 @@ namespace WebQA.Logic
 
         private void GetRequirements(string by, string[] criteria, string file_filter)
         {
-            string query = "SELECT id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, created = modified, status, source FROM REQUIREMENTS WHERE ";
+            string query = "SELECT id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, created = modified, status, boundary, source FROM REQUIREMENTS WHERE ";
 
             if (by.Equals("id") || by.Equals("fr") || by.Equals("tms") || by.Equals("text"))
             {
@@ -273,23 +273,24 @@ namespace WebQA.Logic
                         "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Created / Modified</a></th>",
                         "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Is changed?</a></th>",
                         "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Status</a></th>",
-                        "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Found in file</a></th>", 
+                        "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Boundary</a></th>",
+                        "<th><a id='a-hiden' href='/?help#ds' title='Display help'>Found in file</a></th>",
                         "</tr>"));
 
                     for (int a = 0; a < result.Rows.Count; a++)
                     {
                         html.Append(
                             string.Format(
-                            "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td></tr>",
+                            "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td>{5}</td><td>{6}</td><td>{7}</td><td>{8}</td><td>{9}</td></tr>",
                             // internal id and fr id
                             result.Rows[a].ItemArray[1] != null ?
-                                string.Format("<a href='/?by=id&value={0}' title='Search by FR ID: {1}'>{1}</a>", 
-                                result.Rows[a].ItemArray[0], result.Rows[a].ItemArray[1]) : 
+                                string.Format("<a href='/?by=id&value={0}' title='Search by FR ID: {1}'>{1}</a>",
+                                result.Rows[a].ItemArray[0], result.Rows[a].ItemArray[1]) :
                                 "&nbsp;",
                             // fr tms task number
-                            result.Rows[a].ItemArray[2] != null && !result.Rows[a].ItemArray[2].ToString().Equals("") ? 
-                                string.Format("<a href='/?by=tms&value={0}' title='Search by TMS Task: {0}'>{0}</a>", 
-                                result.Rows[a].ItemArray[2]) : 
+                            result.Rows[a].ItemArray[2] != null && !result.Rows[a].ItemArray[2].ToString().Equals("") ?
+                                string.Format("<a href='/?by=tms&value={0}' title='Search by TMS Task: {0}'>{0}</a>",
+                                result.Rows[a].ItemArray[2]) :
                                 "&nbsp;",
                             // fr object number
                             result.Rows[a].ItemArray[3] != null ? result.Rows[a].ItemArray[3] : "&nbsp;",
@@ -301,24 +302,26 @@ namespace WebQA.Logic
                             Convert.ToInt16(result.Rows[a].ItemArray[5]) != 0 ? result.Rows[a].ItemArray[5] : "&nbsp;",
                             // created / modified dates
                             string.Concat(
-                                result.Rows[a].ItemArray[6] != null && !result.Rows[a].ItemArray[6].ToString().Equals("") ? 
+                                result.Rows[a].ItemArray[6] != null && !result.Rows[a].ItemArray[6].ToString().Equals("") ?
                                 result.Rows[a].ItemArray[6].ToString() :
                                 "-",
                                 " / ",
-                                result.Rows[a].ItemArray[7] != null && !result.Rows[a].ItemArray[7].ToString().Equals("") ? 
+                                result.Rows[a].ItemArray[7] != null && !result.Rows[a].ItemArray[7].ToString().Equals("") ?
                                 result.Rows[a].ItemArray[7].ToString() :
-                                "-"),                            
+                                "-"),
                             // is changed
-                            result.Rows[a].ItemArray[8] != null && !string.IsNullOrEmpty(result.Rows[a].ItemArray[8].ToString()) && 
+                            result.Rows[a].ItemArray[8] != null && !string.IsNullOrEmpty(result.Rows[a].ItemArray[8].ToString()) &&
                             result.Rows[a].ItemArray[7] != null && !string.IsNullOrEmpty(result.Rows[a].ItemArray[7].ToString()) ?
                             !Convert.ToBoolean(result.Rows[a].ItemArray[8]) ? "Yes" : "No" : "No",
                             // fr status
                             result.Rows[a].ItemArray[9] != null ? result.Rows[a].ItemArray[9] : "&nbsp;",
+                            // boundary
+                            result.Rows[a].ItemArray[10] != null ? result.Rows[a].ItemArray[10] : "&nbsp;",
                             // source/file
-                            string.Format("<a href='/?by={0}&value={1}&filter={2}' title='Repeat search using this source only'>{2}</a>", 
+                            string.Format("<a href='/?by={0}&value={1}&filter={2}' title='Repeat search using this source only'>{2}</a>",
                                 by,
                                 value,
-                                result.Rows[a].ItemArray[10])));
+                                result.Rows[a].ItemArray[11])));
 
                         //a % 2 == 0 ? "bgcolor='#ffffff';" : "bgcolor='#cccccc';")
                     }

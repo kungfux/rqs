@@ -102,6 +102,7 @@ namespace WebQA.Converter
                 int cCreated = -1;
                 int cModified = -1;
                 int cStatus = -1;
+                int cBoundary = -1;
 
                 if (sheet.Cells.FirstRowIndex >= 0)
                 {
@@ -168,6 +169,9 @@ namespace WebQA.Converter
                             case "nfr status":
                                 cStatus = a;
                                 break;
+                            case "system boundary":
+                                cBoundary = a;
+                                break;
                         }
                     }
                 }
@@ -188,6 +192,7 @@ namespace WebQA.Converter
                         FR.Created = !row.GetCell(cCreated).IsEmpty ? row.GetCell(cCreated).DateTimeValue.ToShortDateString() : "";
                         FR.Modified = !row.GetCell(cModified).IsEmpty ? row.GetCell(cModified).DateTimeValue.ToShortDateString() : "";
                         FR.Status = !row.GetCell(cStatus).IsEmpty ? row.GetCell(cStatus).Value.ToString() : "";
+                        FR.Boundary = !row.GetCell(cBoundary).IsEmpty ? row.GetCell(cBoundary).Value.ToString() : "";
                     }
                     catch (Exception ex)
                     {
@@ -206,7 +211,8 @@ namespace WebQA.Converter
                                 new SQLiteParameter("@ccp", FR.CCP),
                                 new SQLiteParameter("@created", FR.Created),
                                 new SQLiteParameter("@modified", FR.Modified),
-                                new SQLiteParameter("@status", FR.Status));
+                                new SQLiteParameter("@status", FR.Status),
+                                new SQLiteParameter("@boundary", FR.Boundary));
                         }
                     }
                 }
