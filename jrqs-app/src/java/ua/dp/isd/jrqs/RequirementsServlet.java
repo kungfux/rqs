@@ -38,52 +38,40 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/search")
 public class RequirementsServlet extends HttpServlet {
 
-    private List<Requirement> requirements;
-    private String errorMessage;
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
+    private static final String NEXT_JSP = "/index.jsp";
+    private static final String SEARCH_BY_PARAM_NAME = "by";
+    private static final String SEARCH_KEYWORDS_PARAM_NAME = "value";
+    private static final String LIMIT_BY_SOURCE_PARAM_NAME = "only";
+    private static final String REQUIREMENTS_RESPONSE_NAME = "requirementsList";
+    private static final String ERROR_RESPONSE_NAME = "errorMessage";
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        searchRequirements(request);
-        forwardListRequirements(request, response);
-        resetState();
+        doGet(request, response);
     }
     
-    private void searchRequirements(HttpServletRequest request) {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         RequirementsService service = new RequirementsService(
-                request.getParameter("by"),
-                request.getParameter("value"),
-                request.getParameter("only")
+                request.getParameter(SEARCH_BY_PARAM_NAME),
+                request.getParameter(SEARCH_KEYWORDS_PARAM_NAME),
+                request.getParameter(LIMIT_BY_SOURCE_PARAM_NAME)
         );
         try {
-            requirements = service.getRequirements();
+            List<Requirement> foundRequirements = service.getRequirements();
+            request.setAttribute(REQUIREMENTS_RESPONSE_NAME, foundRequirements);
         } catch (IllegalArgumentException e) {
-            errorMessage = e.getMessage();
+            request.setAttribute(ERROR_RESPONSE_NAME, e.getMessage());
         }
-    }
-
-    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String nextJSP = "/index.jsp";
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("requirementsList", requirements);
-        request.setAttribute("errorMessage", errorMessage);
-        dispatcher.forward(request, response);
+        forwardListRequirements(request, response);
     }
     
-    private void resetState() {
-        requirements = null;
-        errorMessage = null;
+    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String nextJSP = NEXT_JSP;
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
+        dispatcher.forward(request, response);
     }
 }
