@@ -27,7 +27,6 @@
 package ua.dp.isd.jrqs;
 
 import java.util.List;
-import ua.dp.isd.jrqs.ESearchBy.SearchBy;
 
 public class RequirementsService {
 

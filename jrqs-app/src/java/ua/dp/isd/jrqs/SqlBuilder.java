@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import ua.dp.isd.jrqs.ESearchBy.SearchBy;
 
 public class SqlBuilder {
 

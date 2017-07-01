@@ -26,12 +26,9 @@
  */
 package ua.dp.isd.jrqs;
 
-public final class ESearchBy {
-    
-    public static enum SearchBy {
-        ROWID,
-        FRID,
-        TMSTask,
-        Text
-    }
+public enum SearchBy {
+    ROWID,
+    FRID,
+    TMSTask,
+    Text
 }
