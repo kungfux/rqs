@@ -34,10 +34,10 @@ public class RequirementsService {
     private final String rawParamsUserInput;
     private final String rawParamsLimitBySource;
 
-    public RequirementsService(String by, String value, String only) {
-        rawParamsSearchBy = by;
-        rawParamsUserInput = value;
-        rawParamsLimitBySource = only;
+    public RequirementsService(String searchBy, String keywords, String onlyFromSources) {
+        rawParamsSearchBy = searchBy;
+        rawParamsUserInput = keywords;
+        rawParamsLimitBySource = onlyFromSources;
     }
 
     public List<Requirement> getRequirements() {

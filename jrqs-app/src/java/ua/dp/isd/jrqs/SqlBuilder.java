@@ -27,9 +27,11 @@
 package ua.dp.isd.jrqs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class SqlBuilder {
 
@@ -51,11 +53,14 @@ public class SqlBuilder {
     }
 
     public String[] getParametersList() {
-        return sqlParameters;
-    }
-
-    public String[] getSourceParametersList() {
-        return sqlSourceParameters;
+        if (sqlParameters != null) {
+            if (sqlSourceParameters != null) {
+                return Stream.concat(Arrays.stream(sqlParameters), Arrays.stream(sqlSourceParameters))
+                        .toArray(String[]::new);
+            }
+            return sqlParameters;
+        }
+        return null;
     }
 
     public void addCommaSeparatedParameters(String commaSeparatedParameters) {

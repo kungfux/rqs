@@ -40,18 +40,19 @@ import javax.sql.DataSource;
 
 public class RequirementsDAO {
 
-    public List<Requirement> getRequirements(SearchBy selectBy, String keywords, String limitBySources) {
-        SqlBuilder sqlb = new SqlBuilder(selectBy);
+    public List<Requirement> getRequirements(SearchBy searchBy, String keywords, 
+            String onlyFromSources) {
+        SqlBuilder sqlb = new SqlBuilder(searchBy);
         sqlb.addCommaSeparatedParameters(keywords);
-        sqlb.addCommaSeparatedSourcesToFilter(limitBySources);
-        String sql = sqlb.getSql();
-        String[] arguments = sqlb.getParametersList();
-        String[] limitBySource = sqlb.getSourceParametersList();
-        return getRequirementsFromDB(sql, arguments, limitBySource);
+        sqlb.addCommaSeparatedSourcesToFilter(onlyFromSources);
+        String selectSqlStatement = sqlb.getSql();
+        String[] whereArguments = sqlb.getParametersList();
+        return getRequirementsFromDB(selectSqlStatement, whereArguments);
     }
     
-    private List<Requirement> getRequirementsFromDB(String sql, String[] arguments, String[] limitBySource) {
-        if (sql == null) {
+    private List<Requirement> getRequirementsFromDB(String selectSqlStatement, 
+            String[] whereArguments) {
+        if (selectSqlStatement == null) {
             return null;
         }
 
@@ -67,17 +68,12 @@ public class RequirementsDAO {
             DataSource dataSource = (DataSource) context.lookup("jdbc/sqlite");
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(selectSqlStatement);
 
             int i = 1;
-            if (arguments != null) {
-                for (String argValue : arguments) {
+            if (whereArguments != null) {
+                for (String argValue : whereArguments) {
                     statement.setString(i++, argValue);
-                }
-                if (limitBySource != null) {
-                    for (String argSource : limitBySource) {
-                        statement.setString(i++, argSource);
-                    }
                 }
             }
 
