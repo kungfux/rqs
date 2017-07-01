@@ -88,17 +88,17 @@ public class RequirementsDAO {
             }
             while (set.next()) {
                 requirements.add(new Requirement(
-                        set.getLong(1),
-                        set.getString(2),
-                        set.getString(3),
-                        set.getString(4),
-                        set.getString(5),
-                        set.getString(6),
-                        set.getString(7),
-                        set.getString(8),
-                        set.getString(9),
-                        set.getString(10),
-                        set.getString(11)
+                        set.getLong(RequirementsTableMapping.getRowIdColumnName()),
+                        set.getString(RequirementsTableMapping.getRequirementNumberColumnName()),
+                        set.getString(RequirementsTableMapping.getTmsTaskColumnName()),
+                        set.getString(RequirementsTableMapping.getObjectNumberColumnName()),
+                        set.getString(RequirementsTableMapping.getTextColumnName()),
+                        set.getString(RequirementsTableMapping.getCcpColumnName()),
+                        set.getString(RequirementsTableMapping.getCreatedColumnName()),
+                        set.getString(RequirementsTableMapping.getModifiedColumnName()),
+                        set.getString(RequirementsTableMapping.getStatusColumnName()),
+                        set.getString(RequirementsTableMapping.getBoundaryColumnName()),
+                        set.getString(RequirementsTableMapping.getSourceColumnName())
                 ));
             }
 

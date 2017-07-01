@@ -36,10 +36,7 @@ public class SqlBuilder {
     private static final int MAX_PARAMETERS = 100;
     private static final int MAX_SEARCH_RESULTS = 100;
     private static final String SQL_SELECT_TEMPLATE
-            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, "
-            + "status, boundary, source from requirements %s limit "
-            + MAX_SEARCH_RESULTS
-            + ";";
+            = "select * from requirements %s limit " + MAX_SEARCH_RESULTS + ";";
 
     private final SearchBy selectBy;
     private String[] sqlParameters;
@@ -109,26 +106,35 @@ public class SqlBuilder {
 
         switch (selectBy) {
             case ROWID:
-                sqlWhere.append(String.format("where id in (%s)",
+                sqlWhere.append(String.format("where %s in (%s)",
+                        RequirementsTableMapping.getRowIdColumnName(),
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case FRID:
-                sqlWhere.append(String.format("where lower(fr_id) in (%s)",
+                sqlWhere.append(String.format("where lower(%s) in (%s)",
+                        RequirementsTableMapping.getRequirementNumberColumnName(),
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case TMSTask:
                 sqlWhere.append(String.format("where %s",
-                        generatePlaceholders("lower(fr_tms_task) like ?", " and ", sqlParameters.length)));
+                        generatePlaceholders(
+                                String.format("lower(%s) like ?",
+                                        RequirementsTableMapping.getTmsTaskColumnName()),
+                                " and ", sqlParameters.length)));
                 break;
             case Text:
             default:
                 sqlWhere.append(String.format("where %s",
-                        generatePlaceholders("lower(fr_text) like ?", " and ", sqlParameters.length)));
+                        generatePlaceholders(
+                                String.format("lower(%s) like ?",
+                                        RequirementsTableMapping.getTextColumnName()),
+                                " and ", sqlParameters.length)));
                 break;
         }
 
         if (sqlSourceParameters != null) {
-            sqlWhere.append(String.format("and lower(source) in (%s)",
+            sqlWhere.append(String.format("and lower(%s) in (%s)",
+                    RequirementsTableMapping.getSourceColumnName(),
                     generatePlaceholders("?", ",", sqlSourceParameters.length)));
         }
 
