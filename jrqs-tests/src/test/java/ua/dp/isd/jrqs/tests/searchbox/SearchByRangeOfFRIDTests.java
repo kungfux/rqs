@@ -2,6 +2,7 @@ package ua.dp.isd.jrqs.tests.searchbox;
 
 import java.util.Arrays;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 public class SearchByRangeOfFRIDTests {
@@ -33,5 +34,13 @@ public class SearchByRangeOfFRIDTests {
         Arrays.sort(expected);
         Arrays.sort(actual);
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void TestSeacrhByRangeMaybeExceeded() {
+        final String expectedMessage = "The number of maximum allowed arguments have been exceeded.";
+        sp.doSearchBy("FR1-102");
+        assertEquals(1, sp.getErrorMessages().length);
+        assertEquals(expectedMessage, sp.getErrorMessages()[0]);
     }
 }

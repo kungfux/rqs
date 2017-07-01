@@ -29,20 +29,37 @@ package ua.dp.isd.jrqs;
 import java.util.List;
 
 public class RequirementsService {
-    
-    public List<Requirement> getRequirementsByRowId(String RequirementRowIds) {
-        return new RequirementsDAO().getRequirementsByRowIds(RequirementRowIds);
+
+    private final String rawParamsSearchBy;
+    private final String rawParamsUserInput;
+    private final String rawParamsLimitBySource;
+
+    public RequirementsService(String searchBy, String keywords, String onlyFromSources) {
+        rawParamsSearchBy = searchBy;
+        rawParamsUserInput = keywords;
+        rawParamsLimitBySource = onlyFromSources;
+    }
+
+    public List<Requirement> getRequirements() {
+        if (rawParamsSearchBy == null || rawParamsSearchBy.equals("")) {
+            throw new IllegalArgumentException("Invalid request: by parameter is missing in the request.");
+        }
+        SearchBy by = detectSearchBy(rawParamsSearchBy);
+        RequirementsDAO dao = new RequirementsDAO();
+        return dao.getRequirements(by, rawParamsUserInput, rawParamsLimitBySource);
     }
     
-    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByRequirementNumbers(RequirementNumbers, LimitBySource);
-    }
-    
-    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByTmsTaskNumbers(TmsTaskNumbers, LimitBySource);
-    }
-    
-    public List<Requirement> getRequirementsByTextPhrases(String TextPhrases, String LimitBySource) {
-        return new RequirementsDAO().getRequirementsByTextPhrases(TextPhrases, LimitBySource);
+    private SearchBy detectSearchBy(String by) {
+        switch (by) {
+            case "rowid":
+                return SearchBy.ROWID;
+            case "id":
+                return SearchBy.FRID;
+            case "tms":
+               return SearchBy.TMSTask;
+            case "text":
+                return SearchBy.Text;
+        }
+        throw new IllegalArgumentException("Invalid request: inappropriate value is defined for by parameter.");
     }
 }

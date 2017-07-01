@@ -59,4 +59,15 @@ public class SearchPageHelper {
     public Boolean isFilterOutBySourceLinksAvailable() {
         return wh.findElementsByCssWithoutAwaiting("table td:nth-child(12) a").size() > 0;
     }
+    
+    public String[] getErrorMessages() {
+        List<WebElement> messageBoxes = wh.findElementsByCss("div .alert-danger p");
+        String[] messages = new String[messageBoxes.size()];
+        int i = 0;
+        for (WebElement mb : messageBoxes) {
+            messages[i] = mb.getText();
+            i++;
+        }
+        return messages;
+    }
 }

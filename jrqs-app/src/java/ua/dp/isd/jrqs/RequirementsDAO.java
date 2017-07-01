@@ -40,35 +40,19 @@ import javax.sql.DataSource;
 
 public class RequirementsDAO {
 
-    public List<Requirement> getRequirementsByRowIds(String RowIds) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.ROWID);
-        sql.addCommaSeparatedParameters(RowIds);
-        return getRequirements(sql.getSql(), sql.getParametersList(), null);
+    public List<Requirement> getRequirements(SearchBy searchBy, String keywords, 
+            String onlyFromSources) {
+        SqlBuilder sqlb = new SqlBuilder(searchBy);
+        sqlb.addCommaSeparatedParameters(keywords);
+        sqlb.addCommaSeparatedSourcesToFilter(onlyFromSources);
+        String selectSqlStatement = sqlb.getSql();
+        String[] whereArguments = sqlb.getParametersList();
+        return getRequirementsFromDB(selectSqlStatement, whereArguments);
     }
-
-    public List<Requirement> getRequirementsByRequirementNumbers(String RequirementNumbers, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.FRID);
-        sql.addCommaSeparatedParameters(RequirementNumbers);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    public List<Requirement> getRequirementsByTmsTaskNumbers(String TmsTaskNumbers, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.TMSTask);
-        sql.addCommaSeparatedParameters(TmsTaskNumbers);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    public List<Requirement> getRequirementsByTextPhrases(String Keywords, String LimitBySource) {
-        SqlBuilder sql = new SqlBuilder(SqlBuilder.SelectBy.Text);
-        sql.addCommaSeparatedParameters(Keywords);
-        sql.addCommaSeparatedSourcesToFilter(LimitBySource);
-        return getRequirements(sql.getSql(), sql.getParametersList(), sql.getSourceParametersList());
-    }
-
-    private List<Requirement> getRequirements(String sql, String[] arguments, String[] limitBySource) {
-        if (sql == null) {
+    
+    private List<Requirement> getRequirementsFromDB(String selectSqlStatement, 
+            String[] whereArguments) {
+        if (selectSqlStatement == null) {
             return null;
         }
 
@@ -84,17 +68,12 @@ public class RequirementsDAO {
             DataSource dataSource = (DataSource) context.lookup("jdbc/sqlite");
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(selectSqlStatement);
 
             int i = 1;
-            if (arguments != null) {
-                for (String argValue : arguments) {
+            if (whereArguments != null) {
+                for (String argValue : whereArguments) {
                     statement.setString(i++, argValue);
-                }
-                if (limitBySource != null) {
-                    for (String argSource : limitBySource) {
-                        statement.setString(i++, argSource);
-                    }
                 }
             }
 
@@ -105,17 +84,17 @@ public class RequirementsDAO {
             }
             while (set.next()) {
                 requirements.add(new Requirement(
-                        set.getLong(1),
-                        set.getString(2),
-                        set.getString(3),
-                        set.getString(4),
-                        set.getString(5),
-                        set.getString(6),
-                        set.getString(7),
-                        set.getString(8),
-                        set.getString(9),
-                        set.getString(10),
-                        set.getString(11)
+                        set.getLong(RequirementsTableMapping.getRowIdColumnName()),
+                        set.getString(RequirementsTableMapping.getRequirementNumberColumnName()),
+                        set.getString(RequirementsTableMapping.getTmsTaskColumnName()),
+                        set.getString(RequirementsTableMapping.getObjectNumberColumnName()),
+                        set.getString(RequirementsTableMapping.getTextColumnName()),
+                        set.getString(RequirementsTableMapping.getCcpColumnName()),
+                        set.getString(RequirementsTableMapping.getCreatedColumnName()),
+                        set.getString(RequirementsTableMapping.getModifiedColumnName()),
+                        set.getString(RequirementsTableMapping.getStatusColumnName()),
+                        set.getString(RequirementsTableMapping.getBoundaryColumnName()),
+                        set.getString(RequirementsTableMapping.getSourceColumnName())
                 ));
             }
 

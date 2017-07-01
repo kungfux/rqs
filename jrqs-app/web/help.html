@@ -97,8 +97,11 @@
                                     In addition, search by range may be combined with standard 
                                     search requests of the same type e.g. FR1,FR3-5,NFR6-10.
                                     <br>
-                                    Please note that range is limited to 5000, so the search request 
-                                    like FR1000-6001 will be completely ignored by jRQS.
+                                    Please note that range size is limited to 100, so the search 
+                                    request like FR100-201 will be treated as invalid. Moreover, 
+                                    overall search parameters are limited to the 100, so search 
+                                    requests containing more than maximum allowed parameters will 
+                                    be treated as invalid as well.
                                 </td>
                             </tr>
                             <tr>

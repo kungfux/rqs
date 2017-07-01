@@ -27,28 +27,24 @@
 package ua.dp.isd.jrqs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class SqlBuilder {
 
-    public enum SelectBy {
-        ROWID,
-        FRID,
-        TMSTask,
-        Text
-    }
-
-    private final int MAX_RANGE_SIZE = 5000;
+    private static final int MAX_PARAMETERS = 100;
+    private static final int MAX_SEARCH_RESULTS = 100;
     private static final String SQL_SELECT_TEMPLATE
-            = "select id, fr_id, fr_tms_task, fr_object, fr_text, ccp, created, modified, status, boundary, source from requirements %s limit 100;";
+            = "select * from requirements %s limit " + MAX_SEARCH_RESULTS + ";";
 
-    private final SelectBy selectBy;
+    private final SearchBy selectBy;
     private String[] sqlParameters;
     private String[] sqlSourceParameters;
 
-    public SqlBuilder(SelectBy selectBy) {
+    public SqlBuilder(SearchBy selectBy) {
         this.selectBy = selectBy;
     }
 
@@ -57,11 +53,14 @@ public class SqlBuilder {
     }
 
     public String[] getParametersList() {
-        return sqlParameters;
-    }
-
-    public String[] getSourceParametersList() {
-        return sqlSourceParameters;
+        if (sqlParameters != null) {
+            if (sqlSourceParameters != null) {
+                return Stream.concat(Arrays.stream(sqlParameters), Arrays.stream(sqlSourceParameters))
+                        .toArray(String[]::new);
+            }
+            return sqlParameters;
+        }
+        return null;
     }
 
     public void addCommaSeparatedParameters(String commaSeparatedParameters) {
@@ -69,7 +68,12 @@ public class SqlBuilder {
             return;
         }
 
-        sqlParameters = commaSeparatedParameters.toLowerCase().split(",");
+        String[] splitted = commaSeparatedParameters.toLowerCase().split(",");
+        if (splitted.length > MAX_PARAMETERS) {
+            throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
+        } else {
+            sqlParameters = splitted;
+        }
 
         int i = 0;
         for (String s : sqlParameters) {
@@ -85,7 +89,7 @@ public class SqlBuilder {
             }
         }
 
-        if (selectBy == SelectBy.FRID) {
+        if (selectBy == SearchBy.FRID) {
             expandRange();
         }
     }
@@ -107,26 +111,35 @@ public class SqlBuilder {
 
         switch (selectBy) {
             case ROWID:
-                sqlWhere.append(String.format("where id in (%s)",
+                sqlWhere.append(String.format("where %s in (%s)",
+                        RequirementsTableMapping.getRowIdColumnName(),
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case FRID:
-                sqlWhere.append(String.format("where lower(fr_id) in (%s)",
+                sqlWhere.append(String.format("where lower(%s) in (%s)",
+                        RequirementsTableMapping.getRequirementNumberColumnName(),
                         generatePlaceholders("?", ", ", sqlParameters.length)));
                 break;
             case TMSTask:
                 sqlWhere.append(String.format("where %s",
-                        generatePlaceholders("lower(fr_tms_task) like ?", " and ", sqlParameters.length)));
+                        generatePlaceholders(
+                                String.format("lower(%s) like ?",
+                                        RequirementsTableMapping.getTmsTaskColumnName()),
+                                " and ", sqlParameters.length)));
                 break;
             case Text:
             default:
                 sqlWhere.append(String.format("where %s",
-                        generatePlaceholders("lower(fr_text) like ?", " and ", sqlParameters.length)));
+                        generatePlaceholders(
+                                String.format("lower(%s) like ?",
+                                        RequirementsTableMapping.getTextColumnName()),
+                                " and ", sqlParameters.length)));
                 break;
         }
 
         if (sqlSourceParameters != null) {
-            sqlWhere.append(String.format("and lower(source) in (%s)",
+            sqlWhere.append(String.format("and lower(%s) in (%s)",
+                    RequirementsTableMapping.getSourceColumnName(),
                     generatePlaceholders("?", ",", sqlSourceParameters.length)));
         }
 
@@ -163,8 +176,8 @@ public class SqlBuilder {
             if (fromNum == null || toNum == null) {
                 continue;
             }
-            if (fromNum - toNum > MAX_RANGE_SIZE || toNum - fromNum > MAX_RANGE_SIZE) {
-                continue;
+            if (fromNum - toNum > MAX_PARAMETERS || toNum - fromNum > MAX_PARAMETERS) {
+                throw new IllegalArgumentException("The number of maximum allowed arguments have been exceeded.");
             }
             if (fromNum > toNum) {
                 toNum = fromNum + toNum;

@@ -38,48 +38,40 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/search")
 public class RequirementsServlet extends HttpServlet {
 
-    RequirementsService requirementService = new RequirementsService();
-
+    private static final String NEXT_JSP = "/index.jsp";
+    private static final String SEARCH_BY_PARAM_NAME = "by";
+    private static final String SEARCH_KEYWORDS_PARAM_NAME = "value";
+    private static final String LIMIT_BY_SOURCE_PARAM_NAME = "only";
+    private static final String REQUIREMENTS_RESPONSE_NAME = "requirementsList";
+    private static final String ERROR_RESPONSE_NAME = "errorMessage";
+    
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        searchRequirements(request, response);
-    }
-
-    private void searchRequirements(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Requirement> result = null;
-        String searchBy = request.getParameter("by");
-        String searchText = request.getParameter("value");
-        String limitBySource = request.getParameter("only");
-        if (searchBy != null && !searchBy.equals("")) {
-            switch (searchBy) {
-                case "rowid":
-                    result = requirementService.getRequirementsByRowId(searchText);
-                    break;
-                case "id":
-                    result = requirementService.getRequirementsByRequirementNumbers(searchText, limitBySource);
-                    break;
-                case "tms":
-                    result = requirementService.getRequirementsByTmsTaskNumbers(searchText, limitBySource);
-                    break;
-                case "text":
-                default:
-                    result = requirementService.getRequirementsByTextPhrases(searchText, limitBySource);
-                    break;
-            }
-        }
-        forwardListRequirements(request, response, result);
-    }
-
-    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response, List requirementsList)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        String nextJSP = "/index.jsp";
+        doGet(request, response);
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        RequirementsService service = new RequirementsService(
+                request.getParameter(SEARCH_BY_PARAM_NAME),
+                request.getParameter(SEARCH_KEYWORDS_PARAM_NAME),
+                request.getParameter(LIMIT_BY_SOURCE_PARAM_NAME)
+        );
+        try {
+            List<Requirement> foundRequirements = service.getRequirements();
+            request.setAttribute(REQUIREMENTS_RESPONSE_NAME, foundRequirements);
+        } catch (IllegalArgumentException e) {
+            request.setAttribute(ERROR_RESPONSE_NAME, e.getMessage());
+        }
+        forwardListRequirements(request, response);
+    }
+    
+    private void forwardListRequirements(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String nextJSP = NEXT_JSP;
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("requirementsList", requirementsList);
         dispatcher.forward(request, response);
     }
 }
