@@ -6,3 +6,4 @@ WebQA/*.user
 WebQA/*.sln
 WebQA/.vs/*
 WebQA.Tests/*.pyc
+packages
