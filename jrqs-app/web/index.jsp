@@ -62,7 +62,15 @@
                 <title>jRQS - Home</title>
             </c:when>            
             <c:otherwise>
-                <title>jRQS - Search results for "${param.value}"</title>
+                <c:choose>
+                    <c:when test="${param.by != 'rowid'}">
+                        <title>jRQS - Search results for "${param.value}"</title>
+                    </c:when>
+                    <c:otherwise>
+                        <title>jRQS - Shared requirements</title>
+                    </c:otherwise>
+                </c:choose>
+
             </c:otherwise>
         </c:choose>
         <meta charset="utf-8">
