@@ -67,7 +67,7 @@
                         <title>jRQS - Search results for "${param.value}"</title>
                     </c:when>
                     <c:otherwise>
-                        <title>jRQS - Shared requirements</title>
+                        <title>jRQS - Shared requirements: ${param.value}</title>
                     </c:otherwise>
                 </c:choose>
 
@@ -151,7 +151,7 @@
                             <h2>Search results for "${param.value}":</h2>
                         </c:when>
                         <c:otherwise>
-                            <h2>Shared requirements</h2>
+                            <h2>Shared requirements: ${param.value}</h2>
                         </c:otherwise>
                     </c:choose>
                 </c:otherwise>
@@ -204,6 +204,9 @@
                                 <td class="text-nowrap">
                                     <a class="none" href="search?by=rowid&value=${requirement.rowid}" title="Share">
                                         <span class="glyphicon glyphicon-share"></span>
+                                    </a>
+                                    <a class="none" href="search?by=rowid&value=${requirement.rowid}" title="Open in new tab" target="_blank">
+                                        <span class="glyphicon glyphicon-new-window"></span>
                                     </a>
                                 </td>
                                 <td>${requirement.id}</td>
