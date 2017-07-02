@@ -95,7 +95,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.value}" 
+                            <input type="text" name="value" id="value" value="${param.by != 'rowid' ? param.value : ''}" 
                                    class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
@@ -138,7 +138,14 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <h2>Search results for "${param.value}":</h2>
+                    <c:choose>
+                        <c:when test="${param.by != 'rowid'}">
+                            <h2>Search results for "${param.value}":</h2>
+                        </c:when>
+                        <c:otherwise>
+                            <h2>Shared requirements</h2>
+                        </c:otherwise>
+                    </c:choose>
                 </c:otherwise>
             </c:choose>
 
