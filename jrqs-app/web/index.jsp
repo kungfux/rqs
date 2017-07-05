@@ -103,7 +103,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.by != 'rowid' ? param.value : ''}" 
+                            <input type="text" name="value" id="value" value="${param.by != 'rowid' ? fn:escapeXml(param.value) : ''}" 
                                    class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
@@ -148,7 +148,7 @@
                 <c:otherwise>
                     <c:choose>
                         <c:when test="${param.by != 'rowid'}">
-                            <h2>Search results for "${param.value}":</h2>
+                            <h2>Search results for "${fn:escapeXml(param.value)}":</h2>
                         </c:when>
                         <c:otherwise>
                             <h2>Shared requirements: ${param.value}</h2>
@@ -216,7 +216,7 @@
                                     </a>
                                 </td>
                                 <td>${requirement.objectNumber}</td>
-                                <td>${requirement.text}</td>
+                                <td>${fn:escapeXml(requirement.text)}</td>
                                 <td>${requirement.ccp}</td>
                                 <td>
                                     <c:if test="${requirement.created != null && !requirement.created.isEmpty()}">
@@ -242,7 +242,12 @@
                                             ${requirement.source}
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="search?<%= URL%>&only=${requirement.source}" 
+                                            <c:url var="encodedURL" value="search">
+                                                <c:param name="by" value="${param.by}" />
+                                                <c:param name="value" value="${param.value}" />
+                                                <c:param name="only" value="${requirement.source}" />
+                                            </c:url>
+                                            <a href="${encodedURL}" 
                                                title="Repeat search in the ${requirement.source} only">
                                                 ${requirement.source}
                                             </a>
