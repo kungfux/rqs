@@ -185,7 +185,7 @@ namespace WebQA.Converter
                     {
                         FR.FRSource = XLSFile;
                         FR.FRID = !row.GetCell(cFRID).IsEmpty ? row.GetCell(cFRID).Value.ToString() : "";
-                        FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString() : "";
+                        FR.FRTMSTask = !row.GetCell(cFRTMSTask).IsEmpty ? row.GetCell(cFRTMSTask).Value.ToString().Replace("\r\n", " ").Replace("\n", " ") : "";
                         FR.FRObject = !row.GetCell(cFRObject).IsEmpty ? row.GetCell(cFRObject).Value.ToString() : "";
                         FR.FRText = !row.GetCell(cFRText).IsEmpty ? row.GetCell(cFRText).Value.ToString() : "";
                         FR.CCP = !row.GetCell(cCCP).IsEmpty ? row.GetCell(cCCP).Value.ToString() : "";
