@@ -57,6 +57,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/jrqs.css">
+        <script src="js/mark.min.js" charset="utf-8"></script>
         <c:choose>
             <c:when test="${empty param.value}">
                 <title>jRQS - Home</title>
@@ -73,11 +79,6 @@
 
             </c:otherwise>
         </c:choose>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/jrqs.css">
-        <script src="js/mark.min.js" charset="utf-8"></script>
     </head>
 
     <body>
