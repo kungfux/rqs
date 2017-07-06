@@ -88,7 +88,7 @@ namespace WebQA.Converter
                         "[ccp]			INTEGER(1),",
                         "[created]		VARCHAR(20),",
                         "[modified]		VARCHAR(20),",
-                        "[status]		VARCHAR(15));",
+                        "[status]		VARCHAR(15),",
                         "[boundary]		VARCHAR(5));"
                         ));
 
