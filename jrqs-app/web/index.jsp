@@ -2,26 +2,26 @@
  *  jRQS
  *  Java Implementation of RQS
  *  Copyright (C) Alexander Fuks 2013-2017
- *
+ *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- *
+ *  
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
+ *  
  *  You should have received a copy of the GNU General Public License along
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- *
+ *  
  *  Alexander Fuks, hereby disclaims all copyright
  *  interest in the program "jRQS"
  *  (which makes passes at compilers)
  *  written by Alexander Fuks.
- *
+ * 
  *  Alexander Fuks <mailto:Alexander.V.Fuks@gmail.com>, 08 June 2017.
 --%>
 
@@ -66,7 +66,7 @@
         <c:choose>
             <c:when test="${empty param.value}">
                 <title>jRQS - Home</title>
-            </c:when>
+            </c:when>            
             <c:otherwise>
                 <c:choose>
                     <c:when test="${param.by != 'rowid'}">
@@ -90,21 +90,21 @@
         </div>
         </noscript>
 
-        <nav class="navbar navbar-inverse navbar-fixed-top" style="min-width: 1150px !important;">
-            <div class="container-fluid">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">  
                 <div class="navbar-header">
                     <a class="navbar-brand" href="${pageContext.request.contextPath}/">
                         <span class="glyphicon glyphicon-home"></span> Home
                     </a>
                 </div>
 
-                <ul class="nav navbar-nav">
-                    <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search"
+                <ul class="nav navbar-nav">                    
+                    <form class="navbar-form navbar-left" action="${pageContext.request.contextPath}/search" 
                           method="get" id="searchRequirementForm" role="form">
                         <div class="input-group">
                             <span class="input-group-addon">Search</span>
                             <input type="hidden" name="by" id="by" value=""/>
-                            <input type="text" name="value" id="value" value="${param.by != 'rowid' ? fn:escapeXml(param.value) : ''}"
+                            <input type="text" name="value" id="value" value="${param.by != 'rowid' ? fn:escapeXml(param.value) : ''}" 
                                    class="form-control" required="true" placeholder="Type the search phrase"/>
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit" onclick="overrideSubmit();">
@@ -212,7 +212,7 @@
                                 </td>
                                 <td>${requirement.id}</td>
                                 <td>
-                                    <a href="search?by=tms&value=${requirement.tmsTask}"
+                                    <a href="search?by=tms&value=${requirement.tmsTask}" 
                                        title="Search by the ${requirement.tmsTask} TMS task"> ${requirement.tmsTask}
                                     </a>
                                 </td>
@@ -248,7 +248,7 @@
                                                 <c:param name="value" value="${param.value}" />
                                                 <c:param name="only" value="${requirement.source}" />
                                             </c:url>
-                                            <a href="${encodedURL}"
+                                            <a href="${encodedURL}" 
                                                title="Repeat search in the ${requirement.source} only">
                                                 ${requirement.source}
                                             </a>
