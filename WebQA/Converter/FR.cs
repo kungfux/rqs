@@ -38,6 +38,7 @@ namespace WebQA.Converter
         public string Created;    // FR created date (from file)
         public string Modified;   // FR modified date (from file)
         public string Status;     // FR status (from file)
+        public string Boundary;   // FR System Boundary (from file)
 
     }
 }
