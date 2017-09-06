@@ -117,11 +117,6 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <button class="btn btn-danger navbar-btn" onclick="alert('The Watcher is coming soon!');">
-                            <span class="glyphicon glyphicon-eye-open"></span> Watcher
-                        </button>
-                    </li>
-                    <li>
                         <a href="http://github.com/kungfux/rqs" title="Give me a star on GitHub if you are enjoying this app :)">
                             <span class="glyphicon glyphicon-star"></span> Star
                         </a>
