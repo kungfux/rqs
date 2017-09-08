@@ -1,26 +1,15 @@
-## Requirements Search Project
+## Introduction
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4feprs5jsjfi5y02?svg=true)](https://ci.appveyor.com/project/kungfux/rqs)
+Please follow [this](https://github.com/kungfux/rqs/wiki/Introduction-of-jRQS) link to see more screenshots on the Wiki.
 
-### Description
+![jRQS main page](https://user-images.githubusercontent.com/10548881/30138071-14bef154-936f-11e7-8ff8-757ab3b80241.png)
 
-This repository contains several implementations of the "same" program.
-This program is developed to perform quick search of Product Requirements that used by Software Testers, Developers, Analytics and so on.
+## How to build
 
-Application development is directed for solving exact company needs.
+The project may be built using NetBeans. Open the `jrqs-app` project to build and app, `jrqs-tests` to perform Selenium tests.
 
-More information can be found on [Wiki](https://github.com/kungfux/rqs/wiki)
+## How to run
 
-### Installation instructions
-
-Based on implementation, you need to [build](https://github.com/kungfux/rqs/wiki/How-to-build-the-project) the project and [prepare](https://github.com/kungfux/rqs/wiki/How-to-prepare-database) database.
-
-### Contribution guidelines
-
-Using standard pull requests, creating issues etc.
-
-### Features
-
-Basic using examples are described [here](https://github.com/kungfux/rqs/wiki/RQS-Draft-User-Manual) and [here](https://github.com/kungfux/rqs/blob/master/WebQA/WebPages/help.html)
-
-Nice to have features are described [here](https://cloud.githubusercontent.com/assets/10548881/10223804/9ca402fa-6863-11e5-8309-b488be0fd280.png)
+The application may be run using Tomcat. Deploy jRQS right from the NetBeans or build and deploy .war release. 
+To work properly, jRQS requires a SQLite database file to be located in the `$CATALINA_HOME/data/webqa.sqlite`. 
+The database may be prepared using parsing utility from WebQA branch.

@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>jRQS - Help</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/jrqs.css">
+    </head>
+    <body style="padding-top: 70px;">
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li><a href="/jrqs" title="Go back to search">
+                            <span class="glyphicon glyphicon-circle-arrow-left"></span> Go back to search
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <blockquote class="blockquote small">
+                        <p>
+                            "Regression testing"? What's that? If it compiles, it is good; if it 
+                            boots up, it is perfect.
+                        </p>
+                        <footer>Linus Torvalds, 1998</footer>
+                    </blockquote>
+
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#howtosearch">How to search</a></li>
+                        <li><a href="#gridcolumns">Grid columns</a></li>
+                        <li><a href="#contribution">Contribution</a></li>
+                        <li><a href="#license">License</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-9">
+                    <a class="anchor" id="introduction"></a>
+                    <h3 class="text-uppercase">Introduction</h3>
+                    <p>
+                        <abbr title="Java Requirement Searcher - is a 3rd generation of RQS">jRQS</abbr> 
+                        is a free open-source web application that allows to make search for the 
+                        requirements parsed from Excel spreadsheets.
+                    </p>
+                    <div class="alert alert-info">
+                        <p>
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            You should always keep in mind that search results might be outdated since 
+                            jRQS search for the requirements parsed from Excel spreadsheets. The 
+                            search results actuality depends on when jRQS's database was last updated 
+                            by the jRQS instance administrator.
+                        </p>
+                    </div>
+                    <br>
+
+                    <a class="anchor" id="howtosearch"></a>
+                    <h3 class="text-uppercase">How to search</h3>
+                    <p>
+                        Generally, it is possible to search for the requirements by exact FR ID, 
+                        FR TMS task coincidence and by the keyword or a bunch of keywords separated 
+                        by comma. In addition, it is possible to search by exact rowid in the database 
+                        and filter out the results by FR sources separated by comma.
+                    </p>
+                    <div class="alert alert-info">
+                        <p>
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            All the search is case-insensitive.
+                        </p>
+                    </div>
+                    <p>There are few examples indicated below to help get you involved:</p>
+                    <table class="table">
+                        <thread>
+                            <th class="text-nowrap">Search by</th>
+                            <th>Example</th>
+                            <th>Description</th>
+                        </thread>
+                        <tbody>
+                            <tr>
+                                <td>FR ID</td>
+                                <td>FR1</td>
+                                <td>Search for the concrete requirement by it's FR ID</td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>FR1, FR2, FR3</td>
+                                <td>Search for a bunch of requirements by their FR IDs</td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>FR1-3</td>
+                                <td>
+                                    Search for a bunch of requirements by range of FR IDs.
+                                    <br>
+                                    In addition, search by range may be combined with standard 
+                                    search requests of the same type e.g. FR1,FR3-5,NFR6-10.
+                                    <br>
+                                    Please note that range size is limited to 100, so the search 
+                                    request like FR100-201 will be treated as invalid. Moreover, 
+                                    overall search parameters are limited to the 100, so search 
+                                    requests containing more than maximum allowed parameters will 
+                                    be treated as invalid as well.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>TMS task</td>
+                                <td>COBRA-12345</td>
+                                <td>
+                                    Search for requirements associated with the TMS task specified.
+                                    <br> 
+                                    Please note that jRQS will look not for the concrete TMS task 
+                                    but for the tasks that looks like as specified one. 
+                                    For example, search by COBRA-1234 will find the COBRA-12345 as well.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>COBRA-12345, COOKIE-12345</td>
+                                <td>Search for requirements by several TMS tasks</td>
+                            </tr>
+                            <tr>
+                                <td>Keyword</td>
+                                <td>keyword</td>
+                                <td>Search for requirements by the keyword</td>
+                            </tr>
+                            <tr>
+                                <td/>
+                                <td>keyword1, keyword2</td>
+                                <td>
+                                    Search for requirements by several keywords.
+                                    <br>
+                                    Please note that AND logic is applied for such cases, so all 
+                                    requirements containing both keywords will be found.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="alert alert-info">
+                        <p>
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                            Search results are limited to 100. You will be notified by the message 
+                            if your search request returned 100 or more results.
+                        </p>
+                    </div>
+
+                    <h4 class="text-uppercase">Filter out the results</h4>
+                    <p>
+                        If you got big search results, you may click on the source link to repeat the 
+                        search using the only one particular source to make your search results 
+                        more clear. Furthermore, you may specify more than one source to filter out 
+                        the search results by  separating them with comma, but this should be done 
+                        manually since UI does not provide such possibility. The same works for the
+                        search by rowid.
+                    </p>
+                    <br>
+
+                    <a class="anchor" id="gridcolumns"></a>
+                    <h3 class="text-uppercase">Grid columns</h3>
+                    <table class="table col-md-9">
+                        <thread>
+                            <th title="" class="col-md-3">Column</td>
+                            <th title="" class="col-md-6">Description</td>
+                        </thread>
+                        <tbody>
+                            <tr>
+                                <td>Actions</td>
+                                <td>Contains the action button 
+                                    <span class="glyphicon glyphicon-share"></span> 
+                                    to share the link to a particular requirement
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>FR ID</td>
+                                <td>Requirement's unique identifier per project</td>
+                            </tr>
+                            <tr>
+                                <td>TMS Task</td>
+                                <td>TMS task number associated with the requirement</td>
+                            </tr>
+                            <tr>
+                                <td>Object Number</td>
+                                <td>Interaction level of the requirement</td>
+                            </tr>
+                            <tr>
+                                <td>Text</td>
+                                <td>Requirement's text itself</td>
+                            </tr>
+                            <tr>
+                                <td>CCP</td>
+                                <td>
+                                    Level of the failure, where:
+                                    <br>&emsp;<b>5</b> is a critical, leading to serious permanent injury or death,
+                                    <br>&emsp;<b>4</b> is critical, could cause serious delay or misinformation,
+                                    <br>&emsp;<b>3</b> is a failure that could cause to extended delay in patient care,
+                                    <br>&emsp;<b>2</b> is a failure that could cause to delay in treatment of patient,
+                                    <br>&emsp;<b>1</b> is a minor nuisance to users
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Created / Modified</td>
+                                <td>
+                                    The dates when requirement was created and modified last time. 
+                                    In addition, the indicator 
+                                    <span class="glyphicon glyphicon-pencil"></span> appears 
+                                    in case created and modified dates are not equal
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>Requirement's creation/review status</td>
+                            </tr>
+                            <tr>
+                                <td>Boundary</td>
+                                <td>
+                                    Indicates is boundary testing should be performed for checking 
+                                    the requirement or not
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Source</td>
+                                <td>
+                                    The source file name where from the requirement was imported 
+                                    into the jRQS database
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br>
+
+                    <a class="anchor" id="contribution"></a>
+                    <h3 class="text-uppercase">Contribution</h3>
+                    <p>
+                        Want to contribute? Please visit the project on <a href="http://github.com/kungfux/rqs">GitHub</a> 
+                        to post an issue or suggestion. The 
+                        <abbr title="Pull requests let you tell others about changes you've pushed to a repository on GitHub.">pull requests</abbr> 
+                        are also welcome.
+                    </p>
+                    <br>
+
+                    <a class="anchor" id="license"></a>
+                    <h3 class="text-uppercase">License and disclaimer</h3>
+                    <p>
+                        jRQS is licensed under the 
+                        <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License v2.0</a>
+                    </p>
+                    <p>
+                        The source code may be found on the <a href="http://github.com/kungfux/rqs">GitHub</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

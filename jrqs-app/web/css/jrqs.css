@@ -1,0 +1,42 @@
+body {
+    padding-top: 70px;
+}
+
+#no-javascript-alert {
+    background-color:#F44336;
+    color:#fff;
+    height:100px;
+}
+
+#value {
+    width: 644px !important;
+}
+
+mark {
+    background-color: #85C1E9;
+}
+
+a.none {
+    text-decoration: none !important;
+}
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -30px;
+    visibility: hidden;
+}
+
+nav {
+    min-width: 1150px !important;
+}
+
+@media (min-width:0px){
+   .navbar-header {float:left}
+   .navbar-nav{float:left;margin:0}
+   .navbar-nav>li{float:left}
+   .input-group-addon,
+   .input-group-btn{width:auto}
+   .navbar-form {width:auto;padding-top:0;padding-bottom:0;margin-right:0;margin-left:0;border:0;-webkit-box-shadow:none;box-shadow:none}
+}
+
