@@ -9,82 +9,72 @@ using WebServer.Responses;
 
 namespace WebServer
 {
-    internal class ClientProcessor
+    internal class ClientProcessor : IClientProcessor
     {
         private readonly ILog _log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly TcpClient _client;
-        private readonly ClientStream _clientStream;
         private readonly RequestParser _parser = new RequestParser();
 
-        public ClientProcessor(TcpClient client)
+        public void ProcessRequest(TcpClient client, ICollection<IExtension> extensions)
         {
-            if (client == null)
-                throw new ArgumentNullException(nameof(client));
-            _client = client;
-            _clientStream = new ClientStream(_client.GetStream());
-        }
-
-        public void ProcessRequest(ICollection<IExtension> extensions)
-        {
+            var clientStream = new ClientStream(client.GetStream());
             Request request;
 
             try
             {
-                request = _parser.ReadAndParseRequest(_clientStream);
+                request = _parser.ReadAndParseRequest(clientStream);
             }
             catch (Exception e)
             {
                 _log.Fatal("Unable to parse request", e);
-                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
+                clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
                 throw;
             }
 
             if (request?.Url != null && request.Method != null && request.Target != null)
             {
-                ProcessByTarget(request, extensions);
+                ProcessByTarget(request, clientStream, extensions);
             }
             else
             {
-                _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
+                clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
             }
 
-            _client.Close();
+            client.Close();
         }
 
-        private void ProcessByTarget(Request request, ICollection<IExtension> extensions)
+        private void ProcessByTarget(Request request, ClientStream clientStream, ICollection<IExtension> extensions)
         {
             switch(request.Target)
             {
                 case Target.File:
-                    ProcessTargetFile(request);
+                    ProcessTargetFile(request, clientStream);
                     break;
                 case Target.Api:
-                    ProcessTargetApi(request, extensions);
+                    ProcessTargetApi(request, clientStream, extensions);
                     break;
             }
         }
 
-        private void ProcessTargetFile(Request request)
+        private void ProcessTargetFile(Request request, ClientStream clientStream)
         {
             switch (request.Method)
             {
                 case Method.HEAD:
-                    FileProcessor.Instance.WriteFile(_clientStream, request.Url, true);
+                    FileProcessor.Instance.WriteFile(clientStream, request.Url, true);
                     break;
                 case Method.GET:
-                    FileProcessor.Instance.WriteFile(_clientStream, request.Url);
+                    FileProcessor.Instance.WriteFile(clientStream, request.Url);
                     break;
                 case Method.OPTIONS:
-                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.OK));
+                    clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.OK));
                     break;
                 default:
-                    _clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.NotImplemented));
+                    clientStream.WriteHeader(new OptionsHeader(HttpStatusCode.NotImplemented));
                     break;
             }
         }
 
-        private void ProcessTargetApi(Request request, ICollection<IExtension> extensions)
+        private void ProcessTargetApi(Request request, ClientStream clientStream, ICollection<IExtension> extensions)
         {
             if (extensions != null)
             {
@@ -94,11 +84,11 @@ namespace WebServer
                     {
                         try
                         {
-                            extension.ProcessRequest(_clientStream, request);
+                            extension.ProcessRequest(clientStream, request);
                         }
                         catch (Exception e)
                         {
-                            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
+                            clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.InternalServerError));
                             _log.Error("Exception occurs in extension.", e);
                         }
                         return;
@@ -106,7 +96,7 @@ namespace WebServer
                 }
             }
 
-            _clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
+            clientStream.WriteHeader(new ResponseHeader(HttpStatusCode.BadRequest));
         }
     }
 }

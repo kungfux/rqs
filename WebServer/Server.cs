@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -12,75 +13,72 @@ using static WebServer.Status;
 
 namespace WebServer
 {
-    public class Server : IDisposable
+    internal class Server : IServer
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private const string EXTENSIONS_LOCATION = ".";
 
-        private static readonly IPAddress IpAddress = IPAddress.Any;
-        private readonly int _port = Configuration.Instance.Port;
-
-        private readonly TcpListener _listener;
+        private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ITcpListener _tcpListener;
+        private readonly IClientProcessor _clientProcessor;
+        private readonly AutoResetEvent _serverSyncObject;
         private CancellationTokenSource _cts;
 
-        private const string ExtensionsLocation = ".";
-        private readonly ICollection<IExtension> _extensions;
-
-        public Server()
+        public Server(ITcpListener tcpListener, IClientProcessor clientProcessor)
         {
-            _extensions = LoadExtensions();
-
-            try
-            {
-                _listener = new TcpListener(IpAddress, _port);
-                Log.Debug($"Listener initialized on {IpAddress}:{_port}.");
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal("Exception occurs while initializing the listener.", ex);
-                throw;
-            }
+            _tcpListener = tcpListener;
+            _clientProcessor = clientProcessor;
+            _serverSyncObject = new AutoResetEvent(true);
         }
 
-        public async void Start()
+        private Lazy<ICollection<IExtension>> Extensions => new Lazy<ICollection<IExtension>>(LoadExtensions);
+
+        public void Start()
         {
             if (_cts != null && !_cts.IsCancellationRequested)
             {
-                Log.Warn("The code tried to start already started listener.");
+                _log.Warn("The code tried to start already started listener.");
                 throw new InvalidOperationException("Server is already started.");
             }
-            await Task.Run(() => { StartClientsAwaiting(); });
+
+            _serverSyncObject.Reset();
+            _cts = new CancellationTokenSource();
+            try
+            {
+                _tcpListener.Start();
+            }
+            catch (Exception ex)
+            {
+                _log.Fatal("Exception occurs while starting listening the port.", ex);
+                throw;
+            }
+            NotifyStatusChanged(ServerStatus.Started);
+
+            Task.Run(() => { StartClientsAwaiting(); });
         }
 
         public void Stop()
         {
             _cts?.Cancel();
+            if (!_serverSyncObject.WaitOne(TimeSpan.FromSeconds(10)))
+            {
+                const string error = "Exception occurs while stopping the server.";
+                var exception = new TimeoutException(error);
+                _log.Fatal(error, exception);
+                throw exception;
+            }
         }
 
         public void Dispose()
         {
             _cts?.Dispose();
-            _listener?.Stop();
+            _tcpListener?.Stop();
         }
 
         private async void StartClientsAwaiting()
         {
-            _cts = new CancellationTokenSource();
-
-            try
-            {
-                _listener.Start();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal("Exception occurs while starting listening the port.", ex);
-                throw;
-            }
-
-            NotifyStatusChanged(ServerStatus.Started);
-
             while (!_cts.IsCancellationRequested)
             {
-                if (!_listener.Pending())
+                if (!_tcpListener.Pending())
                 {
                     // no pending connections, continue
                     await Task.Delay(20);
@@ -90,9 +88,9 @@ namespace WebServer
                 try
                 {
                     // client is awaiting
-                    var tcpClient = await _listener.AcceptTcpClientAsync();
+                    var tcpClient = await _tcpListener.AcceptTcpClientAsync();
 
-                    Log.Info($"Client {tcpClient.Client.RemoteEndPoint} ({GetResolvedClientName(tcpClient)}) is connected.");
+                    _log.Info($"Client {tcpClient.Client.RemoteEndPoint} ({GetResolvedClientName(tcpClient)}) is connected.");
 
                     ProcessClient(tcpClient);
                 }
@@ -101,30 +99,31 @@ namespace WebServer
                     if (_cts.IsCancellationRequested && e.SocketErrorCode == SocketError.Interrupted)
                     {
                         // cancellation is requested
-                        _listener.Stop();
-                        Log.Debug("Listener stopped as requested.");
+                        _tcpListener.Stop();
+                        _log.Debug("Listener stopped as requested.");
                         break;
                     }
                     if (e.SocketErrorCode == SocketError.ConnectionReset)
                     {
                         // remote host breaks the connection
-                        Log.Debug("Connection was reset by client.");
+                        _log.Debug("Connection was reset by client.");
                         continue;
                     }
-                    Log.Fatal("Exception occurs while accepting the client.", e);
+                    _log.Fatal("Exception occurs while accepting the client.", e);
                     throw;
                 }
             }
 
-            _listener.Stop();
-            Log.Debug("Listener is stopped.");
+            _tcpListener.Stop();
+            _log.Debug("Listener is stopped.");
 
             NotifyStatusChanged(ServerStatus.Stopped);
+            _serverSyncObject.Set();
         }
 
         private void ProcessClient(TcpClient tcpClient)
         {
-            Task.Run(() => { new ClientProcessor(tcpClient).ProcessRequest(_extensions); });
+            Task.Run(() => { _clientProcessor.ProcessRequest(tcpClient, Extensions.Value); });
         }
 
         public event EventHandler<ServerStatus> StatusChanged;
@@ -140,17 +139,10 @@ namespace WebServer
             return Dns.GetHostEntry(ipAddress).HostName;
         }
 
-        private ICollection<IExtension> LoadExtensions()
+        protected virtual ICollection<IExtension> LoadExtensions()
         {
-            var dllFileNames = Directory.GetFiles(ExtensionsLocation, "*.dll");
-
-            var assemblies = new List<Assembly>(dllFileNames.Length);
-            foreach (string dllFile in dllFileNames)
-            {
-                var an = AssemblyName.GetAssemblyName(dllFile);
-                var assembly = Assembly.Load(an);
-                assemblies.Add(assembly);
-            }
+            var dllFileNames = Directory.GetFiles(EXTENSIONS_LOCATION, "*.dll");
+            var assemblies = dllFileNames.Select(AssemblyName.GetAssemblyName).Select(Assembly.Load).ToList();
 
             var extensionType = typeof(IExtension);
             var extensionTypes = new List<Type>();
@@ -158,15 +150,10 @@ namespace WebServer
             {
                 if (assembly != null)
                 {
-                    Type[] types = assembly.GetTypes();
-
+                    var types = assembly.GetTypes();
                     foreach (Type type in types)
                     {
-                        if (type.IsInterface || type.IsAbstract)
-                        {
-                            continue;
-                        }
-                        if (type.GetInterface(extensionType.FullName) != null)
+                        if (!type.IsInterface && !type.IsAbstract && type.GetInterface(extensionType.FullName) != null)
                         {
                             extensionTypes.Add(type);
                         }

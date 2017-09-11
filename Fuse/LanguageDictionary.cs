@@ -2,21 +2,16 @@
 using System.Windows;
 using log4net;
 
-namespace Fuse.Models
+namespace Fuse
 {
-    internal class LanguageDictionary
+    internal interface ILanguageDictionary
     {
-        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        string FindString(string key);
+    }
 
-        static LanguageDictionary()
-        {
-        }
-
-        private LanguageDictionary()
-        {
-        }
-
-        public static LanguageDictionary Instance { get; } = new LanguageDictionary();
+    internal class LanguageDictionary : ILanguageDictionary
+    {
+        private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public string FindString(string key)
         {
