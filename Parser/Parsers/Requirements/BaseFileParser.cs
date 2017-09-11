@@ -11,10 +11,10 @@ namespace Parser.Parsers.Requirements
     {
         protected static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public bool IsOverrideMode { get; set; }
+        public bool SkipCheck { get; set; }
 
-        public abstract string AcceptableFileMask { get; }
         public abstract void ParseFile(string filePath);
+        public abstract bool CheckIsFileQualified(string filePath);
 
         public event Action<ProgressEventArgs> OnUpdateStatus;
         public void UpdateStatus(string fileBeingProcessed, int recordNumberBeingProcessed, int percentsComplete)
@@ -40,9 +40,9 @@ namespace Parser.Parsers.Requirements
 
             Log.Debug($"Looking for files in folder {path}");
 
-            var targetFilesInfos = targetDirectory.GetFiles(AcceptableFileMask);
+            var targetFilesInfos = targetDirectory.GetFiles();
             var targetFiles = targetFilesInfos.ToList();
-            targetFiles.RemoveAll(x => x.Name.StartsWith(".~"));
+            targetFiles.RemoveAll(x => !CheckIsFileQualified(x.FullName));
 
             Log.Debug(targetFiles.Count <= 0
                     ? "No files are qualified."
@@ -54,9 +54,9 @@ namespace Parser.Parsers.Requirements
             }
         }
 
-        public bool IsParsedPreviously(string filePath)
+        public bool CheckIsParsedPreviously(string filePath)
         {
-            if (IsOverrideMode)
+            if (SkipCheck)
                 return false;
 
             // TODO: Replace string comparing with calling method to get data from database

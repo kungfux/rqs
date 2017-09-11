@@ -9,21 +9,31 @@ namespace Parser.Parsers.Requirements
 {
     internal class ExcelParser : BaseFileParser
     {
-        public override string AcceptableFileMask => "*.xls?";
-
         private const string BinaryExtension = ".xls";
         private const string OpenXmlExtension = ".xlsx";
 
-        public ExcelParser(bool isOverrideMode = false)
+        public ExcelParser(bool skipCheck = false)
         {
-            IsOverrideMode = isOverrideMode;
+            SkipCheck = skipCheck;
+        }
+
+        public override bool CheckIsFileQualified(string filePath)
+        {
+            var fileInfo = new FileInfo(filePath);
+
+            if (fileInfo.Name.StartsWith(".~"))
+            {
+                return false;
+            }
+
+            return fileInfo.Extension == BinaryExtension || fileInfo.Extension == OpenXmlExtension;
         }
 
         public override void ParseFile(string filePath)
         {
             Log.Info($"Parsing file {filePath}");
 
-            if (IsParsedPreviously(filePath))
+            if (CheckIsParsedPreviously(filePath))
             {
                 Log.Info($"File {filePath} was parsed previously");
                 return;

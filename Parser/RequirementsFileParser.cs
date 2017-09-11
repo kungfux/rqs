@@ -20,7 +20,10 @@ namespace Parser
         {
             foreach (var fileParser in _fileParsers)
             {
-                fileParser.ParseFile(filePath);
+                if (fileParser.CheckIsFileQualified(filePath))
+                {
+                    fileParser.ParseFile(filePath);
+                }
             }
         }
 
@@ -30,6 +33,18 @@ namespace Parser
             {
                 fileParser.ParseDirectory(path);
             }
+        }
+
+        public bool CheckIsFileQualified(string filePath)
+        {
+            foreach (var fileParser in _fileParsers)
+            {
+                if (fileParser.CheckIsFileQualified(filePath))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public event Action<ProgressEventArgs> OnUpdateStatus

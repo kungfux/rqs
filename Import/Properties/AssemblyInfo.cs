@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Requirements Import Tool")]
+[assembly: AssemblyTitle("Requirements Import Console Utility")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Requirements Import Tool")]
+[assembly: AssemblyProduct("Requirements Import Console Utility")]
 [assembly: AssemblyCopyright("Copyright © Alexander Fuks 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
