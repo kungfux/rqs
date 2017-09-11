@@ -1,0 +1,124 @@
+/* ======== COMMON ========== */
+@themeDarkColor: #333333;
+@themeLightColor: #eee;
+@themeNoColor: #fff;
+@themeLinkColor: #2ba6cb;
+
+@fontFamily: Slab,Georgia,serif;
+@fontSize: 100%;
+
+body {
+	background-color: @themeNoColor;
+	font-family: @fontFamily;
+	font-size: @fontSize;
+	margin: 0;
+	margin-top: @headerHeight;
+}
+
+p {
+	color: @themeDarkColor;
+}
+
+a {
+ 	text-decoration: none;
+	color: @themeLinkColor;
+}
+
+/* ======== HEADER ========== */
+@headerHeight: 52px;
+@fixedWidth: 1050px;
+
+header {
+	background-color: @themeDarkColor;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: @headerHeight;
+
+	p {
+		color: @themeLightColor;
+	}
+
+	>div.container {
+		max-width: @fixedWidth;
+		margin: auto;
+
+		>div.searchBar {
+			float: left;
+		}
+
+		>div.menu {
+
+		}
+	}
+}
+
+/* ======== FOOTER ========== */
+@footerHeight: 40px;
+
+footer {
+	background-color: @themeDarkColor;
+	height: @footerHeight;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	z-index: -99999;
+	display: flex;
+	justify-content: center;
+	font-size: @fontSize - 25%;
+
+	p {
+		color: @themeLightColor;
+	}
+
+	>div.container {
+		max-width: @fixedWidth;
+		width: @fixedWidth;
+		align-self: center;
+		display: flex;
+		flex-direction: row;
+
+		>div {
+			flex: 1 1 auto;
+		}
+
+		>div.stickLeft {
+			text-align: left;
+		}
+
+		>div.stickRight {
+			text-align: right;
+		}
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+
+			li {
+				display: inline;
+				color: @themeLightColor;
+			}
+
+			li + li:before {
+				content: ' | ';
+				padding: 0 10px;
+			}
+		}
+	}
+}
+
+/* ======== DEBUG ========== */
+@debug: false;
+
+// Draw border for each element
+body {
+	& when (@debug = true) {
+		*:nth-of-type(even) {
+			outline: 1px dashed red;
+		}
+		*:nth-of-type(odd) {
+			outline: 1px dashed yellow;
+		}
+	}
+}

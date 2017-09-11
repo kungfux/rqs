@@ -8,7 +8,7 @@ $(document).ready(function () {
 			async: true,
 			dataType: "json",
 			cache: false,
-		  
+
 			success: function (json) {
 				console.log(json);
 				var tr;
@@ -27,3 +27,9 @@ $(document).ready(function () {
 		});
 	});
 });
+
+function updateTitle(newTitle) {
+	const defaultTitle = 'FUSE Search Engine';
+	var updatedTitle = newTitle + ' - ' + defaultTitle;
+	document.title = updatedTitle;
+}
